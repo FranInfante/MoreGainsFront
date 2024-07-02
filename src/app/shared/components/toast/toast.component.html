@@ -1,0 +1,12 @@
+<head>
+  <link rel="stylesheet" href="toast.component.css">
+</head>
+<ngb-toast *ngIf="show"
+  header=" "
+  [autohide]="false"
+  (hidden)="show = false"
+  class="custom-toast">
+
+  {{ body }}
+</ngb-toast>
+
