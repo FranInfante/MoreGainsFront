@@ -1,4 +1,4 @@
-import { PrivacySetting } from "./EnumPrivacySetting";
+import { PrivacySetting } from "./enums/EnumPrivacySetting";
 
 export interface User {
   id: number;
