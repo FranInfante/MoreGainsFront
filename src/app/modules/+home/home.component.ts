@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ASSET_URLS } from '../../shared/components/constants';
 
 @Component({
   selector: 'app-home',
@@ -8,5 +9,6 @@ import { Component } from '@angular/core';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+  herovideo: string = ASSET_URLS.herovideo;
 
 }
