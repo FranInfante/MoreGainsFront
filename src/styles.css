@@ -1,0 +1,16 @@
+html, body {
+    background-color: rgb(24, 23, 23);
+    color: white;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
+  
+  app-root {
+    display: block;
+    height: 100%;
+    width: 100%;
+    background-color: inherit;
+  }
+  
