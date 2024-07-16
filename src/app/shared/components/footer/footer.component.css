@@ -1,5 +1,7 @@
 .logo-img {
-    border-radius: 50%;
     width: 7rem;
+    height: 7rem; 
     object-fit: cover;
+    display: block;
+    margin: 0 auto;
 }

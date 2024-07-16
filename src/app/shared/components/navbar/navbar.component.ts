@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { LOCATIONS } from '../constants';
+import { ASSET_URLS, LOCATIONS } from '../constants';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -11,6 +11,7 @@ import { RouterLink } from '@angular/router';
 })
 export class NavbarComponent {
 LOCATIONS: typeof LOCATIONS = LOCATIONS;
+logoicon = ASSET_URLS.logoicon;
 
 
 }
