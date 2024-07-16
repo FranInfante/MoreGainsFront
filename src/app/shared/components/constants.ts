@@ -4,3 +4,8 @@ export const ASSET_URLS = {
   sample2: 'landingpage/sample2.mp4',
   logo: 'logo.png'
 };
+
+export const LOCATIONS = {
+  home: '',
+  login: '/login'
+};

@@ -1,0 +1,51 @@
+/* app-navbar.component.css */
+.navbar {
+    background-color: transparent !important;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    padding: 1rem 2rem;
+  }
+  
+  .navbar-brand {
+    color: #fff;
+  }
+  
+  .navbar-nav .nav-link {
+    color: #fff !important;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+  }
+  
+  .navbar-nav .nav-link:hover {
+    color: #ddd !important;
+    background-color: rgba(0, 0, 0, 0.7); /* Darker on hover */
+  }
+  
+  .navbar-toggler {
+    border: none;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    border-radius: 5px;
+  }
+  
+  .navbar-toggler-icon {
+    color: #fff;
+  }
+  
+  .navbar-toggler:focus,
+  .navbar-toggler:active {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28155, 155, 155, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  }
+  
+  .nav-link {
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
