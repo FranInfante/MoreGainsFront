@@ -9,5 +9,11 @@ export const ASSET_URLS = {
 export const LOCATIONS = {
   home: '',
   login: '/login',
-  contact: '/contact'
+  contact: '/contact',
+  register: '/register'
+};
+
+export const MSG = {
+  failedPassword: 'Invalid email or password. Please try again.',
+  unknownLoginError: 'An error occurred while logging in. Please try again later.'
 };
