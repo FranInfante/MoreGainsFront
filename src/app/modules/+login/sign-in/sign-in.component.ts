@@ -44,6 +44,7 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
+      this.toastService.showToast('Please fill out all fields.', 'danger');
       return;
     }
 
@@ -55,15 +56,15 @@ export class SignInComponent implements OnInit, OnDestroy {
         this.toastService.showToast(TOAST_MSGS.login, 'success');
       } else {
         this.loginError = MSG.failedPassword;
+        this.toastService.showToast(MSG.failedPassword, 'danger');
+        console.error('Login failed:', MSG.failedPassword);
       }
     },
-      error => {
-        if (error === MSG.failedPassword) {
-          this.loginError = error;
-        } else {
-          this.loginError = MSG.unknownLoginError
-        }
-      }
-    );
+    error => {
+      const errorMsg = error === MSG.failedPassword ? MSG.failedPassword : MSG.unknownLoginError;
+      this.loginError = errorMsg;
+      this.toastService.showToast(errorMsg, 'danger');
+      console.error('Login error:', error);
+    });
   }
 }
