@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { SubscriptionLike } from 'rxjs';
-import { LOCATIONS, MSG } from '../../../shared/components/constants';
+import { LOCATIONS, MSG, TOAST_MSGS } from '../../../shared/components/constants';
 import { UserService } from '../../../shared/service/user.service';
 import { ToastService } from '../../../shared/service/toast.service';
 
@@ -22,7 +22,8 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   constructor(private userService: UserService,
     private fb: FormBuilder,
-    private router: Router) { }
+    private router: Router,
+    private toastService: ToastService) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -51,6 +52,7 @@ export class SignInComponent implements OnInit, OnDestroy {
       if (user) {
         this.userService.setUser(user);
         this.router.navigate([LOCATIONS.home]);
+        this.toastService.showToast(TOAST_MSGS.login, 'success');
       } else {
         this.loginError = MSG.failedPassword;
       }
