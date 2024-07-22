@@ -5,7 +5,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { SubscriptionLike } from 'rxjs';
-import { ASSET_URLS, LOCATIONS } from '../../../shared/components/constants';
+import { LOCATIONS } from '../../../shared/components/constants';
 import { ToastService } from '../../../shared/service/toast.service';
 
 @Component({
@@ -19,7 +19,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   userForm!: FormGroup;
   formvalid = false;
   subscriptions: SubscriptionLike[] = [];
-  ASSET_URLS: typeof ASSET_URLS = ASSET_URLS;
+  LOCATIONS: typeof LOCATIONS = LOCATIONS;
 
   constructor(private userService: UserService,
     private fb: FormBuilder,
