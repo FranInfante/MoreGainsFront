@@ -1,13 +1,15 @@
 .custom-toast {
   position: fixed;
-  bottom: 20px;
+  bottom: 2rem;
   left: 50%;
   transform: translateX(-50%);
-  padding: 1rem;
-  border-radius: 4px;
-  z-index: 1050;
+  padding: 0.5rem 2rem; 
+  border-radius: 10px; 
+  z-index: 9999; 
   color: white;
   width: auto;
+  max-width: 80%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
 }
 
 .bg-success {
@@ -17,3 +19,4 @@
 .bg-danger {
   background-color: red;
 }
+
