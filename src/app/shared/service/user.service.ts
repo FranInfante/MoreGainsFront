@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { User } from '../interfaces/users';
-import { ToastService } from './toast.service';
 import { USER_ROUTES } from '../routes/user-routes';
 
 @Injectable({

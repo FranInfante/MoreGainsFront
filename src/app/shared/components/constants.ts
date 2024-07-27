@@ -10,7 +10,8 @@ export const LOCATIONS = {
   home: '',
   login: '/login',
   contact: '/contact',
-  register: '/register'
+  register: '/register',
+  menu: '/menu'
 };
 
 export const MSG = {

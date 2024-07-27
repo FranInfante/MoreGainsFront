@@ -40,8 +40,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.userForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(5)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      email: ['', [Validators.required, Validators.email]],
-      role: 'USER'
+      email: ['', [Validators.required, Validators.email]]
     })
   }
 
@@ -65,7 +64,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           this.formvalid = false;
         }, 2000)
-        this.router.navigate([LOCATIONS.login]);
+        this.router.navigate([LOCATIONS.menu]);
         this.userForm.reset();
       }));
     } if (this.userForm.invalid) {
