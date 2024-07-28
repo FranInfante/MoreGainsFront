@@ -2,10 +2,10 @@
   <link rel="stylesheet" href="toast.component.css">
 </head>
 <ngb-toast *ngIf="show"
-  header=" "
   [autohide]="false"
   (hidden)="show = false"
-  class="custom-toast">
+  class="custom-toast"
+  [ngClass]="{'bg-success': type === 'success', 'bg-danger': type === 'danger'}">
 
   {{ body }}
 </ngb-toast>

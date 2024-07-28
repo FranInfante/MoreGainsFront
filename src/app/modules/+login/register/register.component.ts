@@ -5,8 +5,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { SubscriptionLike } from 'rxjs';
-import { ASSET_URLS, LOCATIONS } from '../../../shared/components/constants';
+import { LOCATIONS, TOAST_MSGS } from '../../../shared/components/constants';
 import { ToastService } from '../../../shared/service/toast.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -19,7 +20,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   userForm!: FormGroup;
   formvalid = false;
   subscriptions: SubscriptionLike[] = [];
-  ASSET_URLS: typeof ASSET_URLS = ASSET_URLS;
+  LOCATIONS: typeof LOCATIONS = LOCATIONS;
 
   constructor(private userService: UserService,
     private fb: FormBuilder,
@@ -40,12 +41,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.userForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(5)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      email: ['', [Validators.required, Validators.email]],
-      role: 'USER'
+      email: ['', [Validators.required, Validators.email]]
     })
   }
 
-  createUser() {
+  createUser(): void {
     if (this.userForm.valid) {
       const user: User = {
         username: this.userForm.value.username,
@@ -59,18 +59,22 @@ export class RegisterComponent implements OnInit, OnDestroy {
         privacySetting: this.userForm.value.privacySetting
       };
 
-
-      this.subscriptions.push(this.userService.createUser(user).subscribe(response => {
-        this.formvalid = true;
-        setTimeout(() => {
-          this.formvalid = false;
-        }, 2000)
-        this.router.navigate([LOCATIONS.login]);
-        this.userForm.reset();
-      }));
-    } if (this.userForm.invalid) {
-      this.markFormGroupTouched(this.userForm);
-      return;
+      this.subscriptions.push(
+        this.userService.createUser(user).subscribe({
+          next: (response) => {
+            this.toastService.showToast(TOAST_MSGS.register, 'success');
+            this.router.navigate([LOCATIONS.login]);
+            this.userForm.reset();
+          },
+          error: (error: HttpErrorResponse) => {
+            if (error.status === 409) {
+              this.toastService.showToast(error.error, 'danger');
+            } else {
+              this.toastService.showToast(TOAST_MSGS.errorregister, 'danger');
+            }
+          }
+        })
+      );
     }
   }
 

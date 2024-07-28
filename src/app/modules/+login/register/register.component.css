@@ -1,0 +1,40 @@
+.btn-back {
+    display: flex;
+    height: 3em;
+    width: 120px; /* Adjust width if needed */
+    align-items: center;
+    justify-content: center;
+    background-color: #eeeeee4b;
+    border-radius: 3px;
+    letter-spacing: 1px;
+    transition: all 0.2s linear;
+    cursor: pointer;
+    border: none;
+    background: #fff;
+    font-size: 1rem;
+    padding: 0 1rem;
+    border-radius: 4rem;
+    border: 1px solid ;
+}
+
+.btn-back > svg {
+    margin-right: 5px;
+    font-size: 1.2rem;
+    transition: all 0.4s ease-in;
+}
+
+.btn-back:hover > svg {
+    font-size: 1.4rem;
+    transform: translateX(-5px);
+}
+
+.btn-back:hover {
+    box-shadow: 9px 9px 33px #d1d1d1, -9px -9px 33px #ffffff;
+    transform: translateY(-2px);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem; /* Adjust as needed */
+  }
