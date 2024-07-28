@@ -52,7 +52,7 @@ export class SignInComponent implements OnInit, OnDestroy {
     this.subscription = this.userService.loginUser(loginData.email, loginData.password).subscribe(user => {
       if (user) {
         this.userService.setUser(user);
-        this.router.navigate([LOCATIONS.home]);
+        this.router.navigate([LOCATIONS.menu]);
         this.toastService.showToast(TOAST_MSGS.login, 'success');
       } else {
         this.loginError = MSG.failedPassword;

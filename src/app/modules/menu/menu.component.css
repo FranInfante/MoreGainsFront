@@ -1,0 +1,37 @@
+.vh-100 {
+    min-height: 100vh;
+  }
+  
+  .btn-block {
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .btn-dark {
+    background-color: #343a40 !important;
+    border-color: #343a40 !important;
+    color: #ffffff !important; /* Ensure text is white for better contrast */
+  }
+  
+  .btn-dark:hover {
+    background-color: #495057 !important;
+    border-color: #495057 !important;
+  }
+  
+  .btn-dark-dark {
+    background-color: #2c2c2c !important; /* Darker shade for "Log workout" */
+    border-color: #2c2c2c !important;
+    color: #ffffff !important; /* White text color for readability */
+  }
+  
+  .btn-dark-dark:hover {
+    background-color: #1a1a1a !important; /* Even darker on hover */
+    border-color: #1a1a1a !important;
+    color: #ffffff !important; /* Ensure text remains white on hover */
+  }
+  
+  .btn {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  }
+  
