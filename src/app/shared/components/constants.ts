@@ -22,5 +22,6 @@ export const MSG = {
 export const TOAST_MSGS = {
   login: 'Logged in successfully.',
   logout: 'Logged out successfully.',
-  register: 'Registered successfully. You can now log in.'
+  register: 'Registered successfully. You can now log in.',
+  errorregister:'Error registering user. Please try again later.'
 };
