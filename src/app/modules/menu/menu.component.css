@@ -35,3 +35,15 @@
     transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
   }
   
+  .logo {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+  }
+  
+  .container img {
+    max-width: 100%;
+    height: auto;
+  }

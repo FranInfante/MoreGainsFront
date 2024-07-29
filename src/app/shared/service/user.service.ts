@@ -12,23 +12,9 @@ export class UserService {
   userSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
 
   constructor(private http: HttpClient) {
-    this.loadUserFromLocalStorage();
   }
-
-  private loadUserFromLocalStorage() {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      this.user = JSON.parse(storedUser);
-      this.userSubject.next(this.user);
-    }
-  }
-
-  private saveUserToLocalStorage(user: User) {
-    localStorage.setItem('user', JSON.stringify(user));
-  }
-
-  private removeUserFromLocalStorage() {
-    localStorage.removeItem('user');
+  getCurrentUser(): Observable<User> {
+    return this.http.get<User>(USER_ROUTES.getinfo());
   }
 
   getAllUsers(): Observable<User[]> {
@@ -67,12 +53,10 @@ export class UserService {
   setUser(user: User) {
     this.user = user;
     this.userSubject.next(user);
-    this.saveUserToLocalStorage(user);
   }
 
   logout() {
     this.user = null;
     this.userSubject.next(null);
-    this.removeUserFromLocalStorage();
   }
 }

@@ -3,7 +3,8 @@ export const ASSET_URLS = {
   sample1: 'landingpage/sample1.mp4',
   sample2: 'landingpage/sample2.mp4',
   logo: 'logo.png',
-  logoicon: 'logoicon.png'
+  logoicon: 'logoicon.png',
+  genericlogo: 'user/genericlogo.png'
 };
 
 export const LOCATIONS = {
