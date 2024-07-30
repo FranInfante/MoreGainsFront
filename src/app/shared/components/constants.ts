@@ -16,13 +16,16 @@ export const LOCATIONS = {
 };
 
 export const MSG = {
-  failedPassword: 'Invalid email or password. Please try again.',
-  unknownLoginError: 'An error occurred while logging in. Please try again later.'
+  failedCredentials: 'Invalid email or password. Please try again.',
+  unknownLoginError: 'An error occurred while logging in. Please try again later.',
+  fetcherror: 'An error occurred while fetching user information. Please try again later.',
+  unauthorized: 'Unauthorized access. Please log in again.'
 };
 
 export const TOAST_MSGS = {
   login: 'Logged in successfully.',
   logout: 'Logged out successfully.',
   register: 'Registered successfully. You can now log in.',
-  errorregister:'Error registering user. Please try again later.'
+  errorregister:'Error registering user. Please try again later.',
+  fillallfields:'Please fill out all fields.'
 };
