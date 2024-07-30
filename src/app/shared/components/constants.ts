@@ -19,7 +19,8 @@ export const MSG = {
   failedCredentials: 'Invalid email or password. Please try again.',
   unknownLoginError: 'An error occurred while logging in. Please try again later.',
   fetcherror: 'An error occurred while fetching user information. Please try again later.',
-  unauthorized: 'Unauthorized access. Please log in again.'
+  unauthorized: 'Unauthorized access. Please log in again.',
+  notoken: 'No authentication token available.'
 };
 
 export const TOAST_MSGS = {

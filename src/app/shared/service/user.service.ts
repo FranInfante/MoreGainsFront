@@ -13,7 +13,9 @@ export class UserService {
   private user: User | null = null;
   userSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.authToken = localStorage.getItem('authToken'); 
+  }
 
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(USER_ROUTES.list());
@@ -41,6 +43,7 @@ export class UserService {
       switchMap(response => {
         const token = response.token;
         this.authToken = token;
+        this.setAuthToken(token);
         const headers = new HttpHeaders({
           Authorization: `Bearer ${token}`
         });
@@ -62,7 +65,7 @@ export class UserService {
   getCurrentUser(): Observable<User> {
     if (!this.authToken) {
       console.error('No authentication token available.');
-      return throwError(() => new Error('No authentication token available.'));
+      return throwError(() => new Error(MSG.notoken));
     }
 
     const headers = new HttpHeaders({
@@ -71,7 +74,6 @@ export class UserService {
 
     return this.http.get<User>(USER_ROUTES.getinfo(), { headers }).pipe(
       catchError(error => {
-        console.error('Failed to fetch current user with error:', error);
         let errorMessage: string;
         if (error.status === 401) {
           errorMessage = MSG.unauthorized;
@@ -85,6 +87,7 @@ export class UserService {
 
   setAuthToken(token: string) {
     this.authToken = token;
+    localStorage.setItem('authToken', token);
   }
 
   setUser(user: User) {
@@ -96,5 +99,6 @@ export class UserService {
     this.user = null;
     this.userSubject.next(null);
     this.authToken = null;
+    localStorage.removeItem('authToken');
   }
 }
