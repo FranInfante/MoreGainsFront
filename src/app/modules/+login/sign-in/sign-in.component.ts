@@ -57,14 +57,12 @@ export class SignInComponent implements OnInit, OnDestroy {
       } else {
         this.loginError = MSG.failedPassword;
         this.toastService.showToast(MSG.failedPassword, 'danger');
-        console.error('Login failed:', MSG.failedPassword);
       }
     },
     error => {
       const errorMsg = error === MSG.failedPassword ? MSG.failedPassword : MSG.unknownLoginError;
       this.loginError = errorMsg;
       this.toastService.showToast(errorMsg, 'danger');
-      console.error('Login error:', error);
     });
   }
 }
