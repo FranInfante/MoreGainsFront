@@ -3,7 +3,8 @@ export const ASSET_URLS = {
   sample1: 'landingpage/sample1.mp4',
   sample2: 'landingpage/sample2.mp4',
   logo: 'logo.png',
-  logoicon: 'logoicon.png'
+  logoicon: 'logoicon.png',
+  genericlogo: 'user/genericlogo.png'
 };
 
 export const LOCATIONS = {
@@ -15,13 +16,17 @@ export const LOCATIONS = {
 };
 
 export const MSG = {
-  failedPassword: 'Invalid email or password. Please try again.',
-  unknownLoginError: 'An error occurred while logging in. Please try again later.'
+  failedCredentials: 'Invalid email or password. Please try again.',
+  unknownLoginError: 'An error occurred while logging in. Please try again later.',
+  fetcherror: 'An error occurred while fetching user information. Please try again later.',
+  unauthorized: 'Unauthorized access. Please log in again.',
+  notoken: 'No authentication token available.'
 };
 
 export const TOAST_MSGS = {
   login: 'Logged in successfully.',
   logout: 'Logged out successfully.',
   register: 'Registered successfully. You can now log in.',
-  errorregister:'Error registering user. Please try again later.'
+  errorregister:'Error registering user. Please try again later.',
+  fillallfields:'Please fill out all fields.'
 };

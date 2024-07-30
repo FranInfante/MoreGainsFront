@@ -2,10 +2,11 @@ import { NgIf } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { SubscriptionLike } from 'rxjs';
+import { Subscription, SubscriptionLike } from 'rxjs';
 import { LOCATIONS, MSG, TOAST_MSGS } from '../../../shared/components/constants';
 import { UserService } from '../../../shared/service/user.service';
 import { ToastService } from '../../../shared/service/toast.service';
+import { isIdentifier } from '@angular/compiler';
 
 @Component({
   selector: 'app-sign-in',
@@ -17,54 +18,58 @@ import { ToastService } from '../../../shared/service/toast.service';
 export class SignInComponent implements OnInit, OnDestroy {
   loginForm!: FormGroup;
   loginError: string | null = null;
-  subscription?: SubscriptionLike;
+  private subscription: Subscription = new Subscription();
   LOCATIONS: typeof LOCATIONS = LOCATIONS;
 
-  constructor(private userService: UserService,
+  constructor(
+    private userService: UserService,
     private fb: FormBuilder,
     private router: Router,
-    private toastService: ToastService) { }
+    private toastService: ToastService
+  ) { }
 
   ngOnInit(): void {
     this.initializeForm();
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscription.unsubscribe();
   }
 
   initializeForm(): void {
     this.loginForm = this.fb.group({
-      email: ['', Validators.required],
+      identifier: ['', Validators.required],
       password: ['', Validators.required]
-    })
+    });
   }
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
-      this.toastService.showToast('Please fill out all fields.', 'danger');
+      this.toastService.showToast(TOAST_MSGS.fillallfields, 'danger');
       return;
     }
 
     const loginData = this.loginForm.value;
-    this.subscription = this.userService.loginUser(loginData.email, loginData.password).subscribe(user => {
-      if (user) {
-        this.userService.setUser(user);
-        this.router.navigate([LOCATIONS.home]);
-        this.toastService.showToast(TOAST_MSGS.login, 'success');
-      } else {
-        this.loginError = MSG.failedPassword;
-        this.toastService.showToast(MSG.failedPassword, 'danger');
-        console.error('Login failed:', MSG.failedPassword);
-      }
-    },
-    error => {
-      const errorMsg = error === MSG.failedPassword ? MSG.failedPassword : MSG.unknownLoginError;
-      this.loginError = errorMsg;
-      this.toastService.showToast(errorMsg, 'danger');
-      console.error('Login error:', error);
-    });
+
+    this.subscription.add(
+      this.userService.loginUser(loginData.identifier, loginData.password).subscribe({
+        next: (user) => {
+          if (user) {
+            this.userService.setUser(user);
+            this.router.navigate([LOCATIONS.menu]);
+            this.toastService.showToast(TOAST_MSGS.login, 'success');
+          } else {
+            this.loginError = MSG.failedCredentials;
+            this.toastService.showToast(MSG.failedCredentials, 'danger');
+          }
+        },
+        error: (error) => {
+          console.error('Login error:', error);
+          const errorMsg = error.message === MSG.failedCredentials ? MSG.failedCredentials : MSG.unknownLoginError;
+          this.loginError = errorMsg;
+          this.toastService.showToast(errorMsg, 'danger');
+        }
+      })
+    );
   }
 }

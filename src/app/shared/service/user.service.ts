@@ -1,34 +1,20 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, switchMap, throwError } from 'rxjs';
 import { User } from '../interfaces/users';
 import { USER_ROUTES } from '../routes/user-routes';
+import { MSG } from '../components/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private authToken: string | null = null;
   private user: User | null = null;
   userSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
 
   constructor(private http: HttpClient) {
-    this.loadUserFromLocalStorage();
-  }
-
-  private loadUserFromLocalStorage() {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      this.user = JSON.parse(storedUser);
-      this.userSubject.next(this.user);
-    }
-  }
-
-  private saveUserToLocalStorage(user: User) {
-    localStorage.setItem('user', JSON.stringify(user));
-  }
-
-  private removeUserFromLocalStorage() {
-    localStorage.removeItem('user');
+    this.authToken = localStorage.getItem('authToken'); 
   }
 
   getAllUsers(): Observable<User[]> {
@@ -51,28 +37,68 @@ export class UserService {
     return this.http.delete<void>(USER_ROUTES.delete(id));
   }
 
-  loginUser(email: string, password: string): Observable<any> {
-    const loginData = { email, password };
-    return this.http.post<any>(USER_ROUTES.login(), loginData).pipe(
+  loginUser(emailOrUsername: string, password: string): Observable<User> {
+    const loginData = { email: emailOrUsername, password };
+    return this.http.post<{ token: string }>(USER_ROUTES.authenticate(), loginData).pipe(
+      switchMap(response => {
+        const token = response.token;
+        this.authToken = token;
+        this.setAuthToken(token);
+        const headers = new HttpHeaders({
+          Authorization: `Bearer ${token}`
+        });
+        return this.http.get<User>(USER_ROUTES.getinfo(), { headers });
+      }),
       catchError(error => {
+        console.error('Login failed with error:', error);
+        let errorMessage: string;
         if (error.status === 401) {
-          return throwError('Correo electrónico o contraseña no válidos. Inténtalo de nuevo.');
+          errorMessage = MSG.failedCredentials;
         } else {
-          return throwError('Se produjo un error al iniciar sesión. Vuelva a intentarlo más tarde.');
+          errorMessage = MSG.unknownLoginError;
         }
+        return throwError(() => new Error(errorMessage));
       })
     );
+  }
+
+  getCurrentUser(): Observable<User> {
+    if (!this.authToken) {
+      console.error('No authentication token available.');
+      return throwError(() => new Error(MSG.notoken));
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authToken}`
+    });
+
+    return this.http.get<User>(USER_ROUTES.getinfo(), { headers }).pipe(
+      catchError(error => {
+        let errorMessage: string;
+        if (error.status === 401) {
+          errorMessage = MSG.unauthorized;
+        } else {
+          errorMessage = MSG.fetcherror;
+        }
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
+  setAuthToken(token: string) {
+    this.authToken = token;
+    localStorage.setItem('authToken', token);
   }
 
   setUser(user: User) {
     this.user = user;
     this.userSubject.next(user);
-    this.saveUserToLocalStorage(user);
   }
 
   logout() {
     this.user = null;
     this.userSubject.next(null);
-    this.removeUserFromLocalStorage();
+    this.authToken = null;
+    localStorage.removeItem('authToken');
   }
 }
