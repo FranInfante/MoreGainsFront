@@ -1,7 +1,7 @@
 import { NgIf } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription, SubscriptionLike } from 'rxjs';
 import { LOCATIONS, MSG, TOAST_MSGS } from '../../../shared/components/constants';
 import { UserService } from '../../../shared/service/user.service';
@@ -25,11 +25,19 @@ export class SignInComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private fb: FormBuilder,
     private router: Router,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
     this.initializeForm();
+    this.route.queryParams.subscribe(params => {
+      const username = params['username'];
+      const password = params['password'];
+      if (username && password) {
+        this.loginForm.patchValue({ identifier: username, password: password });
+      }
+    });
   }
 
   ngOnDestroy(): void {

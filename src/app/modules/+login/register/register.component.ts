@@ -1,4 +1,4 @@
-import { Router, RouterModule } from '@angular/router';
+import { NavigationExtras, Router, RouterModule } from '@angular/router';
 import { User } from '../../../shared/interfaces/users';
 import { UserService } from './../../../shared/service/user.service';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -63,7 +63,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
         this.userService.createUser(user).subscribe({
           next: (response) => {
             this.toastService.showToast(TOAST_MSGS.register, 'success');
-            this.router.navigate([LOCATIONS.login]);
+            const navigationExtras: NavigationExtras = {
+              queryParams: {
+                username: user.username,
+                password: user.password
+              }
+            };
+            this.router.navigate([LOCATIONS.login], navigationExtras);
             this.userForm.reset();
           },
           error: (error: HttpErrorResponse) => {
