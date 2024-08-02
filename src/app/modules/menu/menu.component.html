@@ -1,6 +1,6 @@
 <div class="container d-flex flex-column justify-content-center align-items-center">
     <div class="row w-100 text-center mb-3 userinfo">
-        <a [routerLink]=LOCATIONS.userprofile class="btn btn-primary">
+        <a [routerLink]=LOCATIONS.userprofile>
       <div class="col-12">
         <ng-container *ngIf="currentUser?.photoUrl; else genericLogoTemplate">
           <img [src]="currentUser?.photoUrl" alt="User Logo" class="logo">

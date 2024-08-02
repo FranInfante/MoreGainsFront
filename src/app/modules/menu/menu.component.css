@@ -1,7 +1,22 @@
 .userinfo{
 
   padding-bottom: 1rem;
+  padding-top: 1rem;
 
+}
+.userinfo a { /* Reset the background color */
+  color: inherit; /* Reset the text color */
+  text-decoration: none; /* Remove underline */
+}
+
+.userinfo a.btn-primary {
+  background-color: #007bff; /* Blue background for the button */
+  border: none; /* Remove any border */
+  color: white; /* White text color */
+}
+
+.userinfo a.btn-primary:hover {
+  background-color: #0056b3; /* Darker blue on hover */
 }
 
 .button-icon {
