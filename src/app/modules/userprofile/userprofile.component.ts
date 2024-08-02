@@ -18,7 +18,7 @@ import { PrivacySetting } from '../../shared/interfaces/enums/EnumPrivacySetting
 export class UserProfileComponent implements OnInit, OnDestroy {
   userForm!: FormGroup;
   userId: number | null = null; 
-  user!: User;
+  user?: User;
   isEditing: boolean = false;
   subscriptions: SubscriptionLike[] = [];
   userIcon = ASSET_URLS.genericlogo;
