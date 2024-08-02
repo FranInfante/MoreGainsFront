@@ -30,7 +30,6 @@ export class UserService {
   }
 
   updateUser(id: number, user: User): Observable<User> {
-    console.log(user)
     return this.http.put<User>(USER_ROUTES.update(id), user);
   }
 
