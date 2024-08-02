@@ -14,9 +14,9 @@ export const ASSET_URLS = {
 export const LOCATIONS = {
   home: '',
   login: '/login',
-  contact: '/contact',
   register: '/register',
-  menu: '/menu'
+  menu: '/menu',
+  userprofile: '/userprofile'
 };
 
 export const MSG = {

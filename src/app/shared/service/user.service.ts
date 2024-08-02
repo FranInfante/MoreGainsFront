@@ -101,4 +101,17 @@ export class UserService {
     this.authToken = null;
     localStorage.removeItem('authToken');
   }
+  fetchAndSetUser(): void {
+    if (this.getToken()) {
+      this.showinfo().subscribe(user => {
+        this.setUser(user);
+      });
+    }
+  }
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+  showinfo() {
+    return this.http.get<any>(USER_ROUTES.getinfo())
+  }
 }
