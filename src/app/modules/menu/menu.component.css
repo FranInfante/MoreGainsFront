@@ -1,7 +1,7 @@
 .button-icon {
-  width: 4rem; /* Responsive icon size */
-  height: 4rem; /* Responsive icon size */
-  margin-bottom: 6px; /* Adjust space between icon and text */
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: 6px;
 }
 
 .logo {
@@ -17,17 +17,17 @@
   justify-content: center;
   padding: 10px;
   text-align: center;
-  background-color: #007bff; /* Brighter button color */
-  border: none; /* Remove border for a cleaner look */
-  color: #ffffff; /* White text color for contrast */
-  font-size: 1rem; /* Adjust text size */
-  font-weight: bold; /* Make text bold */
-  border-radius: 1rem; /* Rounded corners */
+  background-color: #007bff;
+  border: none;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 1rem;
   position: relative;
 }
 
 .btn:hover {
-  background-color: #0056b3; /* Darker color on hover */
+  background-color: #0056b3;
 }
 
 .row > .col-6,
@@ -41,36 +41,36 @@
 }
 
 .username {
-  font-size: 1.25rem; /* Adjust username text size */
-  font-weight: bold; /* Make username bold */
+  font-size: 1.25rem;
+  font-weight: bold;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
-  text-align: center; /* Center text */
-  word-wrap: break-word; /* Ensure text wraps within bounds */
+  text-align: center;
+  word-wrap: break-word;
 }
 
 .container {
   width: 100%;
-  padding: 1rem; /* Add padding for better spacing */
-  overflow: auto; /* Allow scrolling if content overflows */
+  padding: 1rem;
+  overflow: auto;
 }
 
 @media (max-width: 767.98px) {
   .logo {
-    width: 3rem; /* Adjust icon size for smaller screens */
-    height: 3rem; /* Adjust icon size for smaller screens */
+    width: 3rem;
+    height: 3rem;
   }
 
   .btn .button-icon {
-    width: 3rem; /* Adjust icon size for smaller screens */
-    height: 3rem; /* Adjust icon size for smaller screens */
+    width: 3rem;
+    height: 3rem;
   }
 
   .btn span {
-    font-size: 0.875rem; /* Smaller text size for smaller screens */
+    font-size: 0.875rem;
   }
 
   .username {
-    font-size: 1rem; /* Smaller username text size for smaller screens */
+    font-size: 1rem;
   }
 }
