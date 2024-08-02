@@ -17,6 +17,10 @@ export class MenuComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
   subscription?: SubscriptionLike;
   genericLogoUrl: string = ASSET_URLS.genericlogo;
+  workouticon: string = ASSET_URLS.workout;
+  mesosicon: string = ASSET_URLS.mesos;
+  playicon: string = ASSET_URLS.play;
+  favoritesicon: string = ASSET_URLS.favorites;
   
   constructor(private userService: UserService) { }
 
