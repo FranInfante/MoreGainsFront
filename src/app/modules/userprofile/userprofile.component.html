@@ -6,15 +6,23 @@
             <label for="username" class="form-label">Username</label>
             <input type="text" id="username" class="form-control" formControlName="username">
             <div *ngIf="userForm.get('username')?.touched && userForm.get('username')?.invalid">
-              <small class="text-danger" *ngIf="userForm.get('username')?.errors?.['required']">El nombre de usuario es obligatorio.</small>
-              <small class="text-danger" *ngIf="userForm.get('username')?.errors?.['minlength']">El nombre de usuario debe tener al menos 5 caracteres.</small>
+              <small class="text-danger" *ngIf="userForm.get('username')?.errors?.['required']">Username is required.</small>
+              <small class="text-danger" *ngIf="userForm.get('username')?.errors?.['minlength']">Username must be at least 5 characters long.</small>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" class="form-control" formControlName="password">
+            <div *ngIf="userForm.get('password')?.touched && userForm.get('password')?.invalid">
+              <small class="text-danger" *ngIf="userForm.get('password')?.errors?.['required']">Password is required.</small>
+              <small class="text-danger" *ngIf="userForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters long.</small>
             </div>
           </div>
           <div class="mb-3">
             <label for="email" class="form-label">Email Address</label>
             <input type="email" id="email" class="form-control" formControlName="email">
             <div *ngIf="userForm.get('email')?.touched && userForm.get('email')?.invalid">
-              <small class="text-danger" *ngIf="userForm.get('email')?.errors?.['email']">Formato incorrecto.</small>
+              <small class="text-danger" *ngIf="userForm.get('email')?.errors?.['email']">Incorrect format.</small>
             </div>
           </div>
           <div class="mb-3">
@@ -22,37 +30,37 @@
             <textarea id="bio" class="form-control" formControlName="bio" rows="3"></textarea>
           </div>
           <div class="mb-3">
-            <label for="privacySetting" class="form-label">Configuración de privacidad</label>
+            <label for="privacySetting" class="form-label">Privacy Setting</label>
             <select id="privacySetting" class="form-control" formControlName="privacySetting">
               <option *ngFor="let setting of privacySettings" [value]="setting">{{ setting }}</option>
             </select>
           </div>
           <div class="d-flex justify-content-between mb-3">
-            <button type="button" class="btn btn-warning me-2 text-white" id="btn-edit" (click)="toggleEdit()" *ngIf="!isEditing">Editar</button>
-            <button type="submit" class="btn btn-warning me-2 text-white" id="btn-save-change" [disabled]="!userForm.valid" *ngIf="isEditing">Guardar Cambios</button>
-            <button type="button" class="btn btn-danger margin-left-2%" id="btn-cancel-edit" *ngIf="isEditing" (click)="toggleCancel()">Cancelar</button>
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivateModal" *ngIf="!isEditing">Desactivar Cuenta</button>
+            <button type="button" class="btn btn-warning me-2 text-white" id="btn-edit" (click)="toggleEdit()" *ngIf="!isEditing">Edit</button>
+            <button type="submit" class="btn btn-warning me-2 text-white" id="btn-save-change" [disabled]="!userForm.valid" *ngIf="isEditing">Save Changes</button>
+            <button type="button" class="btn btn-danger margin-left-2%" id="btn-cancel-edit" *ngIf="isEditing" (click)="toggleCancel()">Cancel</button>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deactivateModal" *ngIf="!isEditing">Deactivate Account</button>
           </div>
         </form>
       </div>
       <div class="col-md-6 order-md-2 order-1 d-flex flex-column align-items-center iconcontainer">
-        <img [src]="userIcon" class="rounded-circle mb-3 icon-img" alt="Imagen de Perfil">
+        <img [src]="userIcon" class="rounded-circle mb-3 icon-img" alt="Profile Image">
       </div>
     </div>
   
-    <div class="modal" tabindex="-1" id="deactivateModal" #deactivateModal>
-      <div class="modal-dialog">
+    <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="deactivateModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Confirmar Desactivación</h5>
+            <h5 class="modal-title" id="deactivateModalLabel">Confirm Deactivation</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            ¿Estás seguro de que deseas desactivar esta cuenta?
+            Are you sure you want to deactivate this account?
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-danger" (click)="deactivateAccount()" data-bs-dismiss="modal">Desactivar</button>
+            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" (click)="deactivateAccount()" data-bs-dismiss="modal">Deactivate</button>
           </div>
         </div>
       </div>
