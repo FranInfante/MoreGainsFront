@@ -1,3 +1,9 @@
+.userinfo{
+
+  padding-bottom: 1rem;
+
+}
+
 .button-icon {
   width: 4rem;
   height: 4rem;
@@ -11,6 +17,7 @@
 }
 
 .btn {
+  height: 12rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -64,6 +71,11 @@
   .btn .button-icon {
     width: 3rem;
     height: 3rem;
+  }
+  .btn{
+
+    height: 7rem;
+
   }
 
   .btn span {
