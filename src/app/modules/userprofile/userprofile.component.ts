@@ -27,9 +27,17 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit() {
-    this.gatherUserId();
     this.initForm();
-    this.loadUser();
+    this.subscriptions.push(
+      this.userService.getCurrentUser().subscribe(user => {
+        if (user && user.id) {
+          this.userId = user.id;
+          this.loadUser();
+        } else {
+          console.error('Failed to get user ID.');
+        }
+      })
+    );
   }
 
   ngOnDestroy(): void {
@@ -62,13 +70,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
           next: (data) => {
             this.user = data;
             this.userForm.patchValue(data);
-          },
-          error: (err) => console.error('Error loading user:', err)
+          }
         })
       );
-    } else {
-      console.error('User ID is null. Cannot load user.');
-    }
+    } 
   }
 
   updateUser() {

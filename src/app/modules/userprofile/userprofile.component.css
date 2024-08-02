@@ -1,0 +1,44 @@
+.icon-img {
+    width: 15rem;
+    height: 15rem;
+    object-fit: cover;
+  }
+  
+  .iconcontainer {
+    justify-content: center;
+  }
+  
+  @media (max-width: 768px) {
+    .icon-img {
+      width: 10rem;
+      height: 10rem;
+    }
+    
+    .form-container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .icon-img {
+      width: 8rem;
+      height: 8rem;
+    }
+    
+    .form-container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  
+  .form-control[disabled] {
+    background-color: #f0f0f0;
+    color: #6c757d;
+    cursor: not-allowed;
+  }
+  
+  .form-control[disabled]::placeholder {
+    color: #6c757d;
+  }
+  
