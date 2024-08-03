@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { UserService } from '../../shared/service/user.service';
 import { User } from '../../shared/interfaces/users';
 import { CommonModule, NgIf } from '@angular/common';
@@ -17,7 +17,8 @@ import { PrivacySetting } from '../../shared/interfaces/enums/EnumPrivacySetting
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
   userForm!: FormGroup;
-  userId: number | null = null; 
+  passwordForm!: FormGroup;
+  userId: number | null = null;
   user?: User;
   isEditing: boolean = false;
   subscriptions: SubscriptionLike[] = [];
@@ -27,8 +28,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit() {
-    
     this.initForm();
+    this.initPasswordForm();
     this.subscriptions.push(
       this.userService.getCurrentUser().subscribe(user => {
         if (user && user.id) {
@@ -45,23 +46,27 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 
-  gatherUserId() {
-    this.subscriptions.push(this.userService.getCurrentUser().subscribe(user => {
-      if (user && user.id) {
-        this.userId = user.id;
-      }
-    }));
-  }
-
   initForm() {
     this.userForm = new FormGroup({
       username: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.minLength(5)]),
-      password: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.minLength(6)]),
       email: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.email]),
       bio: new FormControl({ value: '', disabled: true }),
       privacySetting: new FormControl({ value: '', disabled: true }, [Validators.required]),
       isAvailable: new FormControl({ value: '', disabled: true })
     });
+  }
+
+  initPasswordForm() {
+    this.passwordForm = new FormGroup({
+      newPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6)])
+    }, { validators: this.passwordsMatchValidator });
+  }
+
+  passwordsMatchValidator: ValidatorFn = (formGroup: AbstractControl): { [key: string]: any } | null => {
+    const newPassword = formGroup.get('newPassword')?.value;
+    const confirmPassword = formGroup.get('confirmPassword')?.value;
+    return newPassword === confirmPassword ? null : { passwordMismatch: true };
   }
 
   loadUser() {
@@ -74,7 +79,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
           }
         })
       );
-    } 
+    }
   }
 
   updateUser() {
@@ -114,6 +119,19 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     if (this.isEditing) {
       this.toggleEdit();
       this.loadUser();
+    }
+  }
+
+  changePassword() {
+    if (this.userId !== null && this.passwordForm.valid) {
+      const newPassword = this.passwordForm.get('newPassword')?.value;
+      const updatedUser = { ...this.user, password: newPassword } as User;
+      this.userService.updateUser(this.userId, updatedUser).subscribe({
+        next: () => {
+          this.passwordForm.reset();
+          alert('Password changed successfully.');
+        }
+      });
     }
   }
 }
