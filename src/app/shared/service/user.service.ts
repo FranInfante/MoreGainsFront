@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, Observable, switchMap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, switchMap, throwError } from 'rxjs';
 import { User } from '../interfaces/users';
 import { USER_ROUTES } from '../routes/user-routes';
 import { MSG } from '../components/constants';
@@ -113,5 +113,25 @@ export class UserService {
   }
   showinfo() {
     return this.http.get<any>(USER_ROUTES.getinfo())
+  }
+  uploadProfilePicture(formData: FormData): Observable<{ imageUrl: string }> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authToken}`,
+      'Accept': 'application/json'
+    });
+  
+    return this.http.post<{ imageUrl: string }>('http://localhost:8080/api/v1/users/upload-profile-picture', formData, { headers }).pipe(
+      map(response => {
+        if (response && response.imageUrl) {
+          return response;
+        } else {
+          throw new Error('Invalid response format');
+        }
+      }),
+      catchError((error) => {
+        console.error('Error uploading profile picture:', error);
+        return throwError(() => new Error('Error uploading profile picture'));
+      })
+    );
   }
 }

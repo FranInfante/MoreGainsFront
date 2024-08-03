@@ -25,10 +25,11 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   subscriptions: SubscriptionLike[] = [];
   userIcon = ASSET_URLS.genericlogo;
   privacySettings = Object.values(PrivacySetting);
+  selectedFile: File | null = null;
 
   constructor(private userService: UserService,
               private router: Router,
-              private toastService: ToastService ,
+              private toastService: ToastService,
               private elementRef: ElementRef) {}
 
   ngOnInit() {
@@ -140,6 +141,30 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     }
   }
 
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+    }
+  }
+
+  uploadProfilePicture() {
+    if (this.selectedFile) {
+      const formData = new FormData();
+      formData.append('file', this.selectedFile);
+  
+      this.userService.uploadProfilePicture(formData).subscribe({
+        next: (response) => {
+          console.log('Profile picture uploaded successfully', response);
+          this.toastService.showToast('Profile picture uploaded successfully', 'success');
+        },
+        error: (error) => {
+          console.error('Error uploading profile picture', error);
+          this.toastService.showToast('Error uploading profile picture', 'danger');
+        }
+      });
+    }
+  }
   closeModal(modalId: string) {
     const modalElement = this.elementRef.nativeElement.querySelector(modalId);
     if (modalElement) {
