@@ -150,21 +150,22 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   uploadProfilePicture() {
     if (this.selectedFile) {
-      const formData = new FormData();
-      formData.append('file', this.selectedFile);
-  
-      this.userService.uploadProfilePicture(formData).subscribe({
-        next: (response) => {
-          console.log('Profile picture uploaded successfully', response);
-          this.toastService.showToast('Profile picture uploaded successfully', 'success');
-        },
-        error: (error) => {
-          console.error('Error uploading profile picture', error);
-          this.toastService.showToast('Error uploading profile picture', 'danger');
-        }
-      });
+        const formData = new FormData();
+        formData.append('file', this.selectedFile);
+
+        this.userService.uploadProfilePicture(formData).subscribe({
+            next: (response) => {
+                console.log('Profile picture uploaded successfully', response);
+                this.userIcon = `http://localhost:8080${response.imageUrl}`;
+                this.toastService.showToast('Profile picture uploaded successfully', 'success');
+            },
+            error: (error) => {
+                console.error('Error uploading profile picture', error);
+                this.toastService.showToast('Error uploading profile picture', 'danger');
+            }
+        });
     }
-  }
+}
   closeModal(modalId: string) {
     const modalElement = this.elementRef.nativeElement.querySelector(modalId);
     if (modalElement) {
