@@ -3,12 +3,13 @@ import { UserService } from '../../shared/service/user.service';
 import { User } from '../../shared/interfaces/users';
 import { SubscriptionLike } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { ASSET_URLS } from '../../shared/components/constants';
+import { ASSET_URLS, LOCATIONS } from '../../shared/components/constants';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css'
 })
@@ -21,6 +22,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   mesosicon: string = ASSET_URLS.mesos;
   playicon: string = ASSET_URLS.play;
   favoritesicon: string = ASSET_URLS.favorites;
+  LOCATIONS: typeof LOCATIONS = LOCATIONS;
   
   constructor(private userService: UserService) { }
 

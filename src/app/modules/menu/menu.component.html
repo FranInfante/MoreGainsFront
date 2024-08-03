@@ -1,16 +1,18 @@
 <div class="container d-flex flex-column justify-content-center align-items-center">
     <div class="row w-100 text-center mb-3 userinfo">
-      <div class="col-12">
-        <ng-container *ngIf="currentUser?.photoUrl; else genericLogoTemplate">
-          <img [src]="currentUser?.photoUrl" alt="User Logo" class="logo">
-        </ng-container>
-        <ng-template #genericLogoTemplate>
-          <img [src]="genericLogoUrl" alt="Generic Logo" class="logo">
-        </ng-template>
-      </div>
-      <div class="col-12">
-        <h2 class="username" *ngIf="currentUser">{{ currentUser.username }}</h2>
-      </div>
+      <a [routerLink]="LOCATIONS.userprofile">
+        <div class="col-12">
+          <ng-container *ngIf="currentUser?.photoUrl; else genericLogoTemplate">
+            <img [src]="currentUser?.photoUrl" alt="User Logo" class="logo">
+          </ng-container>
+          <ng-template #genericLogoTemplate>
+            <img [src]="genericLogoUrl" alt="Generic Logo" class="logo">
+          </ng-template>
+        </div>
+        <div class="col-12">
+          <h2 class="username" *ngIf="currentUser">{{ currentUser.username }}</h2>
+        </div>
+      </a>
     </div>
     <div class="row w-100">
       <div class="col-12 col-md-6 text-center mb-3">
