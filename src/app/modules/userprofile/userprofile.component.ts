@@ -4,9 +4,10 @@ import { UserService } from '../../shared/service/user.service';
 import { User } from '../../shared/interfaces/users';
 import { CommonModule, NgIf } from '@angular/common';
 import { SubscriptionLike } from 'rxjs';
-import { ASSET_URLS, LOCATIONS } from '../../shared/components/constants';
+import { ASSET_URLS, LOCATIONS, TOAST_MSGS } from '../../shared/components/constants';
 import { Router } from '@angular/router';
 import { PrivacySetting } from '../../shared/interfaces/enums/EnumPrivacySetting';
+import { ToastService } from '../../shared/service/toast.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -25,7 +26,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   userIcon = ASSET_URLS.genericlogo;
   privacySettings = Object.values(PrivacySetting);
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(private userService: UserService,
+              private router: Router,
+              private toastService: ToastService ,
+              private elementRef: ElementRef) {}
 
   ngOnInit() {
     this.initForm();
@@ -129,8 +133,23 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       this.userService.updateUser(this.userId, updatedUser).subscribe({
         next: () => {
           this.passwordForm.reset();
+          this.toastService.showToast(TOAST_MSGS.modifiedpassword, 'success');
+          this.closeModal('#changePasswordModal');
         }
       });
+    }
+  }
+
+  closeModal(modalId: string) {
+    const modalElement = this.elementRef.nativeElement.querySelector(modalId);
+    if (modalElement) {
+      modalElement.classList.remove('show');
+      modalElement.style.display = 'none';
+      document.body.classList.remove('modal-open');
+      const modalBackdrop = document.querySelector('.modal-backdrop');
+      if (modalBackdrop) {
+        modalBackdrop.remove();
+      }
     }
   }
 }

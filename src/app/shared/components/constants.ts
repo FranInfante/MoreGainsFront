@@ -32,5 +32,6 @@ export const TOAST_MSGS = {
   logout: 'Logged out successfully.',
   register: 'Registered successfully. You can now log in.',
   errorregister:'Error registering user. Please try again later.',
-  fillallfields:'Please fill out all fields.'
+  fillallfields:'Please fill out all fields.',
+  modifiedpassword: 'Successfully changed password.'
 };
