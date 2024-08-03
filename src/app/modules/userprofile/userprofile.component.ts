@@ -59,7 +59,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       password: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.minLength(6)]),
       email: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.email]),
       bio: new FormControl({ value: '', disabled: true }),
-      privacySetting: new FormControl({ value: '', disabled: true }, [Validators.required])
+      privacySetting: new FormControl({ value: '', disabled: true }, [Validators.required]),
+      isAvailable: new FormControl({ value: '', disabled: true })
     });
   }
 
