@@ -23,7 +23,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   user?: User;
   isEditing: boolean = false;
   subscriptions: SubscriptionLike[] = [];
-  userIcon = ASSET_URLS.genericlogo;
+  userIcon: string | null = null;
   privacySettings = Object.values(PrivacySetting);
   selectedFile: File | null = null;
 
@@ -40,8 +40,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         if (user && user.id) {
           this.userId = user.id;
           this.loadUser();
-        } else {
-          console.error('Failed to get user ID.');
+          this.userIcon = user.photoUrl ? `http://localhost:8080${user.photoUrl}` : ASSET_URLS.genericlogo;
         }
       })
     );
@@ -155,13 +154,13 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
         this.userService.uploadProfilePicture(formData).subscribe({
             next: (response) => {
-                console.log('Profile picture uploaded successfully', response);
                 this.userIcon = `http://localhost:8080${response.imageUrl}`;
-                this.toastService.showToast('Profile picture uploaded successfully', 'success');
+                
+                this.toastService.showToast(TOAST_MSGS.successfulimg, 'success');
+                this.closeModal('#uploadProfilePictureModal');
             },
             error: (error) => {
-                console.error('Error uploading profile picture', error);
-                this.toastService.showToast('Error uploading profile picture', 'danger');
+                this.toastService.showToast(TOAST_MSGS.erroruploadimg, 'danger');
             }
         });
     }
