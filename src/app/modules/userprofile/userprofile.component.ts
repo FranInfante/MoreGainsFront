@@ -8,6 +8,7 @@ import { ASSET_URLS, LOCATIONS, TOAST_MSGS } from '../../shared/components/const
 import { Router } from '@angular/router';
 import { PrivacySetting } from '../../shared/interfaces/enums/EnumPrivacySetting';
 import { ToastService } from '../../shared/service/toast.service';
+import { BASE } from '../../shared/routes/user-routes';
 
 @Component({
   selector: 'app-user-profile',
@@ -40,7 +41,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         if (user && user.id) {
           this.userId = user.id;
           this.loadUser();
-          this.userIcon = user.photoUrl ? `http://localhost:8080${user.photoUrl}` : ASSET_URLS.genericlogo;
+          this.userIcon = user.photoUrl ? `${BASE}${user.photoUrl}` : ASSET_URLS.genericlogo;
         }
       })
     );
@@ -154,7 +155,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
         this.userService.uploadProfilePicture(formData).subscribe({
             next: (response) => {
-                this.userIcon = `http://localhost:8080${response.imageUrl}`;
+                this.userIcon = `${BASE}${response.imageUrl}`;
                 
                 this.toastService.showToast(TOAST_MSGS.successfulimg, 'success');
                 this.closeModal('#uploadProfilePictureModal');

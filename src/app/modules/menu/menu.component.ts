@@ -5,6 +5,7 @@ import { SubscriptionLike } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ASSET_URLS, LOCATIONS } from '../../shared/components/constants';
 import { RouterLink } from '@angular/router';
+import { BASE } from '../../shared/routes/user-routes';
 
 @Component({
   selector: 'app-menu',
@@ -28,9 +29,15 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription = this.userService.getCurrentUser().subscribe(user => {
-      this.currentUser = user;
+      if (user) {
+        this.currentUser = {
+          ...user,
+          photoUrl: user.photoUrl ? `${BASE}${user.photoUrl}` : undefined
+        };
+      }
     });
   }
+
   ngOnDestroy(): void {
     if (this.subscription) {
       this.subscription.unsubscribe();
@@ -39,8 +46,12 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   initUserSubject(): void {
     this.subscription = this.userService.userSubject.subscribe(user => {
-      this.currentUser = user;
+      if (user) {
+        this.currentUser = {
+          ...user,
+          photoUrl: user.photoUrl ? `${BASE}${user.photoUrl}` : undefined
+        };
+      }
     });
   }
-
 }
