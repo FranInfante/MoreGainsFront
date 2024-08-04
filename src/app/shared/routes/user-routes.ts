@@ -11,5 +11,5 @@ export const USER_ROUTES = {
     update: (id: number) => `${USER_API_URL}/${id}`,
     delete: (id: number) => `${USER_API_URL}/${id}`,
     login: () => `${USER_API_URL}/login`,
-    uploadProfilePicture: () => `${USER_API_URL}/profile-picture`
+    uploadProfilePicture: () => `${USER_API_URL}/upload-profile-picture`
   };
