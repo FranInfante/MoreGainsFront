@@ -130,7 +130,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   changePassword() {
     if (this.userId !== null && this.passwordForm.valid) {
       const newPassword = this.passwordForm.get('newPassword')?.value;
-      const updatedUser = { ...this.user, password: newPassword } as User;
+      const updatedUser = { password: newPassword } as User;
       this.userService.updateUser(this.userId, updatedUser).subscribe({
         next: () => {
           this.passwordForm.reset();
