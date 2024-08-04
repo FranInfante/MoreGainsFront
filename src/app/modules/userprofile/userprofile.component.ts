@@ -27,6 +27,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   userIcon: string | null = null;
   privacySettings = Object.values(PrivacySetting);
   selectedFile: File | null = null;
+  isPlaceholderVisible: boolean = false;
 
   constructor(private userService: UserService,
               private router: Router,
@@ -177,5 +178,12 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         modalBackdrop.remove();
       }
     }
+  }
+  showPlaceholder() {
+    this.isPlaceholderVisible = true;
+  }
+
+  hidePlaceholder() {
+    this.isPlaceholderVisible = false;
   }
 }
