@@ -1,0 +1,9 @@
+.navbar.fixed-top {
+    padding: 0.5rem 1rem;
+  }
+  
+  .navbar .btn {
+    margin-left: 0;
+    margin-right: auto; 
+    color: #fff; 
+  }
