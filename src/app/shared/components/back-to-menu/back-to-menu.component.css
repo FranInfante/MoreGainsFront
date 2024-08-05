@@ -3,7 +3,13 @@
   }
   
   .navbar .btn {
-    margin-left: 0;
-    margin-right: auto; 
-    color: #fff; 
+    color: #fff;
+  }
+  
+  .navbar-text {
+    flex-grow: 1;
+    text-align: center;
+    color: #fff;
+    font-size: 1.25rem;
+    margin-right: 3rem;
   }

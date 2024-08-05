@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { LOCATIONS } from '../constants';
 
@@ -10,6 +10,8 @@ import { LOCATIONS } from '../constants';
   styleUrl: './back-to-menu.component.css'
 })
 export class BackToMenuComponent {
+  
+  @Input() displayText: string = '';
 
   constructor(private router: Router) {}
 
