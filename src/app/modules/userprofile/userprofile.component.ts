@@ -8,6 +8,7 @@ import { ASSET_URLS, LOCATIONS, TOAST_MSGS } from '../../shared/components/const
 import { Router } from '@angular/router';
 import { PrivacySetting } from '../../shared/interfaces/enums/EnumPrivacySetting';
 import { ToastService } from '../../shared/service/toast.service';
+import { BASE } from '../../shared/routes/user-routes';
 
 @Component({
   selector: 'app-user-profile',
@@ -23,9 +24,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   user?: User;
   isEditing: boolean = false;
   subscriptions: SubscriptionLike[] = [];
-  userIcon = ASSET_URLS.genericlogo;
+  userIcon: string | null = null;
   privacySettings = Object.values(PrivacySetting);
   selectedFile: File | null = null;
+  isPlaceholderVisible: boolean = false;
 
   constructor(private userService: UserService,
               private router: Router,
@@ -40,8 +42,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         if (user && user.id) {
           this.userId = user.id;
           this.loadUser();
-        } else {
-          console.error('Failed to get user ID.');
+          this.userIcon = user.photoUrl ? `${BASE}${user.photoUrl}` : ASSET_URLS.genericlogo;
         }
       })
     );
@@ -130,7 +131,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   changePassword() {
     if (this.userId !== null && this.passwordForm.valid) {
       const newPassword = this.passwordForm.get('newPassword')?.value;
-      const updatedUser = { ...this.user, password: newPassword } as User;
+      const updatedUser = { password: newPassword } as User;
       this.userService.updateUser(this.userId, updatedUser).subscribe({
         next: () => {
           this.passwordForm.reset();
@@ -155,13 +156,13 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
         this.userService.uploadProfilePicture(formData).subscribe({
             next: (response) => {
-                console.log('Profile picture uploaded successfully', response);
-                this.userIcon = `http://localhost:8080${response.imageUrl}`;
-                this.toastService.showToast('Profile picture uploaded successfully', 'success');
+                this.userIcon = `${BASE}${response.imageUrl}`;
+                
+                this.toastService.showToast(TOAST_MSGS.successfulimg, 'success');
+                this.closeModal('#uploadProfilePictureModal');
             },
             error: (error) => {
-                console.error('Error uploading profile picture', error);
-                this.toastService.showToast('Error uploading profile picture', 'danger');
+                this.toastService.showToast(TOAST_MSGS.erroruploadimg, 'danger');
             }
         });
     }
@@ -177,5 +178,12 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         modalBackdrop.remove();
       }
     }
+  }
+  showPlaceholder() {
+    this.isPlaceholderVisible = true;
+  }
+
+  hidePlaceholder() {
+    this.isPlaceholderVisible = false;
   }
 }

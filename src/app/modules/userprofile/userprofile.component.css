@@ -2,6 +2,7 @@
     width: 15rem;
     height: 15rem;
     object-fit: cover;
+    transition: filter 0.3s ease;
 }
 
 .iconcontainer {
@@ -89,4 +90,46 @@
 .modal .btn-close:hover {
     color: #000;
     opacity: 0.75;
+}
+
+.profile-img-container {
+    position: relative;
+    width: 15rem;
+    height: 15rem;
+    cursor: pointer;
+}
+
+.profile-img-container:hover .icon-img {
+    filter: grayscale(100%);
+}
+
+@media (max-width: 768px) {
+    .profile-img-container {
+        width: 10rem;
+        height: 10rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .profile-img-container {
+        width: 8rem;
+        height: 8rem;
+    }
+}
+
+.placeholder-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: none;
+    pointer-events: none;
+}
+
+.profile-img-container:hover .placeholder-text {
+    display: block;
 }

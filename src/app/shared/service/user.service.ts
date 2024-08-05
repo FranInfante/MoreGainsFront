@@ -120,17 +120,17 @@ export class UserService {
         'Accept': 'application/json'
     });
 
-    return this.http.post<{ imageUrl: string }>('http://localhost:8080/api/v1/users/upload-profile-picture', formData, { headers }).pipe(
+    return this.http.post<{ imageUrl: string }>(USER_ROUTES.uploadProfilePicture(), formData, { headers }).pipe(
+      
         map(response => {
             if (response && response.imageUrl) {
                 return response;
             } else {
-                throw new Error('Invalid response format');
+                throw new Error(MSG.invalidformat);
             }
         }),
         catchError((error) => {
-            console.error('Error uploading profile picture:', error);
-            return throwError(() => new Error('Error uploading profile picture'));
+            return throwError(() => new Error(MSG.errorupload));
         })
     );
 }

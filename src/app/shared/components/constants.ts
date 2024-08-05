@@ -24,7 +24,9 @@ export const MSG = {
   unknownLoginError: 'An error occurred while logging in. Please try again later.',
   fetcherror: 'An error occurred while fetching user information. Please try again later.',
   unauthorized: 'Unauthorized access. Please log in again.',
-  notoken: 'No authentication token available.'
+  notoken: 'No authentication token available.',
+  errorupload: 'Error uploading profile picture',
+  invalidformat: 'Invalid response format'
 };
 
 export const TOAST_MSGS = {
@@ -34,5 +36,7 @@ export const TOAST_MSGS = {
   errorregister:'Error registering user. Please try again later.',
   fillallfields:'Please fill out all fields.',
   modifiedpassword: 'Successfully changed password.',
-  modifiedProfilePicture: 'Successfully changed profile picture'
+  modifiedProfilePicture: 'Successfully changed profile picture',
+  successfulimg: 'Profile picture uploaded successfully',
+  erroruploadimg: 'Error uploading profile picture'
 };

@@ -23,13 +23,17 @@
         </div>
       </form>
     </div>
-    <div class="col-md-6 order-md-2 order-1 d-flex flex-column align-items-center iconcontainer">
-      <img [src]="userIcon" class="rounded-circle mb-3 icon-img" alt="Profile Image" data-bs-toggle="modal" data-bs-target="#uploadProfilePictureModal">
+    <div class="col-md-6 order-md-2 order-1 d-flex flex-column align-items-center iconcontainer position-relative">
+      <div class="profile-img-container" (mouseover)="showPlaceholder()" (mouseout)="hidePlaceholder()">
+        <img [src]="userIcon" class="rounded-circle mb-3 icon-img" alt="Profile Image" data-bs-toggle="modal" data-bs-target="#uploadProfilePictureModal">
+        <div class="placeholder-text" [class.show]="isPlaceholderVisible">Click to change profile picture</div>
+      </div>
       <h5>{{ user?.username }}</h5>
       <p>{{ user?.email }}</p>
     </div>
   </div>
 
+  <!-- Deactivate Modal -->
   <div class="modal fade" id="deactivateModal" tabindex="-1" aria-labelledby="deactivateModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -48,6 +52,7 @@
     </div>
   </div>
 
+  <!-- Change Password Modal -->
   <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
@@ -75,6 +80,7 @@
     </div>
   </div>
 
+  <!-- Upload Profile Picture Modal -->
   <div class="modal fade" id="uploadProfilePictureModal" tabindex="-1" aria-labelledby="uploadProfilePictureModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
