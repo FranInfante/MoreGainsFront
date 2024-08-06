@@ -2,8 +2,8 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './modules/+home/home.component';
 import { SignInComponent } from './modules/+login/sign-in/sign-in.component';
 import { RegisterComponent } from './modules/+login/register/register.component';
-import { MenuComponent } from './modules/menu/menu.component';
-import { UserProfileComponent } from './modules/userprofile/userprofile.component';
+import { MenuComponent } from './modules/+menu/menu.component';
+import { UserProfileComponent } from './modules/+userprofile/userprofile.component';
 
 
 export const routes: Routes = [
