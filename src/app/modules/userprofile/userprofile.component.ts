@@ -9,11 +9,12 @@ import { Router } from '@angular/router';
 import { PrivacySetting } from '../../shared/interfaces/enums/EnumPrivacySetting';
 import { ToastService } from '../../shared/service/toast.service';
 import { BASE } from '../../shared/routes/user-routes';
+import { BackToMenuComponent } from "../../shared/components/back-to-menu/back-to-menu.component";
 
 @Component({
   selector: 'app-user-profile',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, NgIf, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, NgIf, CommonModule, BackToMenuComponent],
   templateUrl: './userprofile.component.html',
   styleUrl: './userprofile.component.css'
 })

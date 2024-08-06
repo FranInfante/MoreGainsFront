@@ -1,0 +1,15 @@
+.navbar.fixed-top {
+    padding: 0.5rem 1rem;
+  }
+  
+  .navbar .btn {
+    color: #fff;
+  }
+  
+  .navbar-text {
+    flex-grow: 1;
+    text-align: center;
+    color: #fff;
+    font-size: 1.25rem;
+    margin-right: 3rem;
+  }
