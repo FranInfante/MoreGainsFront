@@ -1,6 +1,7 @@
 import { environment } from "../../../environments/environment";
 
 export const USER_API_URL = environment.endpointUrl + 'users';
+export const PLAN_API_URL = environment.endpointUrl + 'plans';
 
 export const BASE = environment.base;
 
