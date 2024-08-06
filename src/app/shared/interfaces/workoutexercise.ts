@@ -5,7 +5,7 @@ export interface WorkoutExercise {
     id: number;
     workout: Workout;
     exercise: Exercise;
-    sets: number;
     reps: number;
+    sets: number;
     weight: number;
 }
