@@ -17,7 +17,7 @@ export const LOCATIONS = {
   register: '/register',
   menu: '/menu',
   userprofile: '/userprofile',
-  plans: '/plans'
+  plans: '/plan'
 };
 
 export const MSG = {

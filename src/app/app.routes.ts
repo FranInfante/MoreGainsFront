@@ -4,8 +4,7 @@ import { SignInComponent } from './modules/+login/sign-in/sign-in.component';
 import { RegisterComponent } from './modules/+login/register/register.component';
 import { MenuComponent } from './modules/menu/menu.component';
 import { UserProfileComponent } from './modules/userprofile/userprofile.component';
-import { WorkoutsComponent } from './modules/workouts/workouts.component';
-
+import { PlanComponent } from './modules/workouts/components/plan/plan.component';
 
 export const routes: Routes = [
     {path: "", component: HomeComponent},
@@ -13,5 +12,5 @@ export const routes: Routes = [
     {path: "register", component: RegisterComponent},
     {path: "menu", component: MenuComponent},
     {path: "userprofile", component: UserProfileComponent},
-    {path: "workouts", component: WorkoutsComponent}
+    {path: "plan", component: PlanComponent}
 ];
