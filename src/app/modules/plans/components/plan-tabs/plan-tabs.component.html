@@ -1,0 +1,17 @@
+<ul class="nav nav-tabs">
+    <li class="nav-item" *ngFor="let plan of plans">
+      <a class="nav-link" [class.active]="plan.id === activePlanId" (click)="selectPlan(plan.id)">
+        {{ plan.name }}
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" (click)="addPlan()">+</a>
+    </li>
+  </ul>
+  <div class="tab-content mt-3">
+    <div class="tab-pane fade show active">
+      <ng-container *ngIf="activePlan">
+        <h3>{{ activePlan.name }}</h3>
+      </ng-container>
+    </div>
+  </div>

@@ -1,0 +1,13 @@
+import { environment } from "../../../environments/environment";
+
+export const PLAN_API_URL = environment.endpointUrl + 'plans';
+export const BASE = environment.base;
+
+export const PLAN_ROUTES = {
+  list: () => `${PLAN_API_URL}`,
+  create: () => `${PLAN_API_URL}`,
+  update: (id: number) => `${PLAN_API_URL}/${id}`,
+  delete: (id: number) => `${PLAN_API_URL}/${id}`,
+  workouttoplan: (id: number) => `${PLAN_API_URL}/${id}/workouts`,
+  byUser: (userId: number) => `${PLAN_API_URL}/user/${userId}`
+};
