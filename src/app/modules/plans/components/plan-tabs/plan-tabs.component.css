@@ -1,0 +1,8 @@
+.fixed-bottom {
+    border: none; /* Remove any border */
+  }
+  
+  .nav-tabs {
+    border-bottom: none; /* Remove border under tabs */
+  }
+  
