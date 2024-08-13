@@ -5,18 +5,20 @@ import { FormsModule } from '@angular/forms';
 import { Plan } from '../../../../shared/interfaces/plan';
 import { User } from '../../../../shared/interfaces/users';
 import { UserService } from '../../../../shared/service/user.service';
+import { BackToMenuComponent } from '../../../../shared/components/back-to-menu/back-to-menu.component';
 @Component({
   selector: 'app-plan-tabs',
   standalone: true,
   templateUrl: './plan-tabs.component.html',
   styleUrls: ['./plan-tabs.component.css'],
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BackToMenuComponent],
 })
 export class PlanTabsComponent implements OnInit {
   plans: Plan[] = [];
   activePlanId: number | null = null;
   activePlan: Plan | null = null;
   currentUser: User | null = null;
+  user: User | null = null;
 
   constructor(
     private planService: PlanService,
@@ -25,6 +27,11 @@ export class PlanTabsComponent implements OnInit {
 
   
   ngOnInit(): void {
+    this.userService.getCurrentUser().subscribe(user => {
+      if (user && user.id) {
+        this.user = user;
+      }
+    });
     this.userService.userSubject.subscribe(user => {
       if (user && user.id !== undefined) {
         this.currentUser = user;

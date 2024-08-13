@@ -1,8 +1,32 @@
 .fixed-bottom {
     border: none; /* Remove any border */
-  }
-  
-  .nav-tabs {
+    padding-bottom: 1rem; /* Adjust padding to prevent overlap */
+}
+
+.nav-tabs {
     border-bottom: none; /* Remove border under tabs */
+}
+
+h3 {
+    margin-top: 2rem; /* Adjust this margin to create more space */
+    font-size: 1.5rem; /* Adjust font size if necessary */
+}
+
+@media (max-width: 250px) {
+  h3 {
+    font-size: 1.25rem; /* Reduce font size for smaller screens */
+    margin-top: 3rem; /* Increase top margin on small screens */
   }
-  
+
+  .navbar-text {
+    font-size: 1rem; /* Adjust navbar text size for smaller screens */
+  }
+
+  .tab-content {
+    padding-top: 2.5rem; /* Push content down to prevent overlap */
+  }
+
+  .fixed-bottom {
+    padding-bottom: 2rem; /* Ensure the bottom elements don’t overlap */
+  }
+}
