@@ -1,32 +1,32 @@
 .fixed-bottom {
-    border: none; /* Remove any border */
-    padding-bottom: 1rem; /* Adjust padding to prevent overlap */
+    border: none;
+    padding-bottom: 1rem;
 }
 
 .nav-tabs {
-    border-bottom: none; /* Remove border under tabs */
+    border-bottom: none;
 }
 
 h3 {
-    margin-top: 2rem; /* Adjust this margin to create more space */
-    font-size: 1.5rem; /* Adjust font size if necessary */
+    margin-top: 2rem;
+    font-size: 1.5rem;
 }
 
 @media (max-width: 250px) {
   h3 {
-    font-size: 1.25rem; /* Reduce font size for smaller screens */
-    margin-top: 3rem; /* Increase top margin on small screens */
+    font-size: 1.25rem;
+    margin-top: 3rem;
   }
 
   .navbar-text {
-    font-size: 1rem; /* Adjust navbar text size for smaller screens */
+    font-size: 1rem;
   }
 
   .tab-content {
-    padding-top: 2.5rem; /* Push content down to prevent overlap */
+    padding-top: 2.5rem;
   }
 
   .fixed-bottom {
-    padding-bottom: 2rem; /* Ensure the bottom elements don’t overlap */
+    padding-bottom: 2rem;
   }
 }
