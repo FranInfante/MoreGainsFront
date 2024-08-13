@@ -71,7 +71,7 @@ export class PlanTabsComponent implements OnInit {
       const newPlan: Plan = {
         id: this.plans.length + 1,
         name: `Plan ${this.plans.length + 1}`,
-        user: this.currentUser,
+        userId: this.currentUser.id!,
         workouts: [],
       };
       this.planService.addPlan(newPlan).subscribe((plan) => {
