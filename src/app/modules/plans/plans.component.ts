@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 import { PlanService } from '../../shared/service/plan.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,17 +13,23 @@ import { BackToMenuComponent } from '../../shared/components/back-to-menu/back-t
   styleUrls: ['./plans.component.css'],
   imports: [CommonModule, FormsModule, BackToMenuComponent],
 })
-export class PlansComponent implements OnInit {
+export class PlansComponent implements OnInit, AfterViewChecked {
   plans: Plan[] = [];
   activePlanId: number | null = null;
   activePlan: Plan | null = null;
   currentUser: User | null = null;
   user: User | null = null;
 
+  @ViewChild('navTabs', { static: false }) navTabs!: ElementRef<HTMLUListElement>;
+
   constructor(
     private planService: PlanService,
-    private userService: UserService
+    private userService: UserService,
+    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef
   ) {}
+  ngAfterViewChecked(): void {
+    throw new Error('Method not implemented.');
+  }
 
   ngOnInit(): void {
     this.userService.getCurrentUser().subscribe(user => {
@@ -78,8 +84,20 @@ export class PlansComponent implements OnInit {
       this.planService.addPlan(newPlan).subscribe((plan) => {
         this.plans.push(plan);
         this.selectPlan(plan.id);
+        this.cdr.detectChanges(); // Manually trigger change detection
+        this.scrollToRight(); // Scroll to the right after adding a plan
       });
     }
   }
 
+  scrollToRight(): void {
+    if (this.navTabs) {
+      const navTabsElement = this.navTabs.nativeElement;
+      const maxScrollLeft = navTabsElement.scrollWidth - navTabsElement.clientWidth;
+      navTabsElement.scrollTo({
+        left: maxScrollLeft,
+        behavior: 'smooth'
+      });
+    }
+  }
 }

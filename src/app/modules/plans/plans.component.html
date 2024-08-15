@@ -9,8 +9,7 @@
     </div>
 
     <div class="fixed-bottom-container">
-        <!-- Tabs -->
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs" #navTabs>
             <li class="nav-item" *ngFor="let plan of plans">
                 <a class="nav-link" [class.active]="plan.id === activePlanId" (click)="selectPlan(plan.id)">
                     {{ plan.name }}
