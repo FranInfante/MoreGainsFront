@@ -1,0 +1,33 @@
+.workouts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    padding: 16px;
+  }
+  
+  .workout-box {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .workout-box h4 {
+    margin-bottom: 8px;
+  }
+  
+  .exercises ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .exercises li {
+    margin-bottom: 8px;
+  }
+  
+  .no-workouts {
+    padding: 16px;
+    text-align: center;
+  }
+  
