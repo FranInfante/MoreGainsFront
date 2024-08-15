@@ -20,12 +20,9 @@ export class PlansComponent implements OnInit {
   currentUser: User | null = null;
   user: User | null = null;
 
-  @ViewChild('navTabs', { static: false }) navTabs!: ElementRef<HTMLUListElement>;
-
   constructor(
     private planService: PlanService,
-    private userService: UserService,
-    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -81,20 +78,8 @@ export class PlansComponent implements OnInit {
       this.planService.addPlan(newPlan).subscribe((plan) => {
         this.plans.push(plan);
         this.selectPlan(plan.id);
-        this.cdr.detectChanges(); // Ensure the view has updated
-        setTimeout(() => this.scrollToRight(), 0); // Scroll to the right after adding a plan
       });
     }
   }
 
-  scrollToRight(): void {
-    if (this.navTabs) {
-      const navTabsElement = this.navTabs.nativeElement;
-      const maxScrollLeft = navTabsElement.scrollWidth - navTabsElement.clientWidth;
-      navTabsElement.scrollTo({
-        left: maxScrollLeft,
-        behavior: 'smooth'
-      });
-    }
-  }
 }
