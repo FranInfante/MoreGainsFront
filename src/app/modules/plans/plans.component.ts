@@ -6,12 +6,13 @@ import { Plan } from '../../shared/interfaces/plan';
 import { User } from '../../shared/interfaces/users';
 import { UserService } from '../../shared/service/user.service';
 import { BackToMenuComponent } from '../../shared/components/back-to-menu/back-to-menu.component';
+import { WorkoutsComponent } from "./components/workouts/workouts.component";
 @Component({
   selector: 'app-plan-tabs',
   standalone: true,
   templateUrl: './plans.component.html',
   styleUrls: ['./plans.component.css'],
-  imports: [CommonModule, FormsModule, BackToMenuComponent],
+  imports: [CommonModule, FormsModule, BackToMenuComponent, WorkoutsComponent],
 })
 export class PlansComponent implements OnInit, AfterViewChecked {
   plans: Plan[] = [];
