@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { PlanService } from '../../shared/service/plan.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -19,11 +19,13 @@ export class PlansComponent implements OnInit {
   activePlan: Plan | null = null;
   currentUser: User | null = null;
   user: User | null = null;
-  isTabContainerVisible = false;
+
+  @ViewChild('navTabs', { static: false }) navTabs!: ElementRef<HTMLUListElement>;
 
   constructor(
     private planService: PlanService,
-    private userService: UserService
+    private userService: UserService,
+    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -65,7 +67,6 @@ export class PlansComponent implements OnInit {
     this.activePlanId = id;
     this.planService.getPlanById(id).subscribe((plan) => {
       this.activePlan = plan ?? null;
-      this.isTabContainerVisible = false; // Hide the container after selecting a plan
     });
   }
 
@@ -80,11 +81,20 @@ export class PlansComponent implements OnInit {
       this.planService.addPlan(newPlan).subscribe((plan) => {
         this.plans.push(plan);
         this.selectPlan(plan.id);
+        this.cdr.detectChanges(); // Ensure the view has updated
+        setTimeout(() => this.scrollToRight(), 0); // Scroll to the right after adding a plan
       });
     }
   }
 
-  toggleTabContainer(): void {
-    this.isTabContainerVisible = !this.isTabContainerVisible;
+  scrollToRight(): void {
+    if (this.navTabs) {
+      const navTabsElement = this.navTabs.nativeElement;
+      const maxScrollLeft = navTabsElement.scrollWidth - navTabsElement.clientWidth;
+      navTabsElement.scrollTo({
+        left: maxScrollLeft,
+        behavior: 'smooth'
+      });
+    }
   }
 }

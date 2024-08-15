@@ -8,65 +8,58 @@
     text-align: center;
     padding: 0; /* Ensure there's no padding */
     margin: 0; /* Ensure there's no margin */
-  }
-  
-  .nav-tabs {
+}
+
+.nav-tabs {
     display: flex;
     flex-wrap: nowrap;
-    justify-content: flex-start; /* Align tabs to the start to prevent clipping */
-    overflow-x: auto; /* Allow horizontal scrolling */
+    justify-content: flex-start;
+    overflow-x: auto;
     white-space: nowrap;
-    -ms-overflow-style: none; /* Hide scrollbar in IE */
-    scrollbar-width: thin; /* Make scrollbar thin */
-  }
-  
-  .nav-tabs::-webkit-scrollbar {
-    display: none; /* Hide the scrollbar for webkit browsers */
-  }
-  
-  .nav-item {
-    flex: 0 0 auto; /* Ensure nav items don't shrink */
-  }
-  
-  .nav-link {
+    -ms-overflow-style: none;
+    scrollbar-width: thin;
+    padding: 0; /* Remove padding to avoid interference */
+    margin: 0; /* Remove margin to avoid interference */
+}
+
+.nav-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.nav-item {
+    flex: 0 0 auto;
+}
+
+.nav-link {
     padding: 10px 20px;
     cursor: pointer;
     color: #007bff;
-    text-align: center; /* Center text inside the nav-link */
-  }
-  
-  .nav-link.active {
+    text-align: center;
+}
+
+.nav-link.active {
     color: #fff;
     background-color: #007bff;
     border-radius: 5px;
-  }
-  
-  @media (min-width: 768px) {
-    .nav-tabs {
-      flex-wrap: wrap; /* Allow wrapping of tabs for larger screens */
-    }
-  
-    .nav-item {
-      flex: 1 1 auto; /* Allow nav items to grow and shrink with available space */
-    }
-  }
-  
-  @media (max-width: 250px) {
+}
+
+
+
+@media (max-width: 250px) {
     h3 {
-      font-size: 1.25rem;
-      margin-top: 3rem;
+        font-size: 1.25rem;
+        margin-top: 3rem;
     }
-  
+
     .navbar-text {
-      font-size: 1rem;
+        font-size: 1rem;
     }
-  
+
     .tab-content {
-      padding-top: 2.5rem;
+        padding-top: 2.5rem;
     }
-  
+
     .fixed-bottom-container {
-      padding-bottom: 2rem;
+        padding-bottom: 2rem;
     }
-  }
-  
+}
