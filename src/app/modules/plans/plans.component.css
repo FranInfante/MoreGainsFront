@@ -6,6 +6,7 @@
     background-color: #343a40;
     transition: bottom 0.3s ease-in-out;
     z-index: 10;
+    text-align: center; /* Center content inside the container */
   }
   
   .fixed-bottom-container.visible {
@@ -16,40 +17,52 @@
     bottom: -100px; /* Move it down when hidden */
   }
   
-  
-  .center-toggle-btn {
-    position: fixed;
-    bottom: 20px; /* Adjust this value to position the toggle button */
+  .toggle-arrow {
+    position: absolute;
+    bottom: 100%; 
     left: 50%;
     transform: translateX(-50%);
     cursor: pointer;
-    z-index: 20;
     color: white;
     font-size: 24px;
+    padding: 10px;
   }
   
   .nav-tabs {
     display: flex;
-    overflow-x: auto;
+    flex-wrap: nowrap;
+    justify-content: center; /* Center tabs horizontally */
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
     white-space: nowrap;
-    -ms-overflow-style: none;
-    scrollbar-width: thin;
+    -ms-overflow-style: none; /* Hide scrollbar in IE */
+    scrollbar-width: thin; /* Make scrollbar thin */
   }
   
   .nav-item {
-    flex: 0 0 auto;
+    flex: 1; /* Allow nav items to grow and shrink */
   }
   
   .nav-link {
     padding: 10px 20px;
     cursor: pointer;
     color: #007bff;
+    text-align: center; /* Center text inside the nav-link */
   }
   
   .nav-link.active {
     color: #fff;
     background-color: #007bff;
     border-radius: 5px;
+  }
+  
+  @media (min-width: 768px) {
+    .nav-tabs {
+      flex-wrap: wrap; /* Allow wrapping of tabs for larger screens */
+    }
+  
+    .nav-item {
+      flex: 1 1 auto; /* Allow nav items to grow and shrink with available space */
+    }
   }
   
   @media (max-width: 250px) {
@@ -66,7 +79,7 @@
       padding-top: 2.5rem;
     }
   
-    .fixed-bottom {
+    .fixed-bottom-container {
       padding-bottom: 2rem;
     }
-  }
+}
