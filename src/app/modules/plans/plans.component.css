@@ -5,26 +5,9 @@
     right: 0;
     background-color: #343a40;
     z-index: 10;
-    text-align: center; /* Center content inside the container */
-  }
-  
-  .fixed-bottom-container.visible {
-    bottom: 0px; /* Show the container when visible */
-  }
-  
-  .fixed-bottom-container.hidden {
-    bottom: -100px; /* Move it down when hidden */
-  }
-  
-  .toggle-arrow {
-    position: absolute;
-    bottom: 100%; 
-    left: 50%;
-    transform: translateX(-50%);
-    cursor: pointer;
-    color: white;
-    font-size: 24px;
-    padding: 10px;
+    text-align: center;
+    padding: 0; /* Ensure there's no padding */
+    margin: 0; /* Ensure there's no margin */
   }
   
   .nav-tabs {

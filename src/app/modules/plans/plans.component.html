@@ -8,12 +8,7 @@
       </div>
     </div>
   
-    <div class="fixed-bottom-container" [ngClass]="{'visible': !isTabContainerVisible, 'hidden': isTabContainerVisible}">
-      <!-- Arrow Icon -->
-      <div class="toggle-arrow" (click)="toggleTabContainer()">
-        <i class="fas" [ngClass]="{'fa-chevron-up': isTabContainerVisible, 'fa-chevron-down': !isTabContainerVisible}"></i>
-      </div>
-  
+    <div class="fixed-bottom-container">
       <!-- Tabs -->
       <ul class="nav nav-tabs">
         <li class="nav-item" *ngFor="let plan of plans">
