@@ -11,5 +11,15 @@ import { Workout } from '../../../../shared/interfaces/workout';
   styleUrl: './workouts.component.css'
 })
 export class WorkoutsComponent {
-  @Input() workouts: Workout[] | null | undefined = null; 
+  @Input() workouts: Workout[] | null | undefined = null;
+  
+  selectedWorkout: Workout | null = null;
+
+  showWorkoutDetails(workout: Workout): void {
+    this.selectedWorkout = workout;
+  }
+
+  closeWorkoutDetails(): void {
+    this.selectedWorkout = null;
+  }
 }

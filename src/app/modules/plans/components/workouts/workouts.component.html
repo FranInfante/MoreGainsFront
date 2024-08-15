@@ -1,17 +1,24 @@
 <div *ngIf="workouts?.length" class="workouts-container">
-    <div *ngFor="let workout of workouts" class="workout-box">
+    <div *ngFor="let workout of workouts" class="workout-box" (click)="showWorkoutDetails(workout)">
       <h4>{{ workout.name }}</h4>
-      <p>{{ workout.description }}</p>
-      <div class="exercises">
-        <h5>Exercises:</h5>
-        <ul>
-          <li *ngFor="let exercise of workout.workoutExercises">
-            {{ exercise.exercise.name }} - {{ exercise.reps }} reps, {{ exercise.sets }} sets, {{ exercise.weight }} kg
-          </li>
-        </ul>
-      </div>
     </div>
   </div>
   <div *ngIf="!workouts?.length" class="no-workouts">
     <p>No workouts available for this plan.</p>
+  </div>
+  
+  <div *ngIf="selectedWorkout" class="workout-details">
+    <div class="workout-details-content">
+      <h4>{{ selectedWorkout.name }}</h4>
+      <p>{{ selectedWorkout.description }}</p>
+      <div class="exercises">
+        <h5>Exercises:</h5>
+        <ul>
+          <li *ngFor="let exercise of selectedWorkout.workoutExercises">
+            {{ exercise.exercise.name }} - {{ exercise.reps }} reps, {{ exercise.sets }} sets, {{ exercise.weight }} kg
+          </li>
+        </ul>
+      </div>
+      <button (click)="closeWorkoutDetails()">Close</button>
+    </div>
   </div>
