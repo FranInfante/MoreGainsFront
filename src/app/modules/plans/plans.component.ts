@@ -19,19 +19,20 @@ export class PlansComponent implements OnInit {
   activePlan: Plan | null = null;
   currentUser: User | null = null;
   user: User | null = null;
+  isTabContainerVisible = false;
 
   constructor(
     private planService: PlanService,
     private userService: UserService
   ) {}
 
-  
   ngOnInit(): void {
     this.userService.getCurrentUser().subscribe(user => {
       if (user && user.id) {
         this.user = user;
       }
     });
+
     this.userService.userSubject.subscribe(user => {
       if (user && user.id !== undefined) {
         this.currentUser = user;
@@ -50,6 +51,7 @@ export class PlansComponent implements OnInit {
       });
     }
   }
+
   fetchUserPlans(userId: number): void {
     this.planService.getPlansByUserId(userId).subscribe((plans) => {
       this.plans = plans;
@@ -63,6 +65,7 @@ export class PlansComponent implements OnInit {
     this.activePlanId = id;
     this.planService.getPlanById(id).subscribe((plan) => {
       this.activePlan = plan ?? null;
+      this.isTabContainerVisible = false; // Hide the container after selecting a plan
     });
   }
 
@@ -79,5 +82,9 @@ export class PlansComponent implements OnInit {
         this.selectPlan(plan.id);
       });
     }
+  }
+
+  toggleTabContainer(): void {
+    this.isTabContainerVisible = !this.isTabContainerVisible;
   }
 }

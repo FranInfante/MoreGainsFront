@@ -1,42 +1,72 @@
-.fixed-bottom {
-    background-color: #343a40; /* Adjust the color to match your theme */
-    padding: 0.5rem 0;
+.fixed-bottom-container {
+    position: fixed;
+    bottom: -100px;
+    left: 0;
+    right: 0;
+    background-color: #343a40;
+    transition: bottom 0.3s ease-in-out;
+    z-index: 10;
+  }
+  
+  .fixed-bottom-container.visible {
+    bottom: 0px; /* Show the container when visible */
+  }
+  
+  .fixed-bottom-container.hidden {
+    bottom: -100px; /* Move it down when hidden */
+  }
+  
+  
+  .center-toggle-btn {
+    position: fixed;
+    bottom: 20px; /* Adjust this value to position the toggle button */
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    z-index: 20;
+    color: white;
+    font-size: 24px;
   }
   
   .nav-tabs {
     display: flex;
-    overflow-x: auto; /* Enables horizontal scrolling */
-    white-space: nowrap; /* Prevents wrapping of tabs */
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: thin; /* Firefox */
-  }
-  
-  .nav-tabs::-webkit-scrollbar {
-    height: 8px; /* Height of the scrollbar */
-  }
-  
-  .nav-tabs::-webkit-scrollbar-thumb {
-    background-color: #888; /* Color of the scrollbar thumb */
-    border-radius: 10px;
-  }
-  
-  .nav-tabs::-webkit-scrollbar-thumb:hover {
-    background-color: #555; /* Darker color when hovering */
+    overflow-x: auto;
+    white-space: nowrap;
+    -ms-overflow-style: none;
+    scrollbar-width: thin;
   }
   
   .nav-item {
-    flex: 0 0 auto; /* Prevents shrinking of tabs */
+    flex: 0 0 auto;
   }
   
   .nav-link {
     padding: 10px 20px;
     cursor: pointer;
-    color: #007bff; /* Default tab color */
+    color: #007bff;
   }
   
   .nav-link.active {
-    color: #fff; /* Active tab color */
-    background-color: #007bff; /* Active tab background */
+    color: #fff;
+    background-color: #007bff;
     border-radius: 5px;
   }
   
+  @media (max-width: 250px) {
+    h3 {
+      font-size: 1.25rem;
+      margin-top: 3rem;
+    }
+  
+    .navbar-text {
+      font-size: 1rem;
+    }
+  
+    .tab-content {
+      padding-top: 2.5rem;
+    }
+  
+    .fixed-bottom {
+      padding-bottom: 2rem;
+    }
+  }
