@@ -1,10 +1,9 @@
 .fixed-bottom-container {
     position: fixed;
-    bottom: -100px;
+    bottom: 0;
     left: 0;
     right: 0;
     background-color: #343a40;
-    transition: bottom 0.3s ease-in-out;
     z-index: 10;
     text-align: center; /* Center content inside the container */
   }
@@ -31,15 +30,19 @@
   .nav-tabs {
     display: flex;
     flex-wrap: nowrap;
-    justify-content: center; /* Center tabs horizontally */
-    overflow-x: auto; /* Allow horizontal scrolling if needed */
+    justify-content: flex-start; /* Align tabs to the start to prevent clipping */
+    overflow-x: auto; /* Allow horizontal scrolling */
     white-space: nowrap;
     -ms-overflow-style: none; /* Hide scrollbar in IE */
     scrollbar-width: thin; /* Make scrollbar thin */
   }
   
+  .nav-tabs::-webkit-scrollbar {
+    display: none; /* Hide the scrollbar for webkit browsers */
+  }
+  
   .nav-item {
-    flex: 1; /* Allow nav items to grow and shrink */
+    flex: 0 0 auto; /* Ensure nav items don't shrink */
   }
   
   .nav-link {
@@ -82,4 +85,5 @@
     .fixed-bottom-container {
       padding-bottom: 2rem;
     }
-}
+  }
+  
