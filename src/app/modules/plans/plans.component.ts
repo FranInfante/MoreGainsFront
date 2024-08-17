@@ -7,6 +7,7 @@ import { User } from '../../shared/interfaces/users';
 import { UserService } from '../../shared/service/user.service';
 import { BackToMenuComponent } from '../../shared/components/back-to-menu/back-to-menu.component';
 import { WorkoutsComponent } from "./components/workouts/workouts.component";
+
 @Component({
   selector: 'app-plan-tabs',
   standalone: true,
@@ -21,16 +22,15 @@ export class PlansComponent implements OnInit, AfterViewChecked {
   currentUser: User | null = null;
   user: User | null = null;
 
+  private isNewPlanAdded = false;
+
   @ViewChild('navTabs', { static: false }) navTabs!: ElementRef<HTMLUListElement>;
 
   constructor(
     private planService: PlanService,
     private userService: UserService,
-    private cdr: ChangeDetectorRef // Inject ChangeDetectorRef
+    private cdr: ChangeDetectorRef
   ) {}
-  ngAfterViewChecked(): void {
-    throw new Error('Method not implemented.');
-  }
 
   ngOnInit(): void {
     this.userService.getCurrentUser().subscribe(user => {
@@ -85,8 +85,8 @@ export class PlansComponent implements OnInit, AfterViewChecked {
       this.planService.addPlan(newPlan).subscribe((plan) => {
         this.plans.push(plan);
         this.selectPlan(plan.id);
-        this.cdr.detectChanges(); // Manually trigger change detection
-        this.scrollToRight(); // Scroll to the right after adding a plan
+        this.isNewPlanAdded = true;
+        this.cdr.detectChanges();
       });
     }
   }
@@ -99,6 +99,13 @@ export class PlansComponent implements OnInit, AfterViewChecked {
         left: maxScrollLeft,
         behavior: 'smooth'
       });
+    }
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.isNewPlanAdded) {
+      this.scrollToRight();
+      this.isNewPlanAdded = false;
     }
   }
 }
