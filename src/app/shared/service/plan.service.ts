@@ -38,4 +38,7 @@ export class PlanService {
   addWorkoutToPlan(planId: number, workout: any): Observable<Plan> {
     return this.http.post<Plan>(PLAN_ROUTES.workouttoplan(planId), workout);
   }
+  deleteWorkoutExercise(workoutId: number, exerciseId: number): Observable<void> {
+  return this.http.delete<void>(`${PLAN_ROUTES.workouttoplan(workoutId)}/exercise/${exerciseId}`);
+}
 }

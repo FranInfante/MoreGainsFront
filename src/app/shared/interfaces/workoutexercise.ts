@@ -4,7 +4,7 @@ import { Exercise } from './exercise';
 export interface WorkoutExercise {
     id: number;
     workout: Workout;
-    exercise: Exercise;
+    exerciseName: string;
     reps: number;
     sets: number;
     weight: number;

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { Plan } from '../../../../shared/interfaces/plan';
 import { CommonModule } from '@angular/common';
 import { Workout } from '../../../../shared/interfaces/workout';
+import { PlanService } from '../../../../shared/service/plan.service';
 
 @Component({
   selector: 'app-workouts',
@@ -15,11 +15,20 @@ export class WorkoutsComponent {
   
   selectedWorkout: Workout | null = null;
 
+  constructor(private planService : PlanService) {}
+
   showWorkoutDetails(workout: Workout): void {
     this.selectedWorkout = workout;
   }
 
   closeWorkoutDetails(): void {
     this.selectedWorkout = null;
+  }
+  deleteExercise(exerciseId: number): void {
+    if (this.selectedWorkout) {
+      this.planService.deleteWorkoutExercise(this.selectedWorkout.id, exerciseId).subscribe(() => {
+        this.selectedWorkout!.workoutExercises = this.selectedWorkout!.workoutExercises.filter(ex => ex.id !== exerciseId);
+      });
+    }
   }
 }

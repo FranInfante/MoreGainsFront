@@ -15,8 +15,8 @@
         <h5>Exercises:</h5>
         <ul>
             <li *ngFor="let exercise of selectedWorkout.workoutExercises; let i = index">
-            {{ exercise.exercise.name }} - {{ exercise.reps }} reps, {{ exercise.sets }} sets, {{ exercise.weight }} kg
-            <button (click)="deleteExercise(i)">Delete</button>  
+              {{ exercise?.exerciseName }} - {{ exercise?.reps }} reps, {{ exercise?.sets }} sets, {{ exercise?.weight }} kg
+            <button (click)="deleteExercise(exercise.id)">Delete</button> 
         </li>
         </ul>
       </div>
