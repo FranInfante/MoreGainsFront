@@ -12,6 +12,7 @@ import { PlanService } from '../../../../shared/service/plan.service';
 })
 export class WorkoutsComponent {
   @Input() workouts: Workout[] | null | undefined = null;
+  @Input() planId: number | null = null; 
   
   selectedWorkout: Workout | null = null;
 
@@ -25,8 +26,8 @@ export class WorkoutsComponent {
     this.selectedWorkout = null;
   }
   deleteExercise(exerciseId: number): void {
-    if (this.selectedWorkout) {
-      this.planService.deleteWorkoutExercise(this.selectedWorkout.id, exerciseId).subscribe(() => {
+    if (this.selectedWorkout && this.planId !== null) {
+      this.planService.deleteWorkoutExercise(this.planId, this.selectedWorkout.id, exerciseId).subscribe(() => {
         this.selectedWorkout!.workoutExercises = this.selectedWorkout!.workoutExercises.filter(ex => ex.id !== exerciseId);
       });
     }

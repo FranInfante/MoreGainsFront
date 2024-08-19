@@ -77,7 +77,7 @@ export class PlansComponent implements OnInit, AfterViewChecked {
   addPlan(): void {
     if (this.currentUser) {
       const newPlan: Plan = {
-        id: this.plans.length + 1,
+        id: 0,
         name: `Plan ${this.plans.length + 1}`,
         userId: this.currentUser.id!,
         workouts: [],
