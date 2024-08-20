@@ -9,7 +9,7 @@
 </div>
 
 <div *ngIf="selectedWorkout" class="workout-details">
-  <button class="btn-close" (click)="closeWorkoutDetails()"></button>
+  <button class="btn-close btn-close-white position-absolute top-0 end-0" (click)="closeWorkoutDetails()"></button>
   <div class="workout-details-content">
     <h4>{{ selectedWorkout.name }}</h4>
     <p>{{ selectedWorkout.description }}</p>

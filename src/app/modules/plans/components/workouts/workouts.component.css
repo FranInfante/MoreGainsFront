@@ -59,9 +59,6 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #5b6eae;
-}
 
 .add-exercise-container {
   text-align: right;
@@ -70,4 +67,24 @@ button:hover {
 .btn-primary.btn-sm {
   padding: 5px 10px;
   font-size: 1rem;
+}
+.workout-details {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #2c2f33;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000; 
+  width: 90%;
+  max-width: 400px;
+  box-sizing: border-box; 
+}
+
+.btn-close {
+  z-index: 1001;
+  border: none;
+  cursor: pointer;
 }
