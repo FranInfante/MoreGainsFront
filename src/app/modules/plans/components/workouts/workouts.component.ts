@@ -16,7 +16,7 @@ import { WorkoutExercise } from '../../../../shared/interfaces/workoutexercise';
 })
 export class WorkoutsComponent {
   @Input() workouts: Workout[] | null | undefined = null;
-  @Input() planId: number | null = null; 
+  @Input() planId: number | null = null;
   
   selectedWorkout: Workout | null = null;
 
@@ -24,11 +24,14 @@ export class WorkoutsComponent {
 
   showWorkoutDetails(workout: Workout): void {
     this.selectedWorkout = workout;
+    document.body.classList.add('modal-open');
   }
 
   closeWorkoutDetails(): void {
     this.selectedWorkout = null;
+    document.body.classList.remove('modal-open');
   }
+
   deleteExercise(exerciseId: number): void {
     if (this.selectedWorkout && this.planId !== null) {
       this.planService.deleteWorkoutExercise(this.planId, this.selectedWorkout.id, exerciseId).subscribe(() => {
