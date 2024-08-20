@@ -1,63 +1,73 @@
 .workouts-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 16px;
-    padding: 16px;
-  }
-  
-  .workout-box {
-    background-color: #2c2f33;
-    border: 1px solid #23272a;
-    border-radius: 8px;
-    padding: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    color: #ffffff;
-    text-align: center;
-    cursor: pointer;
-    aspect-ratio: 1 / 1; /* Makes the box a square */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .workout-details {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #2c2f33;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-  }
-  
-  .workout-details-content {
-    color: #ffffff;
-  }
-  
-  .exercises ul {
-    list-style-type: none;
-    padding-left: 0;
-    color: #d1d1d1;
-  }
-  
-  .exercises li {
-    margin-bottom: 8px;
-    color: #d1d1d1;
-  }
-  
-  button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #7289da;
-    border: none;
-    color: #ffffff;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #5b6eae;
-  }
-  
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
+
+.workout-box {
+  background-color: #2c2f33;
+  border: 1px solid #23272a;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  text-align: center;
+  cursor: pointer;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.workout-details {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #2c2f33;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  width: 90%;
+  max-width: 400px;
+  box-sizing: border-box; /* Ensures padding and width behave properly */
+}
+
+.workout-details-content {
+  color: #ffffff;
+  position: relative; /* Ensures the content positions relative to the close button */
+}
+
+.exercises ul {
+  list-style-type: none;
+  padding-left: 0;
+  color: #d1d1d1;
+}
+
+.exercises li {
+  margin-bottom: 8px;
+}
+
+button {
+  margin: 1rem;
+  padding: 10px 20px;
+  border: none;
+  color: #ffffff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #5b6eae;
+}
+
+.add-exercise-container {
+  text-align: right;
+}
+
+.btn-primary.btn-sm {
+  padding: 5px 10px;
+  font-size: 1rem;
+}

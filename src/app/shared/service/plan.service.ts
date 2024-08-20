@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Plan } from '../interfaces/plan';
 import { PLAN_ROUTES } from '../routes/plan-routes';
+import { WorkoutExercise } from '../interfaces/workoutexercise';
+import { Workout } from '../interfaces/workout';
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +42,8 @@ export class PlanService {
   }
   deleteWorkoutExercise(planId: number, workoutId: number, exerciseId: number): Observable<void> {
     return this.http.delete<void>(PLAN_ROUTES.exerciseInWorkout(planId, workoutId, exerciseId));
+  }
+  addExerciseToWorkout(planId: number, workoutId: number, workoutExercise: WorkoutExercise): Observable<Workout> {
+    return this.http.post<Workout>(`/api/plans/${planId}/workouts/${workoutId}/exercises`, workoutExercise);
   }
 }

@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <h5 class="modal-title">Pick an Exercise</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="onCancel()"></button>
+  </div>
+  <div class="modal-body">
+    <div class="mb-3">
+      <input type="text" class="form-control" placeholder="Search by name" [formControl]="searchControl">
+    </div>
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-action" *ngFor="let exercise of filteredExercises" (click)="onSelectExercise(exercise)">
+        {{ exercise.name }}
+      </li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+  </div>

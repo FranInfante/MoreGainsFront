@@ -1,25 +1,29 @@
 <div *ngIf="workouts?.length" class="workouts-container">
-    <div *ngFor="let workout of workouts" class="workout-box" (click)="showWorkoutDetails(workout)">
-      <h4>{{ workout.name }}</h4>
-    </div>
+  <div *ngFor="let workout of workouts" class="workout-box" (click)="showWorkoutDetails(workout)">
+    <h4>{{ workout.name }}</h4>
   </div>
-  <div *ngIf="!workouts?.length" class="no-workouts">
-    <p>No workouts available for this plan.</p>
-  </div>
-  
-  <div *ngIf="selectedWorkout" class="workout-details">
-    <div class="workout-details-content">
-      <h4>{{ selectedWorkout.name }}</h4>
-      <p>{{ selectedWorkout.description }}</p>
-      <div class="exercises">
-        <h5>Exercises:</h5>
-        <ul>
-            <li *ngFor="let exercise of selectedWorkout.workoutExercises; let i = index">
-              {{ exercise?.exerciseName }} - {{ exercise?.reps }} reps, {{ exercise?.sets }} sets, {{ exercise?.weight }} kg
-            <button (click)="deleteExercise(exercise.id)">Delete</button> 
+</div>
+
+<div *ngIf="!workouts?.length" class="no-workouts">
+  <p>No workouts available for this plan.</p>
+</div>
+
+<div *ngIf="selectedWorkout" class="workout-details">
+  <button class="btn-close" (click)="closeWorkoutDetails()"></button>
+  <div class="workout-details-content">
+    <h4>{{ selectedWorkout.name }}</h4>
+    <p>{{ selectedWorkout.description }}</p>
+    <div class="exercises">
+      <h5>Exercises:</h5>
+      <ul>
+        <li *ngFor="let exercise of selectedWorkout.workoutExercises; let i = index">
+          {{ exercise?.exerciseName }} - {{ exercise?.reps }} reps, {{ exercise?.sets }} sets, {{ exercise?.weight }} kg
+          <button class="btn btn-danger btn-sm" (click)="deleteExercise(exercise.id)">Delete</button>
         </li>
-        </ul>
+      </ul>
+      <div class="add-exercise-container">
+        <button class="btn btn-primary btn-sm" (click)="openExercisePickerModal()">+</button>
       </div>
-      <button (click)="closeWorkoutDetails()">Close</button>
     </div>
   </div>
+</div>
