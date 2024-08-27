@@ -1,9 +1,7 @@
 import { Workout } from './workout';
-import { Exercise } from './exercise';
 
 export interface WorkoutExercise {
-    id: number;
-    workout: Workout;
+    id?: number;
     exerciseName: string;
     reps: number;
     sets: number;

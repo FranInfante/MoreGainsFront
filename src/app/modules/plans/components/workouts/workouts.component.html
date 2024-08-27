@@ -9,7 +9,7 @@
         <ul>
           <li *ngFor="let exercise of selectedWorkout.workoutExercises; let i = index">
             {{ exercise?.exerciseName }} - {{ exercise?.reps }} reps, {{ exercise?.sets }} sets, {{ exercise?.weight }} kg
-            <button class="btn btn-danger btn-sm" (click)="deleteExercise(exercise.id)">Delete</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteExercise(exercise.id!)">Delete</button>
           </li>
         </ul>
         <div class="add-exercise-container">

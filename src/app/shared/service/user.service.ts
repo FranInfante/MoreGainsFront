@@ -109,7 +109,7 @@ export class UserService {
     }
   }
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem('authToken');
   }
   showinfo() {
     return this.http.get<any>(USER_ROUTES.getinfo())

@@ -41,3 +41,4 @@ export const TOAST_MSGS = {
   successfulimg: 'Profile picture uploaded successfully',
   erroruploadimg: 'Error uploading profile picture'
 };
+
