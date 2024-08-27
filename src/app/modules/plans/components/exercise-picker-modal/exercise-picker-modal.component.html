@@ -7,11 +7,13 @@
     <div class="mb-3">
       <input type="text" class="form-control bg-secondary text-white" placeholder="Search exercise by name" [formControl]="searchControl">
     </div>
-    <ul class="list-group mb-3">
-      <li class="list-group-item list-group-item-action bg-secondary text-white" *ngFor="let exercise of filteredExercises" (click)="selectExercise(exercise)">
-        {{ exercise.name }}
-      </li>
-    </ul>
+    <div class="d-flex justify-content-center">
+      <ul class="list-group mb-3" style="width: 80%;">
+        <li class="list-group-item list-group-item-action bg-secondary text-white text-center" *ngFor="let exercise of filteredExercises" (click)="selectExercise(exercise)">
+          {{ exercise.name }}
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div *ngIf="selectedExercise" class="exercise-details">
