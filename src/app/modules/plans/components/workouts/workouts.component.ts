@@ -42,16 +42,10 @@ export class WorkoutsComponent {
 
   openExercisePickerModal(): void {
     const modalRef = this.modalService.open(ExercisePickerModalComponent, { size: 'lg' });
-
-    modalRef.result.then((exercise: Exercise) => {
-      if (exercise && this.selectedWorkout && this.planId !== null) {
-        const workoutExercise: WorkoutExercise = { 
-          exerciseName: exercise.name, 
-          reps: 0, 
-          sets: 0, 
-          weight: 0
-        };
-        this.planService.addExerciseToWorkout(this.planId!, this.selectedWorkout.id, workoutExercise).subscribe((updatedWorkout: Workout) => {
+  
+    modalRef.result.then((workoutExercise: WorkoutExercise) => {
+      if (workoutExercise && this.selectedWorkout && this.planId !== null) {
+        this.planService.addExerciseToWorkout(this.planId, this.selectedWorkout.id, workoutExercise).subscribe((updatedWorkout: Workout) => {
           this.selectedWorkout!.workoutExercises = updatedWorkout.workoutExercises;
         });
       }

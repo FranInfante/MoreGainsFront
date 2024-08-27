@@ -1,0 +1,44 @@
+.modal-header, .modal-body, .modal-footer {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+.exercise-details {
+    background-color: #343a40;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.input-group .form-label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+.input-group .form-control {
+    border-radius: 8px;
+    background-color: #495057;
+    color: #ffffff;
+    border: 1px solid #6c757d;
+}
+
+ul.list-group li {
+    border-radius: 5px; 
+    background-color: #495057;
+    color: #ffffff;
+}
+
+ul.list-group li:hover {
+    background-color: #6c757d;
+}
+
+.btn-primary, .btn-secondary {
+    border-radius: 5px;
+}
+
+.text-center {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+}
