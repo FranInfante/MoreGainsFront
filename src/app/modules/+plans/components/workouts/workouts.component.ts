@@ -19,6 +19,7 @@ export class WorkoutsComponent {
   @Input() planId: number | null = null;
   
   selectedWorkout: Workout | null = null;
+  DeleteIcon : string = ASSET_URLS.DeleteIcon;
   PlusSignIcon : string = ASSET_URLS.PlusSignIcon;
 
   constructor(
