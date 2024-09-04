@@ -108,4 +108,19 @@ export class PlansComponent implements OnInit, AfterViewChecked {
       this.isNewPlanAdded = false;
     }
   }
+
+  deletePlan(id: number): void {
+    this.planService.deletePlan(id).subscribe(() => {
+      this.plans = this.plans.filter(plan => plan.id !== id);
+  
+      if (this.activePlanId === id) {
+        if (this.plans.length > 0) {
+          this.selectPlan(this.plans[0].id);
+        } else {
+          this.activePlan = null;
+          this.activePlanId = null;
+        }
+      }
+    });
+  }
 }
