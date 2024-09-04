@@ -45,10 +45,12 @@
   list-style-type: none;
   padding-left: 0;
   color: #d1d1d1;
+  padding-bottom: 0.7rem;
 }
 
 .exercises li {
   margin-bottom: 1rem;
+  padding-bottom: 0.4rem;
 }
 
 .add-exercise-container {
