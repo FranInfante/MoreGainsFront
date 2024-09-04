@@ -4,6 +4,7 @@ export const ASSET_URLS = {
   sample2: 'landingpage/sample2.mp4',
   logo: 'logo.png',
   logoicon: 'logoicon.png',
+  PlusSignIcon: 'icon/PlusSign.svg',
   genericlogo: 'user/genericlogo.png',
   workout: 'menu/workouts.png',
   mesos: 'menu/mesos.png',
