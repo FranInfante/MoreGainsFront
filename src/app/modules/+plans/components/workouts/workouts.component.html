@@ -1,27 +1,51 @@
-<div *ngIf="selectedWorkout" class="modal-backdrop" (click)="closeWorkoutDetails()">
+<div
+  *ngIf="selectedWorkout"
+  class="modal-backdrop"
+  (click)="closeWorkoutDetails()"
+>
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <button class="btn-close btn-close-white position-absolute top-0 end-0" (click)="closeWorkoutDetails()"></button>
+    <button
+      class="btn-close btn-close-white position-absolute top-0 end-0"
+      (click)="closeWorkoutDetails()"
+    ></button>
     <div class="workout-details-content">
       <h4>{{ selectedWorkout.name }}</h4>
       <div class="exercises">
         <h5 class="title">Exercises:</h5>
         <ul>
-          <li *ngFor="let exercise of selectedWorkout.workoutExercises; let i = index">
-            {{ exercise?.exerciseName }} - {{ exercise?.reps }} x {{ exercise?.sets }} - {{ exercise?.weight }} kg
+          <li
+            *ngFor="
+              let exercise of selectedWorkout.workoutExercises;
+              let i = index
+            "
+          >
+            {{ exercise?.exerciseName }} - {{ exercise?.reps }} x
+            {{ exercise?.sets }} - {{ exercise?.weight }} kg
             <!-- <button class="btn btn-danger btn-sm" (click)="deleteExercise(exercise.id!)">Delete</button> -->
           </li>
         </ul>
         <div class="add-exercise-container">
-          <button class="btn btn-primary rounded-circle btn-lg btn-add-exercise" (click)="openExercisePickerModal()">+</button>
+          <button 
+            class="btn btn-primary rounded-circle btn-lg btn-add-exercise"
+            (click)="openExercisePickerModal()"
+          >            
+          <svg xmlns="http://www.w3.org/2000/svg" stroke="currentColor" width="36" height="36" fill="none" class="bi bi-plus" viewBox="0 0 16 16">
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+          </svg>
+          </button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div [ngClass]="{'content-to-blur': selectedWorkout}">
+<div [ngClass]="{ 'content-to-blur': selectedWorkout }">
   <div *ngIf="workouts?.length" class="workouts-container">
-    <div *ngFor="let workout of workouts" class="workout-box" (click)="showWorkoutDetails(workout)">
+    <div
+      *ngFor="let workout of workouts"
+      class="workout-box"
+      (click)="showWorkoutDetails(workout)"
+    >
       <h4>{{ workout.name }}</h4>
     </div>
   </div>

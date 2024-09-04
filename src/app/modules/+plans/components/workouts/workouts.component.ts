@@ -2,10 +2,10 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Workout } from '../../../../shared/interfaces/workout';
 import { PlanService } from '../../../../shared/service/plan.service';
-import { Exercise } from '../../../../shared/interfaces/exercise';
 import { ExercisePickerModalComponent } from '../exercise-picker-modal/exercise-picker-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WorkoutExercise } from '../../../../shared/interfaces/workoutexercise';
+import { ASSET_URLS } from '../../../../shared/components/constants';
 
 @Component({
   selector: 'app-workouts',
@@ -19,8 +19,13 @@ export class WorkoutsComponent {
   @Input() planId: number | null = null;
   
   selectedWorkout: Workout | null = null;
+  PlusSignIcon : string = ASSET_URLS.PlusSignIcon;
 
-  constructor(private planService: PlanService, private modalService: NgbModal) {}
+  constructor(
+    private planService: PlanService,
+    private modalService: NgbModal
+  ) {
+  }
 
   showWorkoutDetails(workout: Workout): void {
     this.selectedWorkout = workout;
@@ -49,7 +54,6 @@ export class WorkoutsComponent {
           this.selectedWorkout!.workoutExercises = updatedWorkout.workoutExercises;
         });
       }
-    }, () => {
-    });
+    }, () => {});
   }
 }
