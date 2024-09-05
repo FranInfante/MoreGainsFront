@@ -12,7 +12,7 @@
       <h4>{{ selectedWorkout.name }}</h4>
       <div class="exercises">
         <h5 class="title">Exercises:</h5>
-        <ul class="list-unstyled">
+        <ul class="list-unstyled" *ngIf="selectedWorkout.workoutExercises.length > 0; else noExercises">
           <li
             *ngFor="
               let exercise of selectedWorkout.workoutExercises;
@@ -32,6 +32,9 @@
             </button>
           </li>
         </ul>
+        <ng-template #noExercises>
+          <p>No exercises available for this workout.</p>
+        </ng-template>
         <div class="add-exercise-container">
           <button
             class="btn btn-primary btn-lg btn-add-exercise"
