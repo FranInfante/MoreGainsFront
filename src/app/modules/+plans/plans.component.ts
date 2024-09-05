@@ -7,6 +7,7 @@ import { User } from '../../shared/interfaces/users';
 import { UserService } from '../../shared/service/user.service';
 import { BackToMenuComponent } from '../../shared/components/back-to-menu/back-to-menu.component';
 import { WorkoutsComponent } from "./components/workouts/workouts.component";
+import { ASSET_URLS } from '../../shared/components/constants';
 
 @Component({
   selector: 'app-plan-tabs',
@@ -21,6 +22,7 @@ export class PlansComponent implements OnInit, AfterViewChecked {
   activePlan: Plan | null = null;
   currentUser: User | null = null;
   user: User | null = null;
+  ThreeDotsIcon: string = ASSET_URLS.ThreeDotsIcon;
 
   private isNewPlanAdded = false;
 
