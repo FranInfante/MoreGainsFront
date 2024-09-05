@@ -28,6 +28,8 @@ export class PlansComponent implements OnInit, AfterViewChecked {
 
   @ViewChild('navTabs', { static: false }) navTabs!: ElementRef<HTMLUListElement>;
 
+  PlusSignIcon: string = ASSET_URLS.PlusSignIcon;
+
   constructor(
     private planService: PlanService,
     private userService: UserService,

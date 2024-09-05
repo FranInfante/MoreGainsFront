@@ -49,13 +49,25 @@
 </div>
 
 <div [ngClass]="{ 'content-to-blur': selectedWorkout }">
-  <div *ngIf="workouts?.length" class="workouts-container">
-    <div
-      *ngFor="let workout of workouts"
-      class="workout-box"
-      (click)="showWorkoutDetails(workout)"
-    >
-      <h4>{{ workout.name }}</h4>
+  <div *ngIf="workouts?.length" class="container">
+    <div class="row">
+      <ng-container *ngFor="let workout of workouts; let i = index">
+        <div class="col-12 col-md-4 d-flex justify-content-center">
+          <div
+            class="workout-box d-flex justify-content-center align-items-center"
+            (click)="showWorkoutDetails(workout)"
+          >
+            <h5>{{ workout.name }}</h5>
+          </div>
+        </div>
+      </ng-container>
+      <div class="col-12 col-md-4 d-flex justify-content-center mb-4">
+        <div class="workout-box add-workout-box d-flex justify-content-center align-items-center">
+          <h4 class="text-primary">
+            <img [src]="PlusSignIcon" alt="PlusSignIcon" />
+          </h4>
+        </div>
+      </div>
     </div>
   </div>
   <div *ngIf="!workouts?.length" class="no-workouts">

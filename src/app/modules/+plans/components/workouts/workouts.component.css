@@ -1,25 +1,8 @@
-.workouts-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 16px;
-  padding: 16px;
-}
-
 .workout-box {
-  background-color: #2c2f33;
-  border: 1px solid #23272a;
-  border-radius: 8px;
-  padding: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  color: #ffffff;
-  text-align: center;
-  cursor: pointer;
-  aspect-ratio: 1 / 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  
+  height: 10rem;
+  width: 10rem;
 }
-
 .workout-details {
   position: fixed;
   top: 50%;
