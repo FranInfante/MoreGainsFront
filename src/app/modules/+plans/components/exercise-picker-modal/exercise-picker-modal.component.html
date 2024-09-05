@@ -1,15 +1,29 @@
 <div class="modal-header bg-dark text-white">
   <h5 class="modal-title">Add Exercise to Workout</h5>
-  <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="onCancel()"></button>
+  <button
+    type="button"
+    class="btn-close btn-close-white"
+    aria-label="Close"
+    (click)="onCancel()"
+  ></button>
 </div>
 <div class="modal-body bg-dark text-white">
   <div *ngIf="!selectedExercise">
     <div class="mb-3">
-      <input type="text" class="form-control bg-secondary text-white" placeholder="Search exercise by name" [formControl]="searchControl">
+      <input
+        type="text"
+        class="form-control bg-secondary text-white"
+        placeholder="Search exercise by name"
+        [formControl]="searchControl"
+      />
     </div>
     <div class="d-flex justify-content-center">
-      <ul class="list-group mb-3" style="width: 80%;">
-        <li class="list-group-item list-group-item-action bg-secondary text-white text-center" *ngFor="let exercise of filteredExercises" (click)="selectExercise(exercise)">
+      <ul class="list-group mb-3" style="width: 80%">
+        <li
+          class="list-group-item list-group-item-action bg-secondary text-white text-center"
+          *ngFor="let exercise of filteredExercises"
+          (click)="selectExercise(exercise)"
+        >
           {{ exercise.name }}
         </li>
       </ul>
@@ -21,23 +35,52 @@
     <form (ngSubmit)="onSubmit()">
       <div class="input-group mb-3">
         <label class="form-label text-white">Reps:</label>
-        <input type="text" class="form-control bg-secondary text-white" [(ngModel)]="exerciseDetails.reps" name="reps" placeholder="e.g., 10" required>
+        <input
+          type="text"
+          class="form-control bg-secondary text-white"
+          [(ngModel)]="exerciseDetails.reps"
+          name="reps"
+          placeholder="e.g., 10"
+          required
+        />
       </div>
       <div class="input-group mb-3">
         <label class="form-label text-white">Sets:</label>
-        <input type="text" class="form-control bg-secondary text-white" [(ngModel)]="exerciseDetails.sets" name="sets" placeholder="e.g., 3" required>
+        <input
+          type="text"
+          class="form-control bg-secondary text-white"
+          [(ngModel)]="exerciseDetails.sets"
+          name="sets"
+          placeholder="e.g., 3"
+          required
+        />
       </div>
       <div class="input-group mb-3">
         <label class="form-label text-white">Weight (kg):</label>
-        <input type="text" class="form-control bg-secondary text-white" [(ngModel)]="exerciseDetails.weight" name="weight" placeholder="e.g., 20" required>
+        <input
+          type="text"
+          class="form-control bg-secondary text-white"
+          [(ngModel)]="exerciseDetails.weight"
+          name="weight"
+          placeholder="e.g., 20"
+          required
+        />
       </div>
       <div class="d-flex justify-content-between mt-3">
-        <button type="button" class="btn btn-secondary" (click)="deselectExercise()">Back</button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="deselectExercise()"
+        >
+          Back
+        </button>
         <button type="submit" class="btn btn-primary">Add Exercise</button>
       </div>
     </form>
   </div>
 </div>
 <div class="modal-footer bg-dark">
-  <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+  <button type="button" class="btn btn-secondary" (click)="onCancel()">
+    Cancel
+  </button>
 </div>

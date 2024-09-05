@@ -8,22 +8,23 @@
             <div class="flex-grow-1">
               <h3 class="mt-3 ms-5" style="text-align: center;">{{ activePlan.name }}</h3>
             </div>
-            <button class="p-2 ms-3 btn">
+            <button class="p-2 ms-3 btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               <img [src]="ThreeDotsIcon" alt="ThreeDotsIcon">
             </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item delete-item" (click)="deletePlan(activePlan.id)">Delete "{{ activePlan.name }}"</a></li>
+            </ul>
           </div>
       <app-workouts
         [workouts]="activePlan.workouts"
         [planId]="activePlan.id"
       ></app-workouts>
-      <button class="btn btn-danger position-absolute bottom-0 end-0 mb-[3rem] me-3" 
-        (click)="deletePlan(activePlan.id)"
-        style="background-color: red; color: white; z-index: 1000;">
-  DELETE
-</button>
+      
     </ng-container>
     <ng-template #noPlans>
-      <p>No plans available. Please add a plan to get started.</p>
+      <div class="no-plans-container">
+        <p class="text-center">No plans available. Please add a plan to get started.</p>
+      </div>
     </ng-template>
   </div>
 
