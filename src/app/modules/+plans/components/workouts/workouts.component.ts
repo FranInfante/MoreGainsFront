@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Workout } from '../../../../shared/interfaces/workout';
 import { PlanService } from '../../../../shared/service/plan.service';
@@ -6,11 +6,13 @@ import { ExercisePickerModalComponent } from '../exercise-picker-modal/exercise-
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WorkoutExercise } from '../../../../shared/interfaces/workoutexercise';
 import { ASSET_URLS } from '../../../../shared/components/constants';
+import { FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-workouts',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './workouts.component.html',
   styleUrl: './workouts.component.css'
 })
@@ -18,14 +20,22 @@ export class WorkoutsComponent {
   @Input() workouts: Workout[] | null | undefined = null;
   @Input() planId: number | null = null;
   
+  workoutForm: FormGroup;
+  newWorkout = {
+    name: ''
+  };
   selectedWorkout: Workout | null = null;
   DeleteIcon : string = ASSET_URLS.DeleteIcon;
   PlusSignIcon : string = ASSET_URLS.PlusSignIcon;
 
   constructor(
     private planService: PlanService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private fb: FormBuilder
   ) {
+    this.workoutForm = this.fb.group({
+      workoutName: ['', [Validators.required, Validators.maxLength(20)]]
+    });
   }
 
   showWorkoutDetails(workout: Workout): void {
@@ -58,4 +68,24 @@ export class WorkoutsComponent {
     }, () => {});
   }
 
+  createWorkout(): void {
+    if (this.workoutForm.valid && this.planId !== null) {
+      this.planService.createWorkoutinPlan(this.planId, { name: this.workoutForm.value.workoutName }).subscribe({
+        next: (response: Workout) => {
+          if (this.workouts) {
+            this.workouts.push(response);
+          }
+          this.modalService.dismissAll();
+          this.resetWorkoutForm();
+        },
+        error: (error: any) => {
+          console.error('Error creating workout:', error);
+        }
+      });
+    }
+  }
+
+  resetWorkoutForm() {
+    this.workoutForm.reset();
+  }
 }

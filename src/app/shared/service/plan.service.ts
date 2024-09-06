@@ -60,4 +60,12 @@ export class PlanService {
       { headers: headers } 
     );
   }
+  createWorkoutinPlan(planId: number, workout: { name: string }): Observable<Workout> {
+
+    return this.http.post<Workout>(
+      PLAN_ROUTES.createWorkoutinPlan(planId),
+      workout
+    );
+
+  }  
 }
