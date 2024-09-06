@@ -52,9 +52,9 @@
   <div *ngIf="workouts?.length" class="container">
     <div class="row">
       <ng-container *ngFor="let workout of workouts; let i = index">
-        <div class="col-12 col-md-4 d-flex justify-content-center">
+        <div class="col-12 col-md-4 d-flex justify-content-center mb-4">
           <div
-            class="workout-box d-flex justify-content-center align-items-center"
+            class="workout-box d-flex justify-content-center align-items-center mt-3 bg-dark"
             (click)="showWorkoutDetails(workout)"
           >
             <h5>{{ workout.name }}</h5>

@@ -2,6 +2,9 @@
   
   height: 10rem;
   width: 10rem;
+  border-radius: 5%;
+  border: 1px solid white;
+
 }
 .workout-details {
   position: fixed;
