@@ -6,18 +6,18 @@ import { ExercisePickerModalComponent } from '../exercise-picker-modal/exercise-
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { WorkoutExercise } from '../../../../shared/interfaces/workoutexercise';
 import { ASSET_URLS } from '../../../../shared/components/constants';
-import { FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
-import { of } from 'rxjs';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-workouts',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, DragDropModule],
   templateUrl: './workouts.component.html',
   styleUrl: './workouts.component.css'
 })
 export class WorkoutsComponent {
-  @Input() workouts: Workout[] | null | undefined = null;
+  @Input() workouts!: Workout[];
   @Input() planId: number | null = null;
   
   workoutForm: FormGroup;
@@ -87,5 +87,14 @@ export class WorkoutsComponent {
 
   resetWorkoutForm() {
     this.workoutForm.reset();
+  }
+
+  drop(event: CdkDragDrop<Workout[]>) {
+    const previousIndex = this.workouts.findIndex(workout => workout.id === event.item.data.id);
+  
+    if (previousIndex !== -1) {
+      moveItemInArray(this.workouts, previousIndex, event.currentIndex);
+    }
+  
   }
 }
