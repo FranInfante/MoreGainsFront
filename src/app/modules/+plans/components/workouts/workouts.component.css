@@ -1,0 +1,194 @@
+.workout-box {
+  padding: 20px 10px;
+  border: solid 1px #ccc;
+  border-radius: 4px;
+  display: inline-block;
+  box-sizing: border-box;
+  cursor: grab;
+  text-align: center;
+  height: 10rem;
+  width: 10rem;
+  border-radius: 5%;
+}
+
+.add-box {
+  border: solid 1px #ccc;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  height: 5rem;
+  width: 5rem;
+  border-radius: 30%;
+  margin-bottom: 3rem;
+  transition: background-color 0.3s ease, transform 0.3s ease; 
+  
+}
+
+.add-box:hover {
+  background-color: #4196f0;
+  transform: scale(1.05);
+  color: #ffffff;
+}
+
+
+.workout-details {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #2c2f33;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  width: 90%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+
+.workout-details-content {
+  color: #ffffff;
+  position: relative;
+}
+
+.exercises ul {
+  list-style-type: none;
+  padding-left: 0;
+  color: #d1d1d1;
+  padding-bottom: 0.7rem;
+}
+
+.exercises li {
+  margin-bottom: 1rem;
+  padding-bottom: 0.4rem;
+}
+
+.add-exercise-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.btn-add-exercise {
+  font-size: 2rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #007bff;
+  color: #ffffff;
+  border: 1px solid whitemodi;
+  cursor: pointer;
+  margin: 0;
+}
+
+.title{
+
+margin-bottom: 1.5rem;
+
+}
+
+.workout-details {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #2c2f33;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000; 
+  width: 90%;
+  max-width: 400px;
+  box-sizing: border-box; 
+}
+
+.btn-close {
+  z-index: 1001;
+  border: none;
+  cursor: pointer;
+  margin: 1rem;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(0.5px);
+  z-index: 999;
+}
+
+.modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #2c2f33;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  width: 90%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+.modal-open .content-to-blur {
+  filter: blur(0.5px);
+  pointer-events: none;
+}
+.example-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: baseline;
+  width: 100%;
+  max-width: 100%;
+  gap: 15px;
+  padding: 15px;
+  min-height: 60px;
+  border-radius: 4px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.example-box {
+  padding: 20px 10px;
+  border: solid 1px #ccc;
+  border-radius: 4px;
+  display: inline-block;
+  box-sizing: border-box;
+  cursor: move;
+  background: white;
+  text-align: center;
+  font-size: 14px;
+  min-width: 115px;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+@media (max-width: 576px) {
+  .example-list {
+    flex-direction: column;
+    align-items: center;  
+  }}

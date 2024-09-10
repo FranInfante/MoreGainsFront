@@ -4,6 +4,9 @@ export const ASSET_URLS = {
   sample2: 'landingpage/sample2.mp4',
   logo: 'logo.png',
   logoicon: 'logoicon.png',
+  DeleteIcon: 'icons/DeleteIcon.svg',
+  PlusSignIcon: 'icons/PlusSignIcon.svg',
+  ThreeDotsIcon: 'icons/ThreeDotsIcon.svg',
   genericlogo: 'user/genericlogo.png',
   workout: 'menu/workouts.png',
   mesos: 'menu/mesos.png',
@@ -16,7 +19,8 @@ export const LOCATIONS = {
   login: '/login',
   register: '/register',
   menu: '/menu',
-  userprofile: '/userprofile'
+  userprofile: '/userprofile',
+  plans: '/plans'
 };
 
 export const MSG = {
@@ -40,3 +44,4 @@ export const TOAST_MSGS = {
   successfulimg: 'Profile picture uploaded successfully',
   erroruploadimg: 'Error uploading profile picture'
 };
+
