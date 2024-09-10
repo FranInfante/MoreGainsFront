@@ -52,17 +52,19 @@
 </div>
 
 <div [ngClass]="{ 'content-to-blur': selectedWorkout }">
-  <div *ngIf="workouts?.length" class="container">
-    <div class="row">
-      <ng-container *ngFor="let workout of workouts; let i = index">
-        <div class="col-12 col-md-4 d-flex justify-content-center mb-4">
-          <div
-            class="workout-box d-flex justify-content-center align-items-center mt-3 bg-dark"
-            (click)="showWorkoutDetails(workout)"
-          >
-            <h5>{{ workout.name }}</h5>
+  <div class="container">
+    <div class="row mt-3">
+      <ng-container *ngIf="workouts && workouts.length > 0; else noWorkouts">
+        <ng-container *ngFor="let workout of workouts; let i = index">
+          <div class="col-12 col-md-4 d-flex justify-content-center mb-4">
+            <div
+              class="workout-box d-flex justify-content-center align-items-center mt-3 bg-dark"
+              (click)="showWorkoutDetails(workout)"
+            >
+              <h5>{{ workout.name }}</h5>
+            </div>
           </div>
-        </div>
+        </ng-container>
       </ng-container>
       <div
         class="col-12 col-md-4 d-flex justify-content-center mt-3 mb-4"
@@ -77,41 +79,71 @@
           </h4>
         </div>
       </div>
-      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Create New Workout</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <form [formGroup]="workoutForm" (ngSubmit)="createWorkout()">
-                <div class="mb-3">
-                  <label for="workout-name" class="col-form-label">Workout Name:</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="workout-name"
-                    formControlName="workoutName"
-                    required
-                  />
-                  <div *ngIf="workoutForm.get('workoutName')?.invalid && workoutForm.get('workoutName')?.touched" class="text-danger">
-                    <div *ngIf="workoutForm.get('workoutName')?.errors?.['required']">Workout name is required.</div>
-                    <div *ngIf="workoutForm.get('workoutName')?.errors?.['maxlength']">Workout name cannot exceed 20 characters.</div>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="submit" class="btn btn-primary" [disabled]="workoutForm.invalid">Create Workout</button>
-                </div>
-              </form>
-            </div>
-          </div>
+      <ng-template #noWorkouts>
+        <div class="col-12">
+          <p class="text-center px-3">No workouts available for this plan.</p>
         </div>
-      </div>
+      </ng-template>
     </div>
   </div>
-  <div *ngIf="!workouts?.length" class="no-workouts">
-    <p class="text-center px-3">No workouts available for this plan.</p>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create New Workout</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="workoutForm" (ngSubmit)="createWorkout()">
+          <div class="mb-3">
+            <label for="workout-name" class="col-form-label">Workout Name:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="workout-name"
+              formControlName="workoutName"
+              required
+            />
+            <div
+              *ngIf="
+                workoutForm.get('workoutName')?.invalid &&
+                workoutForm.get('workoutName')?.touched
+              "
+              class="text-danger"
+            >
+              <div
+                *ngIf="workoutForm.get('workoutName')?.errors?.['required']"
+              >
+                Workout name is required.
+              </div>
+              <div
+                *ngIf="workoutForm.get('workoutName')?.errors?.['maxlength']"
+              >
+                Workout name cannot exceed 20 characters.
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              data-bs-dismiss="modal"
+              [disabled]="workoutForm.invalid"
+            >
+              Create Workout
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
