@@ -68,4 +68,8 @@ export class PlanService {
     );
 
   }  
+
+  reorderWorkouts(planId: number, workoutIds: number[]): Observable<void> {
+    return this.http.put<void>(PLAN_ROUTES.reorderworkoutsinplan(planId), workoutIds);
+  }
 }

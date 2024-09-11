@@ -91,10 +91,23 @@ export class WorkoutsComponent {
 
   drop(event: CdkDragDrop<Workout[]>) {
     const previousIndex = this.workouts.findIndex(workout => workout.id === event.item.data.id);
+    const currentIndex = event.currentIndex;
   
     if (previousIndex !== -1) {
-      moveItemInArray(this.workouts, previousIndex, event.currentIndex);
-    }
+      moveItemInArray(this.workouts, previousIndex, currentIndex);
+      const workoutIds = this.workouts.map(workout => workout.id);
   
+      if (this.planId !== null) {
+        this.planService.reorderWorkouts(this.planId, workoutIds).subscribe({
+          next: () => {
+            console.log('Workouts reordered successfully.');
+          },
+          error: (error) => {
+            console.error('Error reordering workouts:', error);
+            moveItemInArray(this.workouts, currentIndex, previousIndex);
+          }
+        });
+      }
+    }
   }
 }
