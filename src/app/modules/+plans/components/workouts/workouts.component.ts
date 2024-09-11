@@ -99,9 +99,6 @@ export class WorkoutsComponent {
   
       if (this.planId !== null) {
         this.planService.reorderWorkouts(this.planId, workoutIds).subscribe({
-          next: () => {
-            console.log('Workouts reordered successfully.');
-          },
           error: (error) => {
             console.error('Error reordering workouts:', error);
             moveItemInArray(this.workouts, currentIndex, previousIndex);
