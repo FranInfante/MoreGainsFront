@@ -19,6 +19,7 @@ import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-
 export class WorkoutsComponent {
   @Input() workouts!: Workout[];
   @Input() planId: number | null = null;
+  @Input() isEditing = false;
   
   workoutForm: FormGroup;
   newWorkout = {
@@ -27,6 +28,7 @@ export class WorkoutsComponent {
   selectedWorkout: Workout | null = null;
   DeleteIcon : string = ASSET_URLS.DeleteIcon;
   PlusSignIcon : string = ASSET_URLS.PlusSignIcon;
+  
 
   constructor(
     private planService: PlanService,

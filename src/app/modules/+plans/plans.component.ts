@@ -29,6 +29,7 @@ export class PlansComponent implements OnInit, AfterViewChecked {
   @ViewChild('navTabs', { static: false }) navTabs!: ElementRef<HTMLUListElement>;
 
   PlusSignIcon: string = ASSET_URLS.PlusSignIcon;
+  editMode = false;
 
   constructor(
     private planService: PlanService,
@@ -126,5 +127,8 @@ export class PlansComponent implements OnInit, AfterViewChecked {
         }
       }
     });
+  }
+  toggleEditMode(): void {
+    this.editMode = !this.editMode;
   }
 }

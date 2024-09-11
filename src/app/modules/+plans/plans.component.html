@@ -22,7 +22,7 @@
           <li>
             <a
               class="dropdown-item edit-item"
-              data-bs-toggle="modal"
+              (click)="toggleEditMode()"
               >Edit Workouts</a>
           </li>
           <li>
@@ -38,6 +38,7 @@
       <app-workouts
         [workouts]="activePlan.workouts"
         [planId]="activePlan.id"
+        [isEditing]="editMode"
       ></app-workouts>
 
       <div
