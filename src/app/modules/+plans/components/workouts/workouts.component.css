@@ -2,7 +2,9 @@
   padding: 20px 10px;
   border: solid 1px #ccc;
   border-radius: 4px;
-  display: inline-block;
+  position: relative; /* Ensure button is positioned relative to this box */
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   cursor: grab;
   text-align: center;
@@ -10,6 +12,14 @@
   width: 10rem;
   border-radius: 5%;
 }
+.workout-box .btn-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 20px;
+  z-index: 1;
+}
+
 
 .add-box {
   border: solid 1px #ccc;
