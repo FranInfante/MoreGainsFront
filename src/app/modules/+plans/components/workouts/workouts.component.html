@@ -61,26 +61,28 @@
           class="example-list"
           (cdkDropListDropped)="drop($event)"
         >
-        <div
-  *ngFor="let workout of workouts; let i = index"
-  class="workout-box d-flex justify-content-center align-items-center mt-3 bg-dark"
-  (click)="showWorkoutDetails(workout)"
-  [cdkDragData]="workout"
-  cdkDrag
-  [cdkDragDisabled]="!isEditing"
->
-  <h5>{{ workout.name }}</h5>
-</div>
+          <div
+            *ngFor="let workout of workouts; let i = index"
+            class="workout-box d-flex justify-content-center align-items-center mt-3 bg-dark"
+            (click)="showWorkoutDetails(workout)"
+            [cdkDragData]="workout"
+            cdkDrag
+            [cdkDragDisabled]="!isEditing"
+          >
+            <button
+              *ngIf="isEditing"
+              class="btn-close position-relative top-0 end-0"
+            ></button>
+            <h5>{{ workout.name }}</h5>
+          </div>
         </div>
       </ng-container>
       <div
-        class=" d-flex justify-content-end mt-3 mb-4"
+        class="d-flex justify-content-end mt-3 mb-4"
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
       >
-        <div
-          class="add-box d-flex justify-content-center align-items-center"
-        >
+        <div class="add-box d-flex justify-content-center align-items-center">
           <h4 class="text-primary">
             <img [src]="PlusSignIcon" alt="PlusSignIcon" />
           </h4>
