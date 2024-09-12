@@ -68,23 +68,22 @@
             [cdkDragData]="workout"
             cdkDrag
             [cdkDragDisabled]="!isEditing"
-            [ngClass]="isEditing ? 'editing-bg' : 'bg-dark'">
-            
-          
-            <button
-              *ngIf="isEditing"
-              class="btn-close"
-            ></button>
+            [ngClass]="isEditing ? 'editing-bg' : 'bg-dark'"
+          >
+            <button *ngIf="isEditing" class="btn-close"></button>
             <h5>{{ workout.name }}</h5>
           </div>
         </div>
       </ng-container>
 
       <button
-              *ngIf="isEditing"
-              class="btn-primary savebutton"
-            >Save changes</button>
-      
+        *ngIf="isEditing"
+        class="btn-primary savebutton"
+        (click)="saveReorderedWorkouts()"
+      >
+        Save changes
+      </button>
+
       <div
         class="d-flex justify-content-end mt-3 mb-4"
         data-bs-toggle="modal"
