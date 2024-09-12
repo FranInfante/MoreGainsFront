@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { PlanService } from '../../shared/service/plan.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,7 +7,8 @@ import { User } from '../../shared/interfaces/users';
 import { UserService } from '../../shared/service/user.service';
 import { BackToMenuComponent } from '../../shared/components/back-to-menu/back-to-menu.component';
 import { WorkoutsComponent } from "./components/workouts/workouts.component";
-import { ASSET_URLS } from '../../shared/components/constants';
+import { ASSET_URLS, TOAST_MSGS } from '../../shared/components/constants';
+import { ToastService } from '../../shared/service/toast.service';
 
 @Component({
   selector: 'app-plan-tabs',
@@ -34,7 +35,7 @@ export class PlansComponent implements OnInit, AfterViewChecked {
   constructor(
     private planService: PlanService,
     private userService: UserService,
-    private cdr: ChangeDetectorRef
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -91,7 +92,6 @@ export class PlansComponent implements OnInit, AfterViewChecked {
         this.plans.push(plan);
         this.selectPlan(plan.id);
         this.isNewPlanAdded = true;
-        this.cdr.detectChanges();
       });
     }
   }
@@ -130,5 +130,8 @@ export class PlansComponent implements OnInit, AfterViewChecked {
   }
   toggleEditMode(): void {
     this.editMode = !this.editMode;
+    if (this.editMode) {
+      this.toastService.showToast(TOAST_MSGS.editmode, 'success');
+    }
   }
 }
