@@ -7,11 +7,11 @@ import { BehaviorSubject, Subject } from 'rxjs';
   providedIn: 'root'
 })
 export class ToastService {
-  private toastState = new BehaviorSubject<{ show: boolean, body: string, type: 'success' | 'danger', duration: number }>({ show: false, body: '', type: 'success', duration: 5000 });
+  private toastState = new BehaviorSubject<{ show: boolean, body: string, type: 'success' | 'danger' | 'info', duration: number }>({ show: false, body: '', type: 'success', duration: 5000 });
 
   toastState$ = this.toastState.asObservable();
 
-  showToast(body: string, type: 'success' | 'danger', duration = 5000) {
+  showToast(body: string, type: 'success' | 'danger' | 'info', duration = 5000) {
     this.toastState.next({ show: true, body, type, duration });
     setTimeout(() => {
       this.hideToast();

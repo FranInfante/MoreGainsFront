@@ -131,7 +131,7 @@ export class PlansComponent implements OnInit, AfterViewChecked {
   toggleEditMode(): void {
     this.editMode = !this.editMode;
     if (this.editMode) {
-      this.toastService.showToast(TOAST_MSGS.editmode, 'success');
+      this.toastService.showToast(TOAST_MSGS.editmode, 'info');
     }
   }
 }

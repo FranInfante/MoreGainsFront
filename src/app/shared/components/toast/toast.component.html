@@ -5,7 +5,7 @@
   [autohide]="false"
   (hidden)="show = false"
   class="custom-toast"
-  [ngClass]="{'bg-success': type === 'success', 'bg-danger': type === 'danger'}">
+  [ngClass]="{'bg-success': type === 'success', 'bg-danger': type === 'danger', 'bg-info': type === 'info'}">
 
   {{ body }}
 </ngb-toast>
