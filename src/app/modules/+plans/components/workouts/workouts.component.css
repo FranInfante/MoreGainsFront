@@ -29,11 +29,15 @@
   display: inline-block;
   cursor: pointer;
   text-align: center;
-  height: 5rem;
-  width: 5rem;
+  height: 3rem;
+  width: 3rem;
   border-radius: 30%;
   margin-bottom: 3rem;
   transition: background-color 0.3s ease, transform 0.3s ease; 
+  position: fixed; 
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1001;
   
 }
 
