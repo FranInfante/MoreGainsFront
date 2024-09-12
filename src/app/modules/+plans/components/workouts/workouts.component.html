@@ -79,6 +79,12 @@
           </div>
         </div>
       </ng-container>
+
+      <button
+              *ngIf="isEditing"
+              class="btn-primary savebutton"
+            >Save changes</button>
+      
       <div
         class="d-flex justify-content-end mt-3 mb-4"
         data-bs-toggle="modal"

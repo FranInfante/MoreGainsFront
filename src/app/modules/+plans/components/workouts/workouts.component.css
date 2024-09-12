@@ -40,6 +40,11 @@
   z-index: 1001;
   
 }
+.modal-footer{
+
+  justify-content: center !important;
+
+}
 
 .add-box:hover {
   background-color: #4196f0;
@@ -47,6 +52,13 @@
   color: #ffffff;
 }
 
+.savebutton{
+
+width: 50%;
+margin: auto;
+margin-bottom: 2rem;
+
+}
 
 .workout-details {
   position: fixed;
@@ -173,6 +185,7 @@ margin-bottom: 1.5rem;
   border-radius: 4px;
   overflow: hidden;
   box-sizing: border-box;
+  margin-bottom: 2rem;
 }
 
 .example-box {
@@ -208,4 +221,10 @@ margin-bottom: 1.5rem;
   .example-list {
     flex-direction: column;
     align-items: center;  
-  }}
+  }
+
+  .modal-footer {
+    flex-direction: column-reverse;
+    align-items: center; /* Center the buttons */
+  }
+}
