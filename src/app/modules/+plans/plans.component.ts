@@ -9,13 +9,14 @@ import { BackToMenuComponent } from '../../shared/components/back-to-menu/back-t
 import { WorkoutsComponent } from "./components/workouts/workouts.component";
 import { ASSET_URLS, TOAST_MSGS } from '../../shared/components/constants';
 import { ToastService } from '../../shared/service/toast.service';
+import { PlanHeaderComponent } from './components/plan-header/plan-header.component';
 
 @Component({
   selector: 'app-plan-tabs',
   standalone: true,
   templateUrl: './plans.component.html',
   styleUrls: ['./plans.component.css'],
-  imports: [CommonModule, FormsModule, BackToMenuComponent, WorkoutsComponent],
+  imports: [CommonModule, FormsModule, BackToMenuComponent, WorkoutsComponent, PlanHeaderComponent],
 })
 export class PlansComponent implements OnInit, AfterViewChecked {
   plans: Plan[] = [];
