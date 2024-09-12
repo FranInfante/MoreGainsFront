@@ -20,6 +20,9 @@
   z-index: 1;
 }
 
+.editing-bg {
+  background-color: #525151;
+}
 
 .add-box {
   border: solid 1px #ccc;

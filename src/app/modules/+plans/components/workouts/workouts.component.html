@@ -63,12 +63,14 @@
         >
           <div
             *ngFor="let workout of workouts; let i = index"
-            class="workout-box d-flex justify-content-center align-items-center mt-3 bg-dark"
+            class="workout-box d-flex justify-content-center align-items-center mt-3"
             (click)="showWorkoutDetails(workout)"
             [cdkDragData]="workout"
             cdkDrag
             [cdkDragDisabled]="!isEditing"
-          >
+            [ngClass]="isEditing ? 'editing-bg' : 'bg-dark'">
+            
+          
             <button
               *ngIf="isEditing"
               class="btn-close"
