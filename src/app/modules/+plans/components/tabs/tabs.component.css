@@ -1,0 +1,44 @@
+.fixed-bottom-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #343a40;
+    z-index: 10;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    white-space: nowrap;
+    -ms-overflow-style: none;
+    scrollbar-width: thin;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.nav-item {
+    flex: 0 0 auto;
+}
+
+.nav-link {
+    padding: 10px 20px;
+    cursor: pointer;
+    color: #007bff;
+    text-align: center;
+}
+
+.nav-link.active {
+    color: #fff;
+    background-color: #007bff;
+    border-radius: 5px;
+}

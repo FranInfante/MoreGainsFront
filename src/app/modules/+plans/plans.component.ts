@@ -11,25 +11,22 @@ import { ASSET_URLS, TOAST_MSGS } from '../../shared/components/constants';
 import { ToastService } from '../../shared/service/toast.service';
 import { PlanHeaderComponent } from './components/plan-header/plan-header.component';
 import { DeletePlanModalComponent } from "./components/delete-plan-modal/delete-plan-modal.component";
+import { TabsComponent } from "./components/tabs/tabs.component";
 
 @Component({
   selector: 'app-plan-tabs',
   standalone: true,
   templateUrl: './plans.component.html',
   styleUrls: ['./plans.component.css'],
-  imports: [CommonModule, FormsModule, BackToMenuComponent, WorkoutsComponent, PlanHeaderComponent, DeletePlanModalComponent],
+  imports: [CommonModule, FormsModule, BackToMenuComponent, WorkoutsComponent, PlanHeaderComponent, DeletePlanModalComponent, TabsComponent],
 })
-export class PlansComponent implements OnInit, AfterViewChecked {
+export class PlansComponent implements OnInit {
   plans: Plan[] = [];
   activePlanId: number | null = null;
   activePlan: Plan | null = null;
   currentUser: User | null = null;
   user: User | null = null;
   ThreeDotsIcon: string = ASSET_URLS.ThreeDotsIcon;
-
-  private isNewPlanAdded = false;
-
-  @ViewChild('navTabs', { static: false }) navTabs!: ElementRef<HTMLUListElement>;
 
   PlusSignIcon: string = ASSET_URLS.PlusSignIcon;
   editMode = false;
@@ -93,26 +90,7 @@ export class PlansComponent implements OnInit, AfterViewChecked {
       this.planService.addPlan(newPlan).subscribe((plan) => {
         this.plans.push(plan);
         this.selectPlan(plan.id);
-        this.isNewPlanAdded = true;
       });
-    }
-  }
-
-  scrollToRight(): void {
-    if (this.navTabs) {
-      const navTabsElement = this.navTabs.nativeElement;
-      const maxScrollLeft = navTabsElement.scrollWidth - navTabsElement.clientWidth;
-      navTabsElement.scrollTo({
-        left: maxScrollLeft,
-        behavior: 'smooth'
-      });
-    }
-  }
-
-  ngAfterViewChecked(): void {
-    if (this.isNewPlanAdded) {
-      this.scrollToRight();
-      this.isNewPlanAdded = false;
     }
   }
 
