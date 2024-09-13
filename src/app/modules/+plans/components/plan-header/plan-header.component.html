@@ -1,33 +1,35 @@
 <div class="d-flex flex-row align-items-center mx-4">
-    <div class="flex-grow-1">
-      <h3 class="mt-3 ms-5" style="text-align: center">
-        {{ activePlan.name }}
-      </h3>
-    </div>
-    <button
-      class="p-2 ms-3 btn"
-      type="button"
-      data-bs-toggle="dropdown"
-      aria-expanded="false"
+  <div class="flex-grow-1 d-flex justify-content-center">
+    <h3
+    class="mt-3 custom-heading"
+      contenteditable="true"
+      style="text-align: center"
+      (blur)="updatePlanName()"
     >
-      <img [src]="threeDotsIcon" alt="ThreeDotsIcon" />
-    </button>
-    <ul class="dropdown-menu">
-      <li>
-        <a
-          class="dropdown-item edit-item"
-          (click)="toggleEditMode()"
-          >Edit Workouts</a
-        >
-      </li>
-      <li>
-        <a
-          class="dropdown-item delete-item"
-          data-bs-toggle="modal"
-          data-bs-target="#VerificationModal"
-          >Delete "{{ activePlan.name }}"</a
-        >
-      </li>
-    </ul>
+      {{ activePlan.name }}
+    </h3>
   </div>
-  
+  <button
+    class="p-2 ms-3 btn"
+    type="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    <img [src]="threeDotsIcon" alt="ThreeDotsIcon" />
+  </button>
+  <ul class="dropdown-menu">
+    <li>
+      <a class="dropdown-item edit-item" (click)="toggleEditMode()"
+        >Edit Workouts</a
+      >
+    </li>
+    <li>
+      <a
+        class="dropdown-item delete-item"
+        data-bs-toggle="modal"
+        data-bs-target="#VerificationModal"
+        >Delete "{{ activePlan.name }}"</a
+      >
+    </li>
+  </ul>
+</div>
