@@ -38,6 +38,10 @@ export class PlansComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const storedActivePlanId = localStorage.getItem('activePlanId');
+  if (storedActivePlanId) {
+    this.activePlanId = parseInt(storedActivePlanId, 10);
+  }
     this.userService.getCurrentUser().subscribe(user => {
       if (user && user.id) {
         this.user = user;
@@ -67,13 +71,23 @@ export class PlansComponent implements OnInit {
     this.planService.getPlansByUserId(userId).subscribe((plans) => {
       this.plans = plans;
       if (this.plans.length > 0) {
-        this.selectPlan(this.plans[0].id);
+        if (this.activePlanId && this.plans.some(plan => plan.id === this.activePlanId)) {
+          this.selectPlan(this.activePlanId);
+        } else {
+          this.selectPlan(this.plans[0].id);
+        }
+      } else {
+        // No plans available
+        this.activePlan = null;
+        this.activePlanId = null;
+        localStorage.removeItem('activePlanId');
       }
     });
   }
 
   selectPlan(id: number): void {
     this.activePlanId = id;
+    localStorage.setItem('activePlanId', id.toString());
     this.planService.getPlanById(id).subscribe((plan) => {
       this.activePlan = plan ?? null;
     });
