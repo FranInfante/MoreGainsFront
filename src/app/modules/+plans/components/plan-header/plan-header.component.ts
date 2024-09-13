@@ -14,6 +14,7 @@ export class PlanHeaderComponent {
   @Input() threeDotsIcon!: string;
   @Output() editModeToggle = new EventEmitter<void>();
   @Output() planDelete = new EventEmitter<void>();
+  @Output() planNameUpdated = new EventEmitter<Plan>(); 
 
   constructor(private planService : PlanService){
 
@@ -34,6 +35,7 @@ export class PlanHeaderComponent {
       this.planService.updatePlanName(this.activePlan.id, newName).subscribe({
         next: (updatedPlan) => {
           this.activePlan = updatedPlan; 
+          this.planNameUpdated.emit(updatedPlan);
         },
         error: (error) => {
           console.error('Error updating plan name:', error);

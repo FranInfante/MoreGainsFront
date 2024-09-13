@@ -69,7 +69,7 @@ export class PlansComponent implements OnInit {
 
   fetchUserPlans(userId: number): void {
     this.planService.getPlansByUserId(userId).subscribe((plans) => {
-      this.plans = plans;
+      this.plans = plans.sort((a, b) => a.id - b.id);
       if (this.plans.length > 0) {
         if (this.activePlanId && this.plans.some(plan => plan.id === this.activePlanId)) {
           this.selectPlan(this.activePlanId);
@@ -126,6 +126,13 @@ export class PlansComponent implements OnInit {
     this.editMode = !this.editMode;
     if (this.editMode) {
       this.toastService.showToast(TOAST_MSGS.editmode, 'info');
+    }
+  }
+  onPlanNameUpdated(updatedPlan: Plan): void {
+    const index = this.plans.findIndex(plan => plan.id === updatedPlan.id);
+    if (index !== -1) {
+      // Update the plan's name without changing array order
+      this.plans[index].name = updatedPlan.name;
     }
   }
 }
