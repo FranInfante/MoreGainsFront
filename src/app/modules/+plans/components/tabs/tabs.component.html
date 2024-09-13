@@ -1,0 +1,19 @@
+<div class="fixed-bottom-container">
+    <ul class="nav nav-tabs" #navTabs>
+      <li class="nav-item" *ngFor="let plan of plans">
+        <a
+          class="nav-link"
+          [class.active]="plan.id === activePlanId"
+          (click)="selectPlan(plan.id)"
+        >
+          {{ plan.name }}
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" (click)="addPlan()">
+          <img [src]="PlusSignIcon" alt="PlusSignIcon" class="w-75 h-75" />
+        </a>
+      </li>
+    </ul>
+  </div>
+  

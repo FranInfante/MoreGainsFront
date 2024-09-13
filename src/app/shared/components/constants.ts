@@ -42,6 +42,7 @@ export const TOAST_MSGS = {
   modifiedpassword: 'Successfully changed password.',
   modifiedProfilePicture: 'Successfully changed profile picture',
   successfulimg: 'Profile picture uploaded successfully',
-  erroruploadimg: 'Error uploading profile picture'
+  erroruploadimg: 'Error uploading profile picture',
+  editmode: 'Edit mode enabled, you can now reorder your workouts'
 };
 

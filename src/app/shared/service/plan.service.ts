@@ -68,4 +68,13 @@ export class PlanService {
     );
 
   }  
+
+  reorderWorkouts(planId: number, workoutIds: number[]): Observable<void> {
+    return this.http.put<void>(PLAN_ROUTES.reorderworkoutsinplan(planId), workoutIds);
+  }
+
+  updatePlanName(id: number, newName: string): Observable<Plan> {
+    
+    return this.http.patch<Plan>(PLAN_ROUTES.updateplanname(id), { name: newName });
+  }
 }

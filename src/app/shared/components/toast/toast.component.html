@@ -2,11 +2,15 @@
   <link rel="stylesheet" href="toast.component.css">
 </head>
 <ngb-toast *ngIf="show"
-  [autohide]="false"
+  [autohide]="true"
   (hidden)="show = false"
   class="custom-toast"
-  [ngClass]="{'bg-success': type === 'success', 'bg-danger': type === 'danger'}">
-
-  {{ body }}
+  [ngClass]="{'bg-success': type === 'success', 'bg-danger': type === 'danger', 'bg-info': type === 'info'}">
+  
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="toast-body">
+      {{ body }}
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
 </ngb-toast>
-

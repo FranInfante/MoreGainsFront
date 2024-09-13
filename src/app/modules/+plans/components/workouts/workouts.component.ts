@@ -19,6 +19,7 @@ import { CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-
 export class WorkoutsComponent {
   @Input() workouts!: Workout[];
   @Input() planId: number | null = null;
+  @Input() isEditing = false;
   
   workoutForm: FormGroup;
   newWorkout = {
@@ -27,6 +28,8 @@ export class WorkoutsComponent {
   selectedWorkout: Workout | null = null;
   DeleteIcon : string = ASSET_URLS.DeleteIcon;
   PlusSignIcon : string = ASSET_URLS.PlusSignIcon;
+  unsavedChanges = false;
+  
 
   constructor(
     private planService: PlanService,
@@ -91,10 +94,28 @@ export class WorkoutsComponent {
 
   drop(event: CdkDragDrop<Workout[]>) {
     const previousIndex = this.workouts.findIndex(workout => workout.id === event.item.data.id);
-  
+    const currentIndex = event.currentIndex;
+
     if (previousIndex !== -1) {
-      moveItemInArray(this.workouts, previousIndex, event.currentIndex);
+      moveItemInArray(this.workouts, previousIndex, currentIndex);
+      this.unsavedChanges = true;
     }
-  
+  }
+
+  saveReorderedWorkouts() {
+    if (this.unsavedChanges && this.planId !== null) {
+      const workoutIds = this.workouts.map(workout => workout.id);
+
+      this.planService.reorderWorkouts(this.planId, workoutIds).subscribe({
+        next: () => {
+          this.unsavedChanges = false;
+        },
+        error: (error) => {
+          console.error('Error reordering workouts:', error);
+        }
+      });
+
+      this.isEditing = !this.isEditing;
+    }
   }
 }

@@ -2,7 +2,9 @@
   padding: 20px 10px;
   border: solid 1px #ccc;
   border-radius: 4px;
-  display: inline-block;
+  position: relative; /* Ensure button is positioned relative to this box */
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   cursor: grab;
   text-align: center;
@@ -10,18 +12,38 @@
   width: 10rem;
   border-radius: 5%;
 }
+.workout-box .btn-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 20px;
+  z-index: 1;
+}
+
+.editing-bg {
+  background-color: #525151;
+}
 
 .add-box {
   border: solid 1px #ccc;
   display: inline-block;
   cursor: pointer;
   text-align: center;
-  height: 5rem;
-  width: 5rem;
+  height: 3rem;
+  width: 3rem;
   border-radius: 30%;
   margin-bottom: 3rem;
   transition: background-color 0.3s ease, transform 0.3s ease; 
+  position: fixed; 
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1001;
   
+}
+.modal-footer{
+
+  justify-content: center !important;
+
 }
 
 .add-box:hover {
@@ -30,6 +52,13 @@
   color: #ffffff;
 }
 
+.savebutton{
+
+width: 50%;
+margin: auto;
+margin-bottom: 2rem;
+
+}
 
 .workout-details {
   position: fixed;
@@ -156,6 +185,7 @@ margin-bottom: 1.5rem;
   border-radius: 4px;
   overflow: hidden;
   box-sizing: border-box;
+  margin-bottom: 2rem;
 }
 
 .example-box {
@@ -191,4 +221,10 @@ margin-bottom: 1.5rem;
   .example-list {
     flex-direction: column;
     align-items: center;  
-  }}
+  }
+
+  .modal-footer {
+    flex-direction: column-reverse;
+    align-items: center; /* Center the buttons */
+  }
+}

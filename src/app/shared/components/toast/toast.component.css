@@ -7,16 +7,11 @@
   border-radius: 10px; 
   z-index: 9999; 
   color: white;
-  width: auto;
   max-width: 80%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
 }
 
-.bg-success {
-  background-color: green;
-}
-
-.bg-danger {
-  background-color: red;
+.bg-info {
+  background-color: blue !important;
 }
 

@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 export class NgbdToastInline implements OnInit {
   show = false;
   body = '';
-  type: 'success' | 'danger' = 'success';
+  type: 'success' | 'danger' | 'info' = 'success';
 
   constructor(private toastService: ToastService) {}
 
