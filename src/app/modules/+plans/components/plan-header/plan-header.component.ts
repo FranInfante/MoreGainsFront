@@ -34,7 +34,6 @@ export class PlanHeaderComponent {
     if (newName && newName !== this.activePlan.name) {
       this.planService.updatePlanName(this.activePlan.id, newName).subscribe({
         next: (updatedPlan) => {
-          this.activePlan = updatedPlan; 
           this.planNameUpdated.emit(updatedPlan);
         },
         error: (error) => {
