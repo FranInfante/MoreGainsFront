@@ -4,6 +4,33 @@
         margin-left:4rem;
         padding: 1rem;
       }
+
+      .dropdown-menu{
+        cursor: pointer;
+    }
+    .delete-item {
+      background: #ffffff;
+      color: #000000;
+      padding: 8px 20px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      opacity: 90%;
+    }
+    .edit-item {
+      background: #ffffff;
+      color: #000000;
+      padding: 8px 20px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      opacity: 90%;
+    }
+    
+    .delete-item:hover {
+      background-color: red;
+      color: white;
+    }
+    .edit-item:hover {
+      background-color: rgb(52, 57, 53);
+      color: white;
+    }
     
       
       @media (max-width: 576px) {
