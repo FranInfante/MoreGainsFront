@@ -2,9 +2,11 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { Plan } from '../../../../shared/interfaces/plan';
 import { PlanService } from '../../../../shared/service/plan.service';
 import { PLAN_ROUTES } from '../../../../shared/routes/plan-routes';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-plan-header',
+  imports: [CommonModule],
   standalone: true,
   templateUrl: './plan-header.component.html',
   styleUrls: ['./plan-header.component.css']
@@ -12,6 +14,7 @@ import { PLAN_ROUTES } from '../../../../shared/routes/plan-routes';
 export class PlanHeaderComponent {
   @Input() activePlan!: Plan;
   @Input() threeDotsIcon!: string;
+  @Input() workouts: any[] = [];
   @Output() editModeToggle = new EventEmitter<void>();
   @Output() planDelete = new EventEmitter<void>();
   @Output() planNameUpdated = new EventEmitter<Plan>();

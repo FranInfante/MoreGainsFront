@@ -5,6 +5,7 @@
       <app-plan-header
         [activePlan]="activePlan"
         [threeDotsIcon]="ThreeDotsIcon"
+        [workouts]="activePlan.workouts" 
         (editModeToggle)="toggleEditMode()"
         (planDelete)="deletePlan(activePlan.id)"
         (planNameUpdated)="onPlanNameUpdated($event)"
