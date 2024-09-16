@@ -43,6 +43,6 @@ export const TOAST_MSGS = {
   modifiedProfilePicture: 'Successfully changed profile picture',
   successfulimg: 'Profile picture uploaded successfully',
   erroruploadimg: 'Error uploading profile picture',
-  editmode: 'Edit mode enabled, you can now reorder your workouts'
+  editmode: 'Edit mode enabled'
 };
 
