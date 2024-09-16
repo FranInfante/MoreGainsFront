@@ -3,6 +3,7 @@ import { Plan } from '../../../../shared/interfaces/plan';
 import { PlanService } from '../../../../shared/service/plan.service';
 import { PLAN_ROUTES } from '../../../../shared/routes/plan-routes';
 import { CommonModule } from '@angular/common';
+import { Workout } from '../../../../shared/interfaces/workout';
 
 @Component({
   selector: 'app-plan-header',
@@ -14,7 +15,7 @@ import { CommonModule } from '@angular/common';
 export class PlanHeaderComponent {
   @Input() activePlan!: Plan;
   @Input() threeDotsIcon!: string;
-  @Input() workouts: any[] = [];
+  @Input() workouts: Workout[] = []; 
   @Output() editModeToggle = new EventEmitter<void>();
   @Output() planDelete = new EventEmitter<void>();
   @Output() planNameUpdated = new EventEmitter<Plan>();
@@ -31,6 +32,10 @@ export class PlanHeaderComponent {
 
   deletePlan(): void {
     this.planDelete.emit();
+  }
+
+  onWorkoutsUpdated(updatedWorkouts: Workout[]): void {
+    this.workouts = updatedWorkouts; 
   }
 
   updatePlanName(): void {

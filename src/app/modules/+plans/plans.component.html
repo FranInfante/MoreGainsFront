@@ -14,6 +14,7 @@
         [workouts]="activePlan.workouts"
         (isEditingChange)="editMode = $event"
         [planId]="activePlan.id"
+        (workoutsUpdated)="onWorkoutsUpdated($event)"
         [isEditing]="editMode"
       ></app-workouts>
       <app-delete-plan-modal

@@ -38,6 +38,7 @@ export class WorkoutsComponent {
   @Input() planId: number | null = null;
   @Input() isEditing = false;
   @Output() isEditingChange: EventEmitter<boolean> = new EventEmitter();
+  @Output() workoutsUpdated = new EventEmitter<Workout[]>();
 
   workoutForm: FormGroup;
   newWorkout = {
@@ -161,7 +162,7 @@ export class WorkoutsComponent {
         this.workouts = this.workouts.filter(
           (workout) => workout.id !== workoutId
         );
-
+        this.workoutsUpdated.emit(this.workouts);
         // If there are no workouts left, disable edit mode
         if (this.workouts.length === 0) {
           this.isEditing = false;

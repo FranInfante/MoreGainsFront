@@ -12,6 +12,7 @@ import { ToastService } from '../../shared/service/toast.service';
 import { PlanHeaderComponent } from './components/plan-header/plan-header.component';
 import { DeletePlanModalComponent } from "./components/delete-plan-modal/delete-plan-modal.component";
 import { TabsComponent } from "./components/tabs/tabs.component";
+import { Workout } from '../../shared/interfaces/workout';
 
 @Component({
   selector: 'app-plan-tabs',
@@ -153,6 +154,11 @@ export class PlansComponent implements OnInit {
     if (index !== -1) {
       // Update the plan's name without changing array order
       this.plans[index].name = updatedPlan.name;
+    }
+  }
+  onWorkoutsUpdated(updatedWorkouts: Workout[]): void {
+    if (this.activePlan) {
+      this.activePlan.workouts = updatedWorkouts;
     }
   }
 }
