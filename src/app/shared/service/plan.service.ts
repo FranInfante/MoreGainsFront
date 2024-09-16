@@ -8,11 +8,10 @@ import { Workout } from '../interfaces/workout';
 import { UserService } from './user.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PlanService {
-
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private userService: UserService) {}
 
   getPlans(): Observable<Plan[]> {
     return this.http.get<Plan[]>(PLAN_ROUTES.list());
@@ -41,40 +40,60 @@ export class PlanService {
   addWorkoutToPlan(planId: number, workout: any): Observable<Plan> {
     return this.http.post<Plan>(PLAN_ROUTES.workouttoplan(planId), workout);
   }
-  deleteWorkoutExercise(planId: number, workoutId: number, exerciseId: number): Observable<void> {
-    return this.http.delete<void>(PLAN_ROUTES.exerciseInWorkout(planId, workoutId, exerciseId));
+  deleteWorkoutExercise(
+    planId: number,
+    workoutId: number,
+    exerciseId: number
+  ): Observable<void> {
+    return this.http.delete<void>(
+      PLAN_ROUTES.exerciseInWorkout(planId, workoutId, exerciseId)
+    );
   }
-  addExerciseToWorkout(planId: number, workoutId: number, workoutExercise: WorkoutExercise): Observable<Workout> {
-
+  addExerciseToWorkout(
+    planId: number,
+    workoutId: number,
+    workoutExercise: WorkoutExercise
+  ): Observable<Workout> {
     const token = this.userService.getToken();
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Accept': '*/*',
-      'Authorization': `Bearer ${token}`
+      Accept: '*/*',
+      Authorization: `Bearer ${token}`,
     });
-    
 
     return this.http.post<Workout>(
       PLAN_ROUTES.addexerciseInWorkout(planId, workoutId),
       workoutExercise,
-      { headers: headers } 
+      { headers: headers }
     );
   }
-  createWorkoutinPlan(planId: number, workout: { name: string }): Observable<Workout> {
-
+  createWorkoutinPlan(
+    planId: number,
+    workout: { name: string }
+  ): Observable<Workout> {
     return this.http.post<Workout>(
       PLAN_ROUTES.createWorkoutinPlan(planId),
       workout
     );
-
-  }  
+  }
 
   reorderWorkouts(planId: number, workoutIds: number[]): Observable<void> {
-    return this.http.put<void>(PLAN_ROUTES.reorderworkoutsinplan(planId), workoutIds);
+    return this.http.put<void>(
+      PLAN_ROUTES.reorderworkoutsinplan(planId),
+      workoutIds
+    );
   }
 
   updatePlanName(id: number, newName: string): Observable<Plan> {
-    
-    return this.http.patch<Plan>(PLAN_ROUTES.updateplanname(id), { name: newName });
+    return this.http.patch<Plan>(PLAN_ROUTES.updateplanname(id), {
+      name: newName,
+    });
+  }
+
+  deleteWorkout(planId: number,
+    workoutId: number): Observable<void> {
+    return this.http.delete<void>(
+      PLAN_ROUTES.deleteworkoutid(planId, workoutId)
+    );
   }
 }

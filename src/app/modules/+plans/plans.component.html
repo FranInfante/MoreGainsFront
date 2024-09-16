@@ -12,6 +12,7 @@
       ></app-plan-header>
       <app-workouts
         [workouts]="activePlan.workouts"
+        (isEditingChange)="editMode = $event"
         [planId]="activePlan.id"
         [isEditing]="editMode"
       ></app-workouts>
