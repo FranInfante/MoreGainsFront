@@ -28,7 +28,6 @@ export class WorkoutsComponent {
   selectedWorkout: Workout | null = null;
   DeleteIcon : string = ASSET_URLS.DeleteIcon;
   PlusSignIcon : string = ASSET_URLS.PlusSignIcon;
-  unsavedChanges = false;
   
 
   constructor(
@@ -98,21 +97,14 @@ export class WorkoutsComponent {
 
     if (previousIndex !== -1) {
       moveItemInArray(this.workouts, previousIndex, currentIndex);
-      this.unsavedChanges = true;
     }
   }
 
   saveReorderedWorkouts() {
-    if (this.unsavedChanges && this.planId !== null) {
+    if (this.planId !== null) {
       const workoutIds = this.workouts.map(workout => workout.id);
 
       this.planService.reorderWorkouts(this.planId, workoutIds).subscribe({
-        next: () => {
-          this.unsavedChanges = false;
-        },
-        error: (error) => {
-          console.error('Error reordering workouts:', error);
-        }
       });
 
       this.isEditing = !this.isEditing;
