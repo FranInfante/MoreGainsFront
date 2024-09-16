@@ -77,7 +77,6 @@ export class PlansComponent implements OnInit {
           this.selectPlan(this.plans[0].id);
         }
       } else {
-        // No plans available
         this.activePlan = null;
         this.activePlanId = null;
         localStorage.removeItem('activePlanId');
@@ -88,9 +87,30 @@ export class PlansComponent implements OnInit {
   selectPlan(id: number): void {
     this.activePlanId = id;
     localStorage.setItem('activePlanId', id.toString());
+    this.resetPlanHeader();
+  
+    // Fetch the new plan
     this.planService.getPlanById(id).subscribe((plan) => {
       this.activePlan = plan ?? null;
+  
+      if (this.activePlan) {
+        this.updatePlanHeader(this.activePlan.name);
+      }
     });
+  }
+  
+  resetPlanHeader(): void {
+    const headerElement = document.querySelector('h3') as HTMLElement;
+    if (headerElement) {
+      headerElement.innerText = '';  // Clear the h3 content
+    }
+  }
+  
+  updatePlanHeader(planName: string): void {
+    const headerElement = document.querySelector('h3') as HTMLElement;
+    if (headerElement) {
+      headerElement.innerText = planName; 
+    }
   }
 
   addPlan(): void {
