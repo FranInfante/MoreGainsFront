@@ -25,6 +25,7 @@ export class ExercisePickerModalComponent implements OnInit {
   creatingNewExercise: boolean = false;
   muscleGroups: MuscleGroup[] = [];
   userId: number | null = null;
+  noExercisesFound: boolean = false;
 
   newExerciseForm: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -70,6 +71,7 @@ export class ExercisePickerModalComponent implements OnInit {
     this.filteredExercises = this.exercises.filter(exercise =>
       exercise.name.toLowerCase().includes(searchText.toLowerCase())
     );
+    this.noExercisesFound = this.filteredExercises.length === 0;
   }
 
   selectExercise(exercise: Exercise): void {
