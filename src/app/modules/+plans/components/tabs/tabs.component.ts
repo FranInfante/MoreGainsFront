@@ -13,13 +13,18 @@ export class TabsComponent {
   @Input() plans: Plan[] = [];
   @Input() activePlanId: number | null = null;
   @Input() PlusSignIcon: string = '';
+  @Input() editMode: boolean = false;
   @Output() planSelected = new EventEmitter<number>();
   @Output() addNewPlan = new EventEmitter<void>();
-
+  @Output() toggleEditMode = new EventEmitter<void>();
   @ViewChild('navTabs', { static: false }) navTabs!: ElementRef<HTMLUListElement>;
 
   selectPlan(id: number): void {
     this.planSelected.emit(id);
+
+    if (this.editMode) {
+      this.toggleEditMode.emit();
+    }
   }
 
   addPlan(): void {

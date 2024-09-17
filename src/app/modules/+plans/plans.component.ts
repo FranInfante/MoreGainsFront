@@ -86,14 +86,19 @@ export class PlansComponent implements OnInit {
   }
 
   selectPlan(id: number): void {
+    if (this.editMode) {
+      this.editMode = false;
+      this.toastService.showToast(TOAST_MSGS.editmodedisabled, 'info');
+    }
+
     this.activePlanId = id;
     localStorage.setItem('activePlanId', id.toString());
     this.resetPlanHeader();
-  
+
     // Fetch the new plan
     this.planService.getPlanById(id).subscribe((plan) => {
       this.activePlan = plan ?? null;
-  
+
       if (this.activePlan) {
         this.updatePlanHeader(this.activePlan.name);
       }
