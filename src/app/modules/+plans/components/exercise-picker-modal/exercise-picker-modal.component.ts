@@ -52,19 +52,19 @@ export class ExercisePickerModalComponent implements OnInit {
   getCurrentUserId(): void {
     this.userService.getCurrentUser().subscribe(user => {
       if (user && user.id) {
-        this.userId = user.id; // Store the user ID
+        this.userId = user.id;
+        this.loadExercises();
       }
-    }, error => {
-      console.error('Error fetching user data', error);
-      this.toastService.showToast('Unable to retrieve user data.', 'danger');
     });
   }
 
   loadExercises(): void {
-    this.exerciseService.getallExercises().subscribe(exercises => {
-      this.exercises = exercises;
-      this.filteredExercises = exercises;
-    });
+    if (this.userId !== null) {
+      this.exerciseService.getallExercises(this.userId).subscribe(exercises => {
+        this.exercises = exercises;
+        this.filteredExercises = exercises;
+      });
+    }
   }
 
   filterExercises(searchText: string): void {

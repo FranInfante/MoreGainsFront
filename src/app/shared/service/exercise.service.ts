@@ -12,8 +12,8 @@ import { MUSCLEGROUPS_API_URL } from '../routes/musclegroups-routes';
 export class ExerciseService {
   constructor(private http: HttpClient) {}
 
-  getallExercises(): Observable<Exercise[]> {
-    return this.http.get<Exercise[]>(EXERCISES_ROUTES.list());
+  getallExercises(userId: number): Observable<Exercise[]> {
+    return this.http.get<Exercise[]>(EXERCISES_ROUTES.list(userId));
   }
 
   createOrCheckExercise(newExercise: {
