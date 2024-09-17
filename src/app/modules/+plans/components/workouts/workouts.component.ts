@@ -1,18 +1,15 @@
 import {
-  ChangeDetectorRef,
+  CdkDragDrop,
+  DragDropModule,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
+import { CommonModule } from '@angular/common';
+import {
   Component,
   EventEmitter,
   Input,
-  NgZone,
   Output,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { Workout } from '../../../../shared/interfaces/workout';
-import { PlanService } from '../../../../shared/service/plan.service';
-import { ExercisePickerModalComponent } from '../exercise-picker-modal/exercise-picker-modal.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { WorkoutExercise } from '../../../../shared/interfaces/workoutexercise';
-import { ASSET_URLS } from '../../../../shared/components/constants';
 import {
   FormBuilder,
   FormGroup,
@@ -20,11 +17,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {
-  CdkDragDrop,
-  DragDropModule,
-  moveItemInArray,
-} from '@angular/cdk/drag-drop';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ASSET_URLS, MSG } from '../../../../shared/components/constants';
+import { Workout } from '../../../../shared/interfaces/workout';
+import { WorkoutExercise } from '../../../../shared/interfaces/workoutexercise';
+import { PlanService } from '../../../../shared/service/plan.service';
+import { ExercisePickerModalComponent } from '../exercise-picker-modal/exercise-picker-modal.component';
 
 @Component({
   selector: 'app-workouts',
@@ -123,7 +121,7 @@ export class WorkoutsComponent {
             this.resetWorkoutForm();
           },
           error: (error: any) => {
-            console.error('Error creating workout:', error);
+            console.error(MSG.errorcreatingworkout, error);
           },
         });
     }

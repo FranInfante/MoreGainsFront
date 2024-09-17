@@ -1,13 +1,13 @@
-import { NavigationExtras, Router, RouterModule } from '@angular/router';
-import { User } from '../../../shared/interfaces/users';
-import { UserService } from './../../../shared/service/user.service';
+import { NgIf } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgIf } from '@angular/common';
+import { NavigationExtras, Router, RouterModule } from '@angular/router';
 import { SubscriptionLike } from 'rxjs';
 import { LOCATIONS, TOAST_MSGS } from '../../../shared/components/constants';
+import { User } from '../../../shared/interfaces/users';
 import { ToastService } from '../../../shared/service/toast.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { UserService } from './../../../shared/service/user.service';
 
 @Component({
   selector: 'app-register',

@@ -1,9 +1,9 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
-import { Plan } from '../../../../shared/interfaces/plan';
-import { PlanService } from '../../../../shared/service/plan.service';
-import { PLAN_ROUTES } from '../../../../shared/routes/plan-routes';
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MSG } from '../../../../shared/components/constants';
+import { Plan } from '../../../../shared/interfaces/plan';
 import { Workout } from '../../../../shared/interfaces/workout';
+import { PlanService } from '../../../../shared/service/plan.service';
 
 @Component({
   selector: 'app-plan-header',
@@ -47,7 +47,7 @@ export class PlanHeaderComponent {
           this.planNameUpdated.emit(updatedPlan);
         },
         error: (error) => {
-          console.error('Error updating plan name:', error);
+          console.error(MSG.errorupdatingplanname , error);
         }
       });
     }

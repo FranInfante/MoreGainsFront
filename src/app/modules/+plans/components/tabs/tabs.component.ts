@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
-import { Plan } from '../../../../shared/interfaces/plan';
 import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Plan } from '../../../../shared/interfaces/plan';
 
 @Component({
   selector: 'app-tabs',

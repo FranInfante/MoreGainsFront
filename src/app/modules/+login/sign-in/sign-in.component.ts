@@ -2,11 +2,10 @@ import { NgIf } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Subscription, SubscriptionLike } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { LOCATIONS, MSG, TOAST_MSGS } from '../../../shared/components/constants';
-import { UserService } from '../../../shared/service/user.service';
 import { ToastService } from '../../../shared/service/toast.service';
-import { isIdentifier } from '@angular/compiler';
+import { UserService } from '../../../shared/service/user.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -72,7 +71,7 @@ export class SignInComponent implements OnInit, OnDestroy {
           }
         },
         error: (error) => {
-          console.error('Login error:', error);
+          console.error(MSG.loginerror, error);
           const errorMsg = error.message === MSG.failedCredentials ? MSG.failedCredentials : MSG.unknownLoginError;
           this.loginError = errorMsg;
           this.toastService.showToast(errorMsg, 'danger');
