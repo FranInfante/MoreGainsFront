@@ -7,4 +7,5 @@ export interface Exercise {
     videoUrl?: string;
     muscleGroup?: MuscleGroup;
     isAvailable: boolean;
+    userId?: number;  
 }
