@@ -115,7 +115,10 @@ export class WorkoutsComponent {
           next: (response: Workout) => {
             if (this.workouts) {
               this.workouts.push(response);
+              this.workoutsUpdated.emit(this.workouts); // Emit updated workout list
+              this.isEditingChange.emit(this.isEditing); // Inform parent component of the change
             }
+  
             this.modalService.dismissAll();
             this.resetWorkoutForm();
           },
@@ -153,19 +156,20 @@ export class WorkoutsComponent {
   }
 
   deleteWorkout(workoutId: number, event: Event): void {
-    // Stop the click event from propagating to the parent elements
-    event.stopPropagation();
-
+    event.stopPropagation(); // Prevent clicking on the workout from triggering other actions
+  
     if (this.planId !== null) {
       this.planService.deleteWorkout(this.planId, workoutId).subscribe(() => {
-        // Remove the deleted workout from the workouts array
-        this.workouts = this.workouts.filter(
-          (workout) => workout.id !== workoutId
-        );
+        // Remove the workout from the list
+        this.workouts = this.workouts.filter((workout) => workout.id !== workoutId);
+  
+        // Emit updated workout list
         this.workoutsUpdated.emit(this.workouts);
+  
         // If there are no workouts left, disable edit mode
         if (this.workouts.length === 0) {
-          this.isEditing = false;
+          this.isEditing = false; // Turn off edit mode
+          this.isEditingChange.emit(this.isEditing); // Inform parent component that edit mode is off
         }
       });
     }
