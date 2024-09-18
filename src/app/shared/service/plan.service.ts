@@ -55,16 +55,10 @@ export class PlanService {
     workoutExercise: WorkoutExercise
   ): Observable<Workout> {
     const token = this.userService.getToken();
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Accept: '*/*',
-      Authorization: `Bearer ${token}`,
-    });
 
     return this.http.post<Workout>(
       PLAN_ROUTES.addexerciseInWorkout(planId, workoutId),
-      workoutExercise,
-      { headers: headers }
+      workoutExercise
     );
   }
   createWorkoutinPlan(
