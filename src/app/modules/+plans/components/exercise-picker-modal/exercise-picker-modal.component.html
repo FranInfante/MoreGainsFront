@@ -28,37 +28,8 @@
         </li>
       </ul>
     </div>
-    
-    <div *ngIf="noExercisesFound" class="text-center">
-      <p class="text-white">No exercises found. Would you like to create a new one?</p>
-      <button class="btn btn-primary" (click)="toggleCreateExercise()">Create New Exercise</button>
-    </div>
   </div>
- 
-  <div *ngIf="creatingNewExercise">
-    <form [formGroup]="newExerciseForm" (ngSubmit)="onCreateNewExercise()">
-      <div class="mb-3">
-        <label class="form-label text-white">Name:</label>
-        <input type="text" class="form-control bg-secondary text-white" formControlName="name" placeholder="Exercise name" required />
-      </div>
-      <div class="mb-3">
-        <label class="form-label text-white">Description:</label>
-        <textarea class="form-control bg-secondary text-white" formControlName="description" placeholder="Exercise description"></textarea>
-      </div>
-      <div class="mb-3">
-        <label class="form-label text-white">Muscle Group:</label>
-        <select class="form-select bg-secondary text-white" formControlName="muscleGroup" required>
-          <option *ngFor="let group of muscleGroups" [value]="group.id">
-            {{ group.name }}
-          </option>
-        </select>
-      </div>
-      <div class="d-flex justify-content-between mt-3">
-        <button type="button" class="btn btn-secondary" (click)="cancelCreateExercise()">Cancel</button>
-        <button type="submit" class="btn btn-primary" [disabled]="!newExerciseForm.valid">Create Exercise</button>
-      </div>
-    </form>
-  </div>
+
 <div class="modal-footer bg-dark">
   <button type="button" class="btn btn-secondary" (click)="onCancel()">
     Cancel

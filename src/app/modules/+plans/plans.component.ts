@@ -95,7 +95,6 @@ export class PlansComponent implements OnInit {
     localStorage.setItem('activePlanId', id.toString());
     this.resetPlanHeader();
 
-    // Fetch the new plan
     this.planService.getPlanById(id).subscribe((plan) => {
       this.activePlan = plan ?? null;
 
@@ -108,7 +107,7 @@ export class PlansComponent implements OnInit {
   resetPlanHeader(): void {
     const headerElement = document.querySelector('h3') as HTMLElement;
     if (headerElement) {
-      headerElement.innerText = '';  // Clear the h3 content
+      headerElement.innerText = ''; 
     }
   }
   
@@ -157,7 +156,6 @@ export class PlansComponent implements OnInit {
   onPlanNameUpdated(updatedPlan: Plan): void {
     const index = this.plans.findIndex(plan => plan.id === updatedPlan.id);
     if (index !== -1) {
-      // Update the plan's name without changing array order
       this.plans[index].name = updatedPlan.name;
     }
   }

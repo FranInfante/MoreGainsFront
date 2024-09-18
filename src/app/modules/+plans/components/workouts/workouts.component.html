@@ -39,11 +39,15 @@
         <div class="add-exercise-container">
           <button
             class="btn btn-primary btn-lg btn-add-exercise"
-            (click)="openExercisePickerModal(planId!, selectedWorkout!.id)"
+            (click)="openExerciseOptions()"
           >
             <img [src]="PlusSignIcon" alt="PlusSignIcon" />
           </button>
         </div>
+        <ng-container *ngIf="showExerciseOptions">
+          <button class="btn btn-secondary" (click)="openExercisePickerModal()">Select Existing Exercise</button>
+          <button class="btn btn-secondary" (click)="openCreateExerciseModal()">Create New Exercise</button>
+        </ng-container>
       </div>
     </div>
   </div>

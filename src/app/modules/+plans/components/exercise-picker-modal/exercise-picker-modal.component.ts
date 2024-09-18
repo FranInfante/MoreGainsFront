@@ -27,8 +27,8 @@ export class ExercisePickerModalComponent implements OnInit {
   userId: number | null = null;
   noExercisesFound: boolean = false;
 
-  planId: number | null = null;  // Plan ID
-  workoutId: number | null = null;  // Workout ID
+  planId: number | null = null;
+  workoutId: number | null = null;
 
   newExerciseForm: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -45,7 +45,6 @@ export class ExercisePickerModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadExercises();
-    this.loadMuscleGroups();
     this.getCurrentUserId();
     this.searchControl.valueChanges.subscribe(searchText => {
       this.filterExercises(searchText);
@@ -100,46 +99,4 @@ export class ExercisePickerModalComponent implements OnInit {
     this.activeModal.dismiss();
   }
 
-  onCreateNewExercise(): void {
-    const newExerciseName = this.newExerciseForm.get('name')?.value.trim();
-    const description = this.newExerciseForm.get('description')?.value;
-    const muscleGroupId = this.newExerciseForm.get('muscleGroup')?.value;
-  
-    if (newExerciseName && muscleGroupId) {
-      if (this.userId && this.planId && this.workoutId) {
-        const newExercise = {
-          name: newExerciseName,
-          description,
-          muscleGroup: { id: muscleGroupId },
-          userId: this.userId,
-          planId: this.planId, 
-          workoutId: this.workoutId,
-        };
-  
-        this.exerciseService.createOrCheckExercise(newExercise).subscribe(response => {
-          if (response.exercise) {
-            const workoutExercise = { exerciseName: response.exercise.name };
-            this.activeModal.close(workoutExercise);
-            
-          }
-          this.activeModal.dismiss();
-        });
-      }
-    }
-  }
-
-  cancelCreateExercise(): void {
-    this.creatingNewExercise = false;
-    this.newExerciseForm.reset();
-  }
-
-  toggleCreateExercise(): void {
-    this.creatingNewExercise = !this.creatingNewExercise;
-  }
-
-  loadMuscleGroups(): void {
-    this.exerciseService.getMuscleGroups().subscribe(groups => {
-      this.muscleGroups = groups; // Asigna los grupos musculares a la propiedad
-    });
-  }
 }

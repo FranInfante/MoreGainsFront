@@ -23,6 +23,7 @@ import { Workout } from '../../../../shared/interfaces/workout';
 import { WorkoutExercise } from '../../../../shared/interfaces/workoutexercise';
 import { PlanService } from '../../../../shared/service/plan.service';
 import { ExercisePickerModalComponent } from '../exercise-picker-modal/exercise-picker-modal.component';
+import { CreateExerciseModalComponent } from '../create-exercise-modal/create-exercise-modal.component';
 
 @Component({
   selector: 'app-workouts',
@@ -55,6 +56,56 @@ export class WorkoutsComponent {
       workoutName: ['', [Validators.required, Validators.maxLength(20)]],
     });
   }
+  showExerciseOptions = false;
+
+  openExerciseOptions(): void {
+    this.showExerciseOptions = !this.showExerciseOptions;
+  }
+
+  openExercisePickerModal(): void {
+    const modalRef = this.modalService.open(ExercisePickerModalComponent, {
+      size: 'lg',
+    });
+    
+    modalRef.componentInstance.planId = this.planId!;
+    modalRef.componentInstance.workoutId = this.selectedWorkout!.id;
+    modalRef.result.then((workoutExercise: WorkoutExercise) => {
+      if (workoutExercise && this.selectedWorkout) {
+        this.planService.addExerciseToWorkout(
+          this.planId!,
+          this.selectedWorkout.id,
+          workoutExercise
+        ).subscribe((updatedWorkout: Workout) => {
+          this.selectedWorkout!.workoutExercises = updatedWorkout.workoutExercises;
+        });
+      }
+    }, () => {});
+  }
+
+  openCreateExerciseModal(): void {
+    const modalRef = this.modalService.open(CreateExerciseModalComponent, {
+      size: 'lg',
+    });
+  
+    modalRef.componentInstance.planId = this.planId!;
+    modalRef.componentInstance.workoutId = this.selectedWorkout!.id;
+  
+    modalRef.result.then((newExercise) => {
+   
+      if (newExercise && this.selectedWorkout) {
+        this.selectedWorkout!.workoutExercises.push(newExercise);
+   
+        // Add to backend
+        this.planService.addExerciseToWorkout(
+          this.planId!,
+          this.selectedWorkout.id,
+          newExercise
+        ).subscribe((updatedWorkout: Workout) => {
+          this.selectedWorkout!.workoutExercises = updatedWorkout.workoutExercises;
+        });
+      }
+    });
+  }
 
   showWorkoutDetails(workout: Workout): void {
     this.selectedWorkout = workout;
@@ -79,32 +130,6 @@ export class WorkoutsComponent {
     }
   }
 
-  openExercisePickerModal(planId: number, workoutId: number): void {
-    const modalRef = this.modalService.open(ExercisePickerModalComponent, {
-      size: 'lg',
-    });
-
-    modalRef.componentInstance.planId = planId;
-    modalRef.componentInstance.workoutId = workoutId;
-    modalRef.result.then(
-      (workoutExercise: WorkoutExercise) => {
-        if (workoutExercise && this.selectedWorkout && this.planId !== null) {
-          this.planService
-            .addExerciseToWorkout(
-              this.planId,
-              this.selectedWorkout.id,
-              workoutExercise
-            )
-            .subscribe((updatedWorkout: Workout) => {
-              this.selectedWorkout!.workoutExercises =
-                updatedWorkout.workoutExercises;
-            });
-        }
-      },
-      () => {}
-    );
-  }
-
   createWorkout(): void {
     if (this.workoutForm.valid && this.planId !== null) {
       this.planService
@@ -115,8 +140,8 @@ export class WorkoutsComponent {
           next: (response: Workout) => {
             if (this.workouts) {
               this.workouts.push(response);
-              this.workoutsUpdated.emit(this.workouts); // Emit updated workout list
-              this.isEditingChange.emit(this.isEditing); // Inform parent component of the change
+              this.workoutsUpdated.emit(this.workouts);
+              this.isEditingChange.emit(this.isEditing);
             }
   
             this.modalService.dismissAll();
@@ -156,20 +181,17 @@ export class WorkoutsComponent {
   }
 
   deleteWorkout(workoutId: number, event: Event): void {
-    event.stopPropagation(); // Prevent clicking on the workout from triggering other actions
+    event.stopPropagation();
   
     if (this.planId !== null) {
       this.planService.deleteWorkout(this.planId, workoutId).subscribe(() => {
-        // Remove the workout from the list
         this.workouts = this.workouts.filter((workout) => workout.id !== workoutId);
   
-        // Emit updated workout list
         this.workoutsUpdated.emit(this.workouts);
   
-        // If there are no workouts left, disable edit mode
         if (this.workouts.length === 0) {
-          this.isEditing = false; // Turn off edit mode
-          this.isEditingChange.emit(this.isEditing); // Inform parent component that edit mode is off
+          this.isEditing = false;
+          this.isEditingChange.emit(this.isEditing);
         }
       });
     }
