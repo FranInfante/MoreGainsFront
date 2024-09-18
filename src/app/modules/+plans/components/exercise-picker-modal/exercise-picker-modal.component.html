@@ -59,56 +59,6 @@
       </div>
     </form>
   </div>
-
-  <div *ngIf="selectedExercise" class="exercise-details">
-    <h5 class="text-center">{{ selectedExercise.name }}</h5>
-    <form (ngSubmit)="onSubmit()">
-      <div class="input-group mb-3">
-        <label class="form-label text-white">Reps:</label>
-        <input
-          type="text"
-          class="form-control bg-secondary text-white"
-          [(ngModel)]="exerciseDetails.reps"
-          name="reps"
-          placeholder="e.g., 10"
-          required
-        />
-      </div>
-      <div class="input-group mb-3">
-        <label class="form-label text-white">Sets:</label>
-        <input
-          type="text"
-          class="form-control bg-secondary text-white"
-          [(ngModel)]="exerciseDetails.sets"
-          name="sets"
-          placeholder="e.g., 3"
-          required
-        />
-      </div>
-      <div class="input-group mb-3">
-        <label class="form-label text-white">Weight (kg):</label>
-        <input
-          type="text"
-          class="form-control bg-secondary text-white"
-          [(ngModel)]="exerciseDetails.weight"
-          name="weight"
-          placeholder="e.g., 20"
-          required
-        />
-      </div>
-      <div class="d-flex justify-content-between mt-3">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="deselectExercise()"
-        >
-          Back
-        </button>
-        <button type="submit" class="btn btn-primary">Add Exercise</button>
-      </div>
-    </form>
-  </div>
-</div>
 <div class="modal-footer bg-dark">
   <button type="button" class="btn btn-secondary" (click)="onCancel()">
     Cancel

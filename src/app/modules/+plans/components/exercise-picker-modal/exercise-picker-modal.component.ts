@@ -76,6 +76,8 @@ export class ExercisePickerModalComponent implements OnInit {
 
   selectExercise(exercise: Exercise): void {
     this.selectedExercise = exercise;
+    const workoutExercise = { exerciseName: exercise.name };
+    this.activeModal.close(workoutExercise);
   }
 
   deselectExercise(): void {

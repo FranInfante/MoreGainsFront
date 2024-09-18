@@ -11,7 +11,6 @@
     <div class="workout-details-content text-center">
       <h4 class="mb-3">{{ selectedWorkout.name }}</h4>
       <div class="exercises">
-        <h5 class="title">Exercises:</h5>
         <ul
           class="list-unstyled"
           *ngIf="selectedWorkout.workoutExercises.length > 0; else noExercises"
@@ -21,11 +20,10 @@
               let exercise of selectedWorkout.workoutExercises;
               let i = index
             "
-            class="row align-items-center mb-2 position-relative"
+            class="row align-items-center mb-2 position-relative rounded bg-dark pt-1"
           >
             <div class="col-8 text-center offset-2">
-              {{ exercise?.exerciseName }} - {{ exercise?.reps }} x
-              {{ exercise?.sets }} - {{ exercise?.weight }} kg
+              {{ exercise?.exerciseName }}
             </div>
             <button
               class="btn btn-sm col-2"
