@@ -21,12 +21,14 @@ export class ExerciseService {
     userId: number;
     description?: string;
     muscleGroup: { id: number };
-  }): Observable<{ exercise?: Exercise; exists: boolean }> {
+    planId: number;
+    workoutId: number;
+}): Observable<{ exercise?: Exercise; exists: boolean }> {
     return this.http.post<{ exercise?: Exercise; exists: boolean }>(
-      EXERCISES_ROUTES.createOrCheck(),
-      newExercise,
+      `${EXERCISES_ROUTES.createOrCheck()}?planId=${newExercise.planId}&workoutId=${newExercise.workoutId}`,
+      newExercise
     );
-  }
+}
   getMuscleGroups(): Observable<MuscleGroup[]> {
     return this.http.get<MuscleGroup[]>(MUSCLEGROUPS_API_URL);
   }

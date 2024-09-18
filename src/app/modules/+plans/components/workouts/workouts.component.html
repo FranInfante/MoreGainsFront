@@ -39,7 +39,7 @@
         <div class="add-exercise-container">
           <button
             class="btn btn-primary btn-lg btn-add-exercise"
-            (click)="openExercisePickerModal()"
+            (click)="openExercisePickerModal(planId!, selectedWorkout!.id)"
           >
             <img [src]="PlusSignIcon" alt="PlusSignIcon" />
           </button>

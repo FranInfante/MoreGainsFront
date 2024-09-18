@@ -79,11 +79,13 @@ export class WorkoutsComponent {
     }
   }
 
-  openExercisePickerModal(): void {
+  openExercisePickerModal(planId: number, workoutId: number): void {
     const modalRef = this.modalService.open(ExercisePickerModalComponent, {
       size: 'lg',
     });
 
+    modalRef.componentInstance.planId = planId;
+    modalRef.componentInstance.workoutId = workoutId;
     modalRef.result.then(
       (workoutExercise: WorkoutExercise) => {
         if (workoutExercise && this.selectedWorkout && this.planId !== null) {
