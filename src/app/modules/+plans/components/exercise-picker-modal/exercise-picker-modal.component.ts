@@ -82,16 +82,12 @@ export class ExercisePickerModalComponent implements OnInit {
 
   deselectExercise(): void {
     this.selectedExercise = null;
-    this.exerciseDetails = { reps: 0, sets: 0, weight: 0 }; // Reset details
   }
 
   onSubmit(): void {
     if (this.selectedExercise) {
       const workoutExercise = { 
-        exerciseName: this.selectedExercise.name, 
-        reps: this.exerciseDetails.reps, 
-        sets: this.exerciseDetails.sets, 
-        weight: this.exerciseDetails.weight
+        exerciseName: this.selectedExercise.name
       };
       this.activeModal.close(workoutExercise);
     }
@@ -116,27 +112,19 @@ export class ExercisePickerModalComponent implements OnInit {
         };
 
         this.exerciseService.createOrCheckExercise(newExercise).subscribe(response => {
-          if (response.exists) {
-            this.toastService.showToast('Exercise with this name already exists.', 'danger');
-          } else if (response.exercise) {
-            this.selectExercise(response.exercise);
-            this.toastService.showToast('Exercise created successfully!', 'success');
-            this.creatingNewExercise = false;
-          }
+          this.activeModal.dismiss();
         });
-      } else {
-        this.toastService.showToast('User not authenticated. Please log in.', 'danger');
       }
     }
   }
 
   cancelCreateExercise(): void {
     this.creatingNewExercise = false;
-    this.newExerciseForm.reset(); // Reset the form fields
+    this.newExerciseForm.reset();
   }
 
   toggleCreateExercise(): void {
-    this.creatingNewExercise = true;
+    this.creatingNewExercise = !this.creatingNewExercise;
   }
 
   loadMuscleGroups(): void {
