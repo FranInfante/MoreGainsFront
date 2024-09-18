@@ -119,6 +119,13 @@
 .workout-details-content {
   color: #487ff7;
   position: relative;
+  height: 50vh;
+}
+
+.exercises p {
+
+  padding-top: 3rem;
+
 }
 
 .exercises ul {
@@ -142,19 +149,23 @@
 
 .btn-add-exercise {
   font-size: 2rem;
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: #007bff;
   color: #ffffff;
-  border: 1px solid whitemodi;
+  border: none;
   cursor: pointer;
   margin: 0;
+  position: absolute; /* This positions it inside the parent container */
+  bottom: 1rem; /* Adjust this value to move it upwards or downwards */
+  right: 1rem; /* Adjust this value to move it left or right */
+  z-index: 1001;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
-
 .title{
 
 margin-bottom: 1.5rem;
