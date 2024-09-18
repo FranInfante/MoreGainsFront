@@ -108,7 +108,7 @@ export class ExercisePickerModalComponent implements OnInit {
           name: newExerciseName, 
           description, 
           muscleGroup: { id: muscleGroupId },
-          userId: this.userId // Use the retrieved user ID here
+          userId: this.userId
         };
 
         this.exerciseService.createOrCheckExercise(newExercise).subscribe(response => {
