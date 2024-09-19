@@ -15,12 +15,13 @@ import { PlanService } from '../../../../shared/service/plan.service';
 export class PlanHeaderComponent {
   @Input() activePlan!: Plan;
   @Input() threeDotsIcon!: string;
-  @Input() workouts: Workout[] = []; 
+  @Input() workouts: Workout[] = [];
   @Output() editModeToggle = new EventEmitter<void>();
   @Output() planDelete = new EventEmitter<void>();
   @Output() planNameUpdated = new EventEmitter<Plan>();
 
   maxLen = 20;
+  originalPlanName: string = '';
   specialKeys = ['Backspace', 'Shift', 'Control', 'Alt', 'Delete'];
   navigationalKeys = ['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
 
@@ -35,23 +36,29 @@ export class PlanHeaderComponent {
   }
 
   onWorkoutsUpdated(updatedWorkouts: Workout[]): void {
-    this.workouts = updatedWorkouts; 
+    this.workouts = updatedWorkouts;
+  }
+
+  onEditStart(): void {
+    this.originalPlanName = this.activePlan.name;
   }
 
   updatePlanName(): void {
     const newName = (document.querySelector('h3') as HTMLElement)?.innerText.trim();
-
-    if (newName && newName !== this.activePlan.name) {
+    if (!newName) {
+      (document.querySelector('h3') as HTMLElement).innerText = this.activePlan.name;
+      return;
+    }
+    if (newName !== this.activePlan.name) {
       this.planService.updatePlanName(this.activePlan.id, newName).subscribe({
         next: (updatedPlan) => {
           this.planNameUpdated.emit(updatedPlan);
+          this.activePlan.name = updatedPlan.name;
         },
-        error: (error) => {
-          console.error(MSG.errorupdatingplanname , error);
-        }
       });
     }
   }
+  
 
   onKeyDown(event: KeyboardEvent): boolean {
     const input = event.target as HTMLElement;
@@ -62,15 +69,25 @@ export class PlanHeaderComponent {
 
     const isSpecial = this.specialKeys.includes(key);
     const isNavigational = this.navigationalKeys.includes(key);
-
+    
     if (selection) {
       hasSelection = !!selection.toString();
     }
 
+    // Handle Enter key press
+    if (key === 'Enter') {
+      event.preventDefault();
+      this.updatePlanName(); 
+      input.blur();     
+      return false;            
+    }
+
+    // Allow special or navigational keys
     if (isSpecial || isNavigational) {
       return true;
     }
 
+    // Prevent input if length exceeds the max and there's no text selection
     if (len >= this.maxLen && !hasSelection) {
       event.preventDefault();
       return false;
