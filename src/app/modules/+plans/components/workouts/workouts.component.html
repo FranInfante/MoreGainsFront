@@ -9,9 +9,9 @@
       <h4 class="mb-3">{{ selectedWorkout.name }}</h4>
       <div class="exercises">
         <ul class="list-unstyled" *ngIf="selectedWorkout.workoutExercises.length > 0; else noExercises">
-          <li *ngFor="let exercise of selectedWorkout.workoutExercises; let i = index" class="row align-items-center mb-2 position-relative bg-dark pt-1">
-            <div class="col-8 text-center offset-2">{{ exercise?.exerciseName }}</div>
-            <button class="btn btn-sm col-2 delete-btn" (click)="deleteExercise(exercise.id!)">
+          <li *ngFor="let exercise of selectedWorkout.workoutExercises; let i = index" class="d-flex justify-content-between align-items-center mb-2 position-relative bg-dark pt-1 px-2 rounded">
+            <span class="exercise-name">{{ exercise?.exerciseName }}</span>
+            <button class="btn btn-sm delete-btn" (click)="deleteExercise(exercise.id!)">
               <img [src]="DeleteIcon" alt="DeleteIcon" />
             </button>
           </li>

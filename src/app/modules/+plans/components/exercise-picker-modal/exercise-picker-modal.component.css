@@ -42,7 +42,7 @@ ul.list-group {
     max-height: 300px;
     overflow-y: auto;
     padding-left: 0;
-    padding-right: 5px;
+    padding-right: 7px;
     width: 100%;
 }
   
@@ -51,17 +51,17 @@ ul.list-group {
   }
   
   ul.list-group::-webkit-scrollbar-thumb {
-    background-color: #000000;
+    background-color: #6c757d;
     border-radius: 4px;
   }
   
   ul.list-group::-webkit-scrollbar-track {
-    background-color: #000000;
+    background-color: #6c757d;
   }
   
   ul.list-group {
     scrollbar-width: thin;
-    scrollbar-color: #000000 #343a40;
+    scrollbar-color: #6c757d #343a40;
   }
 
 ul.list-group li {
