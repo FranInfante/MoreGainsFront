@@ -42,7 +42,7 @@
       <ng-container *ngIf="workouts && workouts.length > 0; else noWorkouts">
         <div cdkDropList cdkDropListOrientation="mixed" class="example-list" (cdkDropListDropped)="drop($event)">
           <div *ngFor="let workout of workouts; let i = index" class="workout-box d-flex justify-content-center align-items-center mt-3" (click)="showWorkoutDetails(workout)" [cdkDragData]="workout" cdkDrag [cdkDragDisabled]="!isEditing" [ngClass]="isEditing ? 'editing-bg' : 'bg-dark'">
-            <button *ngIf="isEditing" class="btn-close" (click)="deleteWorkout(workout.id, $event)"></button>
+            <button *ngIf="isEditing" class="btn-close" (click)="markWorkoutForDeletion(workout); $event.stopPropagation()"></button>
             <h5>{{ workout.name }}</h5>
           </div>
         </div>

@@ -46,6 +46,7 @@ export class WorkoutsComponent {
   selectedWorkout: Workout | null = null;
   DeleteIcon: string = ASSET_URLS.DeleteIcon;
   PlusSignIcon: string = ASSET_URLS.PlusSignIcon;
+  workoutsMarkedForDeletion: Workout[] = [];
 
   constructor(
     private planService: PlanService,
@@ -57,6 +58,14 @@ export class WorkoutsComponent {
     });
   }
   showExerciseOptions = false;
+
+  markWorkoutForDeletion(workout: Workout): void {
+    this.workoutsMarkedForDeletion.push(workout);
+
+    // Filter out the marked workout from the displayed list without actually deleting it yet
+    this.workouts = this.workouts.filter(w => w.id !== workout.id);
+    this.workoutsUpdated.emit(this.workouts);
+  }
 
   openExerciseOptions(): void {
     this.showExerciseOptions = !this.showExerciseOptions;
@@ -173,10 +182,20 @@ export class WorkoutsComponent {
     if (this.planId !== null) {
       const workoutIds = this.workouts.map((workout) => workout.id);
 
-      this.planService.reorderWorkouts(this.planId, workoutIds).subscribe({});
+      // Reorder the remaining workouts
+      this.planService.reorderWorkouts(this.planId, workoutIds).subscribe(() => {
+        // After reordering, send delete requests for workouts marked for deletion
+        this.workoutsMarkedForDeletion.forEach(workout => {
+          this.planService.deleteWorkout(this.planId!, workout.id).subscribe(() => {
+            // Optionally handle response or errors
+          });
+        });
 
-      this.isEditing = false;
-      this.isEditingChange.emit(this.isEditing);
+        // Clear the deletion list after the changes are saved
+        this.workoutsMarkedForDeletion = [];
+        this.isEditing = false;
+        this.isEditingChange.emit(this.isEditing);
+      });
     }
   }
 
