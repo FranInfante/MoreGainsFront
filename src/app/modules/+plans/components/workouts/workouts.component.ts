@@ -18,7 +18,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ASSET_URLS, MSG } from '../../../../shared/components/constants';
+import { ASSET_URLS, MSG, TOAST_MSGS } from '../../../../shared/components/constants';
 import { Workout } from '../../../../shared/interfaces/workout';
 import { WorkoutExercise } from '../../../../shared/interfaces/workoutexercise';
 import { PlanService } from '../../../../shared/service/plan.service';
@@ -196,7 +196,7 @@ export class WorkoutsComponent {
           });
     
           // Show a toast message after successfully saving changes if any workout was deleted
-          this.toastService.showToast('Workouts deleted and changes saved successfully!', 'success');
+          this.toastService.showToast(TOAST_MSGS.workoutdeletedsaved, 'success');
     
           // Clear the deletion list after the changes are saved
           this.workoutsMarkedForDeletion = [];
