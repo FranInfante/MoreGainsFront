@@ -24,6 +24,7 @@ import { WorkoutExercise } from '../../../../shared/interfaces/workoutexercise';
 import { PlanService } from '../../../../shared/service/plan.service';
 import { ExercisePickerModalComponent } from '../exercise-picker-modal/exercise-picker-modal.component';
 import { CreateExerciseModalComponent } from '../create-exercise-modal/create-exercise-modal.component';
+import { ToastService } from '../../../../shared/service/toast.service';
 
 @Component({
   selector: 'app-workouts',
@@ -51,7 +52,8 @@ export class WorkoutsComponent {
   constructor(
     private planService: PlanService,
     private modalService: NgbModal,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private toastService: ToastService
   ) {
     this.workoutForm = this.fb.group({
       workoutName: ['', [Validators.required, Validators.maxLength(20)]],
@@ -181,18 +183,26 @@ export class WorkoutsComponent {
   saveReorderedWorkouts() {
     if (this.planId !== null) {
       const workoutIds = this.workouts.map((workout) => workout.id);
-
+    
       // Reorder the remaining workouts
       this.planService.reorderWorkouts(this.planId, workoutIds).subscribe(() => {
-        // After reordering, send delete requests for workouts marked for deletion
-        this.workoutsMarkedForDeletion.forEach(workout => {
-          this.planService.deleteWorkout(this.planId!, workout.id).subscribe(() => {
-            // Optionally handle response or errors
+        // Check if any workouts are marked for deletion
+        if (this.workoutsMarkedForDeletion.length > 0) {
+          // Send delete requests for workouts marked for deletion
+          this.workoutsMarkedForDeletion.forEach(workout => {
+            this.planService.deleteWorkout(this.planId!, workout.id).subscribe(() => {
+              // Optionally handle response or errors
+            });
           });
-        });
-
-        // Clear the deletion list after the changes are saved
-        this.workoutsMarkedForDeletion = [];
+    
+          // Show a toast message after successfully saving changes if any workout was deleted
+          this.toastService.showToast('Workouts deleted and changes saved successfully!', 'success');
+    
+          // Clear the deletion list after the changes are saved
+          this.workoutsMarkedForDeletion = [];
+        }
+    
+        // Update UI and reset editing mode
         this.isEditing = false;
         this.isEditingChange.emit(this.isEditing);
       });

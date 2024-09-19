@@ -1,16 +1,35 @@
 <head>
-  <link rel="stylesheet" href="toast.component.css">
+  <link rel="stylesheet" href="toast.component.css" />
 </head>
-<ngb-toast *ngIf="show"
-  [autohide]="true"
-  (hidden)="show = false"
-  class="custom-toast"
-  [ngClass]="{'bg-success': type === 'success', 'bg-danger': type === 'danger', 'bg-info': type === 'info'}">
-  
-  <div class="d-flex justify-content-between align-items-center">
-    <div class="toast-body">
-      {{ body }}
-    </div>
-    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+<div class="custom-toast-container">
+  <div
+    *ngFor="let toast of toasts"
+    [ngClass]="{
+      'bg-success': toast.type === 'success',
+      'bg-danger': toast.type === 'danger',
+      'bg-info': toast.type === 'info',
+    }"
+    class="custom-toast"
+  >
+    <ngb-toast
+      [autohide]="true"
+      [delay]="5000"
+      (hidden)="removeToast(toast.id)"
+      [ngClass]="{
+        'bg-success': toast.type === 'success',
+        'bg-danger': toast.type === 'danger',
+        'bg-info': toast.type === 'info',
+      }"
+    >
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="toast-body">{{ toast.body }}</div>
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="removeToast(toast.id)"
+        ></button>
+      </div>
+    </ngb-toast>
   </div>
-</ngb-toast>
+</div>
