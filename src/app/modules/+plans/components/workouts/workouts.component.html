@@ -1,8 +1,5 @@
-<div
-  *ngIf="selectedWorkout"
-  class="modal-backdrop"
-  (click)="closeWorkoutDetails()"
->
+<!-- Workout Details Modal -->
+<div *ngIf="selectedWorkout" class="modal-backdrop" (click)="closeWorkoutDetails()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <button
       class="btn-close btn-close-white position-absolute top-0 end-0"
@@ -11,26 +8,10 @@
     <div class="workout-details-content text-center">
       <h4 class="mb-3">{{ selectedWorkout.name }}</h4>
       <div class="exercises">
-        <h5 class="title">Exercises:</h5>
-        <ul
-          class="list-unstyled"
-          *ngIf="selectedWorkout.workoutExercises.length > 0; else noExercises"
-        >
-          <li
-            *ngFor="
-              let exercise of selectedWorkout.workoutExercises;
-              let i = index
-            "
-            class="row align-items-center mb-2 position-relative"
-          >
-            <div class="col-8 text-center offset-2">
-              {{ exercise?.exerciseName }} - {{ exercise?.reps }} x
-              {{ exercise?.sets }} - {{ exercise?.weight }} kg
-            </div>
-            <button
-              class="btn btn-sm col-2"
-              (click)="deleteExercise(exercise.id!)"
-            >
+        <ul class="list-unstyled" *ngIf="selectedWorkout.workoutExercises.length > 0; else noExercises">
+          <li *ngFor="let exercise of selectedWorkout.workoutExercises; let i = index" class="d-flex justify-content-between align-items-center mb-2 position-relative bg-dark pt-1 px-2 rounded">
+            <span class="exercise-name">{{ exercise?.exerciseName }}</span>
+            <button class="btn btn-sm delete-btn" (click)="deleteExercise(exercise.id!)">
               <img [src]="DeleteIcon" alt="DeleteIcon" />
             </button>
           </li>
@@ -39,56 +20,37 @@
           <p>No exercises available for this workout.</p>
         </ng-template>
         <div class="add-exercise-container">
-          <button
-            class="btn btn-primary btn-lg btn-add-exercise"
-            (click)="openExercisePickerModal()"
-          >
-            <img [src]="PlusSignIcon" alt="PlusSignIcon" />
-          </button>
         </div>
+      </div>
+      <div class="dropdown bottom-right-dropdown">
+        <button class="btn btn-primary btn-lg" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+          <img class="pluss" [src]="PlusSignIcon" alt="PlusSignIcon" />
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <li><a class="dropdown-item" (click)="openExercisePickerModal()">Select Existing Exercise</a></li>
+          <li><a class="dropdown-item" (click)="openCreateExerciseModal()">Create New Exercise</a></li>
+        </ul>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Workouts List -->
 <div [ngClass]="{ 'content-to-blur': selectedWorkout }">
   <div class="container">
     <div class="row mt-3">
       <ng-container *ngIf="workouts && workouts.length > 0; else noWorkouts">
-        <div
-          cdkDropList
-          cdkDropListOrientation="mixed"
-          class="example-list"
-          (cdkDropListDropped)="drop($event)"
-        >
-          <div
-            *ngFor="let workout of workouts; let i = index"
-            class="workout-box d-flex justify-content-center align-items-center mt-3"
-            (click)="showWorkoutDetails(workout)"
-            [cdkDragData]="workout"
-            cdkDrag
-            [cdkDragDisabled]="!isEditing"
-            [ngClass]="isEditing ? 'editing-bg' : 'bg-dark'"
-          >
-            <button *ngIf="isEditing" class="btn-close"></button>
+        <div cdkDropList cdkDropListOrientation="mixed" class="example-list" (cdkDropListDropped)="drop($event)">
+          <div *ngFor="let workout of workouts; let i = index" class="workout-box d-flex justify-content-center align-items-center mt-3" (click)="showWorkoutDetails(workout)" [cdkDragData]="workout" cdkDrag [cdkDragDisabled]="!isEditing" [ngClass]="isEditing ? 'editing-bg' : 'bg-dark'">
+            <button *ngIf="isEditing" class="btn-close" (click)="markWorkoutForDeletion(workout); $event.stopPropagation()"></button>
             <h5>{{ workout.name }}</h5>
           </div>
         </div>
       </ng-container>
 
-      <button
-        *ngIf="isEditing"
-        class="btn-primary savebutton"
-        (click)="saveReorderedWorkouts()"
-      >
-        Save changes
-      </button>
+      <button *ngIf="isEditing" id="bottone5" (click)="saveReorderedWorkouts()">Save changes</button>
 
-      <div
-        class="d-flex justify-content-end mt-3 mb-4"
-        data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
-      >
+      <div class="d-flex justify-content-end mt-3 mb-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
         <div class="add-box d-flex justify-content-center align-items-center">
           <h4 class="text-primary">
             <img [src]="PlusSignIcon" alt="PlusSignIcon" />
@@ -104,61 +66,23 @@
   </div>
 </div>
 
-<div
-  class="modal fade"
-  id="exampleModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<!-- Workout Creation Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
         <form [formGroup]="workoutForm" (ngSubmit)="createWorkout()">
           <div class="mb-3">
-            <label for="workout-name" class="col-form-label"
-              >Workout Name:</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="workout-name"
-              formControlName="workoutName"
-              required
-            />
-            <div
-              *ngIf="
-                workoutForm.get('workoutName')?.invalid &&
-                workoutForm.get('workoutName')?.touched
-              "
-              class="text-danger"
-            >
-              <div *ngIf="workoutForm.get('workoutName')?.errors?.['required']">
-                Workout name is required.
-              </div>
-              <div
-                *ngIf="workoutForm.get('workoutName')?.errors?.['maxlength']"
-              >
-                Workout name cannot exceed 20 characters.
-              </div>
+            <label for="workout-name" class="col-form-label">Workout Name:</label>
+            <input type="text" class="form-control" id="workout-name" formControlName="workoutName" required />
+            <div *ngIf="workoutForm.get('workoutName')?.invalid && workoutForm.get('workoutName')?.touched" class="text-danger">
+              <div *ngIf="workoutForm.get('workoutName')?.errors?.['required']">Workout name is required.</div>
+              <div *ngIf="workoutForm.get('workoutName')?.errors?.['maxlength']">Workout name cannot exceed 20 characters.</div>
             </div>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
-            <button
-              type="submit"
-              class="btn btn-primary"
-              data-bs-dismiss="modal"
-              [disabled]="workoutForm.invalid"
-            >
-              Create Workout
-            </button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" [disabled]="workoutForm.invalid">Create Workout</button>
           </div>
         </form>
       </div>

@@ -1,10 +1,13 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MSG } from '../../../../shared/components/constants';
 import { Plan } from '../../../../shared/interfaces/plan';
+import { Workout } from '../../../../shared/interfaces/workout';
 import { PlanService } from '../../../../shared/service/plan.service';
-import { PLAN_ROUTES } from '../../../../shared/routes/plan-routes';
 
 @Component({
   selector: 'app-plan-header',
+  imports: [CommonModule],
   standalone: true,
   templateUrl: './plan-header.component.html',
   styleUrls: ['./plan-header.component.css']
@@ -12,6 +15,7 @@ import { PLAN_ROUTES } from '../../../../shared/routes/plan-routes';
 export class PlanHeaderComponent {
   @Input() activePlan!: Plan;
   @Input() threeDotsIcon!: string;
+  @Input() workouts: Workout[] = []; 
   @Output() editModeToggle = new EventEmitter<void>();
   @Output() planDelete = new EventEmitter<void>();
   @Output() planNameUpdated = new EventEmitter<Plan>();
@@ -30,6 +34,10 @@ export class PlanHeaderComponent {
     this.planDelete.emit();
   }
 
+  onWorkoutsUpdated(updatedWorkouts: Workout[]): void {
+    this.workouts = updatedWorkouts; 
+  }
+
   updatePlanName(): void {
     const newName = (document.querySelector('h3') as HTMLElement)?.innerText.trim();
 
@@ -39,7 +47,7 @@ export class PlanHeaderComponent {
           this.planNameUpdated.emit(updatedPlan);
         },
         error: (error) => {
-          console.error('Error updating plan name:', error);
+          console.error(MSG.errorupdatingplanname , error);
         }
       });
     }

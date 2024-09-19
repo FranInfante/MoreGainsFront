@@ -5,13 +5,16 @@
       <app-plan-header
         [activePlan]="activePlan"
         [threeDotsIcon]="ThreeDotsIcon"
+        [workouts]="activePlan.workouts" 
         (editModeToggle)="toggleEditMode()"
         (planDelete)="deletePlan(activePlan.id)"
         (planNameUpdated)="onPlanNameUpdated($event)"
       ></app-plan-header>
       <app-workouts
         [workouts]="activePlan.workouts"
+        (isEditingChange)="editMode = $event"
         [planId]="activePlan.id"
+        (workoutsUpdated)="onWorkoutsUpdated($event)"
         [isEditing]="editMode"
       ></app-workouts>
       <app-delete-plan-modal
@@ -32,5 +35,6 @@
   [activePlanId]="activePlanId"
   [PlusSignIcon]="PlusSignIcon"
   (planSelected)="selectPlan($event)"
+  (toggleEditMode)="toggleEditMode()"
   (addNewPlan)="addPlan()"
 ></app-tabs>

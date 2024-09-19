@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
-import { UserService } from '../../shared/service/user.service';
-import { User } from '../../shared/interfaces/users';
-import { SubscriptionLike } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { ASSET_URLS, LOCATIONS } from '../../shared/components/constants';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { SubscriptionLike } from 'rxjs';
+import { ASSET_URLS, LOCATIONS } from '../../shared/components/constants';
+import { User } from '../../shared/interfaces/users';
 import { BASE } from '../../shared/routes/user-routes';
+import { UserService } from '../../shared/service/user.service';
 
 @Component({
   selector: 'app-menu',

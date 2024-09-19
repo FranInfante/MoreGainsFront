@@ -1,15 +1,15 @@
-import { Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
-import { UserService } from '../../shared/service/user.service';
-import { User } from '../../shared/interfaces/users';
 import { CommonModule, NgIf } from '@angular/common';
-import { SubscriptionLike } from 'rxjs';
-import { ASSET_URLS, LOCATIONS, TOAST_MSGS } from '../../shared/components/constants';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { PrivacySetting } from '../../shared/interfaces/enums/EnumPrivacySetting';
-import { ToastService } from '../../shared/service/toast.service';
-import { BASE } from '../../shared/routes/user-routes';
+import { SubscriptionLike } from 'rxjs';
 import { BackToMenuComponent } from "../../shared/components/back-to-menu/back-to-menu.component";
+import { ASSET_URLS, LOCATIONS, TOAST_MSGS } from '../../shared/components/constants';
+import { PrivacySetting } from '../../shared/interfaces/enums/EnumPrivacySetting';
+import { User } from '../../shared/interfaces/users';
+import { BASE } from '../../shared/routes/user-routes';
+import { ToastService } from '../../shared/service/toast.service';
+import { UserService } from '../../shared/service/user.service';
 
 @Component({
   selector: 'app-user-profile',

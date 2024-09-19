@@ -10,17 +10,17 @@ import { CommonModule } from '@angular/common';
 	templateUrl: './toast.component.html'
 })
 export class NgbdToastInline implements OnInit {
-  show = false;
-  body = '';
-  type: 'success' | 'danger' | 'info' = 'success';
+  toasts: { id: number; body: string; type: 'success' | 'danger' | 'info' }[] = [];
 
   constructor(private toastService: ToastService) {}
 
   ngOnInit() {
-    this.toastService.toastState$.subscribe(state => {
-      this.show = state.show;
-      this.body = state.body;
-      this.type = state.type;
+    this.toastService.toastState$.subscribe(toasts => {
+      this.toasts = toasts;
     });
+  }
+
+  removeToast(toastId: number) {
+    this.toastService.removeToast(toastId);
   }
 }

@@ -50,7 +50,7 @@ export class UserService {
         return this.http.get<User>(USER_ROUTES.getinfo(), { headers });
       }),
       catchError(error => {
-        console.error('Login failed with error:', error);
+        console.error(MSG.loginerror, error);
         let errorMessage: string;
         if (error.status === 401) {
           errorMessage = MSG.failedCredentials;
@@ -64,7 +64,7 @@ export class UserService {
 
   getCurrentUser(): Observable<User> {
     if (!this.authToken) {
-      console.error('No authentication token available.');
+      console.error(MSG.noauthtoken);
       return throwError(() => new Error(MSG.notoken));
     }
 
@@ -134,4 +134,5 @@ export class UserService {
         })
     );
 }
+
 }

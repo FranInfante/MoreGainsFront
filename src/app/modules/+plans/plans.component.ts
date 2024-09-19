@@ -1,17 +1,18 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
-import { PlanService } from '../../shared/service/plan.service';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { BackToMenuComponent } from '../../shared/components/back-to-menu/back-to-menu.component';
+import { ASSET_URLS, TOAST_MSGS } from '../../shared/components/constants';
 import { Plan } from '../../shared/interfaces/plan';
 import { User } from '../../shared/interfaces/users';
-import { UserService } from '../../shared/service/user.service';
-import { BackToMenuComponent } from '../../shared/components/back-to-menu/back-to-menu.component';
-import { WorkoutsComponent } from "./components/workouts/workouts.component";
-import { ASSET_URLS, TOAST_MSGS } from '../../shared/components/constants';
+import { Workout } from '../../shared/interfaces/workout';
+import { PlanService } from '../../shared/service/plan.service';
 import { ToastService } from '../../shared/service/toast.service';
-import { PlanHeaderComponent } from './components/plan-header/plan-header.component';
+import { UserService } from '../../shared/service/user.service';
 import { DeletePlanModalComponent } from "./components/delete-plan-modal/delete-plan-modal.component";
+import { PlanHeaderComponent } from './components/plan-header/plan-header.component';
 import { TabsComponent } from "./components/tabs/tabs.component";
+import { WorkoutsComponent } from "./components/workouts/workouts.component";
 
 @Component({
   selector: 'app-plan-tabs',
@@ -85,14 +86,18 @@ export class PlansComponent implements OnInit {
   }
 
   selectPlan(id: number): void {
+    if (this.editMode) {
+      this.editMode = false;
+      this.toastService.showToast(TOAST_MSGS.editmodedisabled, 'info');
+    }
+
     this.activePlanId = id;
     localStorage.setItem('activePlanId', id.toString());
     this.resetPlanHeader();
-  
-    // Fetch the new plan
+
     this.planService.getPlanById(id).subscribe((plan) => {
       this.activePlan = plan ?? null;
-  
+
       if (this.activePlan) {
         this.updatePlanHeader(this.activePlan.name);
       }
@@ -102,7 +107,7 @@ export class PlansComponent implements OnInit {
   resetPlanHeader(): void {
     const headerElement = document.querySelector('h3') as HTMLElement;
     if (headerElement) {
-      headerElement.innerText = '';  // Clear the h3 content
+      headerElement.innerText = ''; 
     }
   }
   
@@ -151,8 +156,12 @@ export class PlansComponent implements OnInit {
   onPlanNameUpdated(updatedPlan: Plan): void {
     const index = this.plans.findIndex(plan => plan.id === updatedPlan.id);
     if (index !== -1) {
-      // Update the plan's name without changing array order
       this.plans[index].name = updatedPlan.name;
+    }
+  }
+  onWorkoutsUpdated(updatedWorkouts: Workout[]): void {
+    if (this.activePlan) {
+      this.activePlan.workouts = updatedWorkouts;
     }
   }
 }

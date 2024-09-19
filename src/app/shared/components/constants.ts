@@ -30,7 +30,11 @@ export const MSG = {
   unauthorized: 'Unauthorized access. Please log in again.',
   notoken: 'No authentication token available.',
   errorupload: 'Error uploading profile picture',
-  invalidformat: 'Invalid response format'
+  invalidformat: 'Invalid response format',
+  loginerror: 'Login error: ',
+  errorupdatingplanname: 'Error updating plan name: ',
+  errorcreatingworkout: 'Error creating workout: ',
+  noauthtoken: 'No authentication token available.'
 };
 
 export const TOAST_MSGS = {
@@ -43,6 +47,7 @@ export const TOAST_MSGS = {
   modifiedProfilePicture: 'Successfully changed profile picture',
   successfulimg: 'Profile picture uploaded successfully',
   erroruploadimg: 'Error uploading profile picture',
-  editmode: 'Edit mode enabled, you can now reorder your workouts'
+  editmode: 'Edit mode enabled',
+  editmodedisabled: 'Edit mode disabled'
 };
 

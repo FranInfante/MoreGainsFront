@@ -20,11 +20,13 @@
     <img [src]="threeDotsIcon" alt="ThreeDotsIcon" />
   </button>
   <ul class="dropdown-menu">
-    <li>
-      <a class="dropdown-item edit-item" (click)="toggleEditMode()"
-        >Edit Workouts</a
-      >
-    </li>
+    <ng-container *ngIf="workouts.length > 0">
+      <li>
+        <a class="dropdown-item edit-item" (click)="toggleEditMode()">
+          Edit Workouts
+        </a>
+      </li>
+    </ng-container>
     <li>
       <a
         class="dropdown-item delete-item"
