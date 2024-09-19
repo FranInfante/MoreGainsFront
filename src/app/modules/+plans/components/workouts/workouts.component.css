@@ -188,6 +188,16 @@ margin-left: 30%;
 
 }
 
+.dropdown-item {
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+.dropdown-item:hover {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
 .exercises li {
   display: flex;
   justify-content: space-between;
