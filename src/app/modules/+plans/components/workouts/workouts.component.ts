@@ -6,9 +6,11 @@ import {
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   Output,
+  ViewChild,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -39,6 +41,8 @@ export class WorkoutsComponent {
   @Input() isEditing = false;
   @Output() isEditingChange: EventEmitter<boolean> = new EventEmitter();
   @Output() workoutsUpdated = new EventEmitter<Workout[]>();
+
+  @ViewChild('exerciseList') exerciseList!: ElementRef;
 
   workoutForm: FormGroup;
   newWorkout = {
@@ -88,6 +92,9 @@ export class WorkoutsComponent {
           workoutExercise
         ).subscribe((updatedWorkout: Workout) => {
           this.selectedWorkout!.workoutExercises = updatedWorkout.workoutExercises;
+          setTimeout(() => {
+            this.scrollToLastExercise();
+          }, 100);
         });
       }
     }, () => {});
@@ -113,6 +120,7 @@ export class WorkoutsComponent {
           newExercise
         ).subscribe((updatedWorkout: Workout) => {
           this.selectedWorkout!.workoutExercises = updatedWorkout.workoutExercises;
+          this.scrollToLastExercise();
         });
       }
     });
@@ -225,4 +233,15 @@ export class WorkoutsComponent {
       });
     }
   }
+
+  scrollToLastExercise(): void {
+  if (this.exerciseList) {
+    const lastExerciseElement = this.exerciseList.nativeElement.lastElementChild;
+    if (lastExerciseElement) {
+      lastExerciseElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+    }
+  }
+   
+}
 }
