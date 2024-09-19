@@ -202,7 +202,7 @@ margin-bottom: 2rem;
   padding: 10px;
   margin-bottom: 1rem;
   overflow: hidden;
-  white-space: nowrap; 
+  flex-wrap: nowrap; /* Prevent line breaks initially */
 }
 
 .add-exercise-container {
@@ -343,4 +343,24 @@ margin-bottom: 1.5rem;
     flex-direction: column-reverse;
     align-items: center; /* Center the buttons */
   }
+  
 }
+
+@media (max-width: 576px) {
+  .exercises li {
+    flex-wrap: wrap; /* Allow text to wrap on smaller screens */
+    justify-content: space-between;
+  }
+
+  .exercise-name {
+    white-space: normal; /* Allow wrapping */
+    max-width: 100%; /* Allow full width usage on small screens */
+  }
+
+  .delete-btn {
+    margin-left: auto; /* Push it to the far right */
+  }
+}
+
+
+
