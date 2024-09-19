@@ -99,6 +99,10 @@
   transform: translateY(0);
 }
 
+.delete-btn {
+  margin-left: -20px; /* Move the button 10px to the left */
+  z-index: 1; /* Ensure it stays above other content */
+}
 
 .workout-details {
   position: fixed;
@@ -119,25 +123,58 @@
 .workout-details-content {
   color: #487ff7;
   position: relative;
-  height: 50vh;
+  min-height: 30vh;
+  max-height: 80vh;
+}
+
+.bottom-right-dropdown {
+  position: absolute;
+  bottom: 0rem; /* Adjust this value as needed */
+  right: 0rem; /* Adjust this value as needed */
+  z-index: 1001; /* Ensure it's above other content */
+}
+
+.bottom-right-dropdown .dropdown-menu {
+  transform: translateY(0); /* Override Bootstrap's default dropdown transform */
+  bottom: 100%; /* Push the dropdown menu upwards */
+  right: 0; /* Align it to the right */
+}
+
+.pluss{
+
+margin-bottom: 2.5px;
+
 }
 
 .exercises p {
 
-  padding-top: 3rem;
+margin-top: 2rem;
+margin-bottom: 2rem;
 
 }
+
 
 .exercises ul {
   list-style-type: none;
   padding-left: 0;
   color: #d1d1d1;
   padding-bottom: 0.7rem;
+  margin-top: 1.5rem;
+  margin-bottom: 4rem;
+  max-width: 350px;
+  max-height: 210px; /* Set a maximum height */
+  overflow-y: auto;
+  scrollbar-width: none; /* For Firefox */
+}
+
+.exercises ul::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Edge */
 }
 
 .exercises li {
   margin-bottom: 1rem;
   padding-bottom: 0.4rem;
+  overflow: hidden; /* Ensure content doesn't overflow rounded corners */
 }
 
 .add-exercise-container {
