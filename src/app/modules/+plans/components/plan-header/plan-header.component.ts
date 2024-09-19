@@ -21,7 +21,6 @@ export class PlanHeaderComponent {
   @Output() planNameUpdated = new EventEmitter<Plan>();
 
   maxLen = 20;
-  originalPlanName: string = '';
   specialKeys = ['Backspace', 'Shift', 'Control', 'Alt', 'Delete'];
   navigationalKeys = ['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
 
@@ -39,26 +38,25 @@ export class PlanHeaderComponent {
     this.workouts = updatedWorkouts;
   }
 
-  onEditStart(): void {
-    this.originalPlanName = this.activePlan.name;
-  }
-
+  // Function to handle updating the plan name
   updatePlanName(): void {
-    const newName = (document.querySelector('h3') as HTMLElement)?.innerText.trim();
+    const inputElement = document.querySelector('h3') as HTMLElement;
+    const newName = inputElement.innerText.trim();
+
     if (!newName) {
-      (document.querySelector('h3') as HTMLElement).innerText = this.activePlan.name;
+      inputElement.innerText = this.activePlan.name;
       return;
     }
+
     if (newName !== this.activePlan.name) {
       this.planService.updatePlanName(this.activePlan.id, newName).subscribe({
         next: (updatedPlan) => {
           this.planNameUpdated.emit(updatedPlan);
-          this.activePlan.name = updatedPlan.name;
-        },
+          this.activePlan.name = updatedPlan.name; 
+        }
       });
     }
   }
-  
 
   onKeyDown(event: KeyboardEvent): boolean {
     const input = event.target as HTMLElement;
@@ -76,18 +74,12 @@ export class PlanHeaderComponent {
 
     // Handle Enter key press
     if (key === 'Enter') {
-      event.preventDefault();
-      this.updatePlanName(); 
-      input.blur();     
-      return false;            
+      event.preventDefault(); 
+      this.updatePlanName();
+      input.blur();
+      return false;
     }
 
-    // Allow special or navigational keys
-    if (isSpecial || isNavigational) {
-      return true;
-    }
-
-    // Prevent input if length exceeds the max and there's no text selection
     if (len >= this.maxLen && !hasSelection) {
       event.preventDefault();
       return false;
