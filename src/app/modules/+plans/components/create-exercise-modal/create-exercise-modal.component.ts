@@ -7,6 +7,7 @@ import { ToastService } from '../../../../shared/service/toast.service';
 import { CommonModule } from '@angular/common';
 import { UserService } from '../../../../shared/service/user.service';
 import { Exercise } from '../../../../shared/interfaces/exercise';
+import { TOAST_MSGS } from '../../../../shared/components/constants';
 
 @Component({
   selector: 'app-create-exercise-modal',
@@ -74,24 +75,23 @@ export class CreateExerciseModalComponent implements OnInit {
   
       this.exerciseService.createOrCheckExercise(newExercise).subscribe({
         next: (response) => {
-      
-          const exercise = (response as any).exercise || response;
-      
+          const exercise = response as any;
+  
           if (exercise) {
-            const workoutExercise = { exerciseName: exercise.name };
-            this.activeModal.close(workoutExercise); 
-          } else {
-            console.error('No valid exercise found in response');
+            if (exercise.exists) {
+              this.toastService.showToast(( TOAST_MSGS.exerciseexists + exercise.name  ), 'danger')
+            } else {
+              this.toastService.showToast(TOAST_MSGS.exercisecreated + exercise.name, 'success');
+              const workoutExercise = { exerciseName: exercise.name };
+              this.activeModal.close(workoutExercise); 
+            }
           }
         },
-        error: (err) => {
-          console.error('Error creating exercise:', err);
-        }
       });
     }
   }
 
   cancelCreateExercise(): void {
-    this.activeModal.dismiss();
+    this.activeModal.close();
   }
 }
