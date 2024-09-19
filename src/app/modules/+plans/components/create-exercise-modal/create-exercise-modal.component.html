@@ -33,9 +33,10 @@
       <select
         class="form-select bg-secondary text-white"
         formControlName="muscleGroup"
+        onfocus='this.size=3;' onblur='this.size=1;' onchange='this.size=1; this.blur();'
         required
       >
-        <option *ngFor="let group of muscleGroups" [value]="group.id">
+        <option class="options" *ngFor="let group of muscleGroups" [value]="group.id">
           {{ group.name }}
         </option>
       </select>
