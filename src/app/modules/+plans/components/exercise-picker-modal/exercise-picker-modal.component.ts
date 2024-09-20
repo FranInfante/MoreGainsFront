@@ -1,13 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Exercise } from '../../../../shared/interfaces/exercise';
 import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExerciseService } from '../../../../shared/service/exercise.service';
 import { ToastService } from '../../../../shared/service/toast.service';
 import { UserService } from '../../../../shared/service/user.service';
 import { MuscleGroup } from '../../../../shared/interfaces/musclegroup';
+import { WorkoutExercise } from '../../../../shared/interfaces/workoutexercise';
+import { Workout } from '../../../../shared/interfaces/workout';
+import { CreateExerciseModalComponent } from '../create-exercise-modal/create-exercise-modal.component';
+import { PlanService } from '../../../../shared/service/plan.service';
 
 @Component({
   selector: 'app-exercise-picker-modal',
@@ -40,7 +44,9 @@ export class ExercisePickerModalComponent implements OnInit {
     private exerciseService: ExerciseService,
     public activeModal: NgbActiveModal,
     private toastService: ToastService,
-    private userService: UserService
+    private userService: UserService,
+    private modalService: NgbModal,
+    private planService: PlanService
   ) {}
 
   ngOnInit(): void {
@@ -97,6 +103,17 @@ export class ExercisePickerModalComponent implements OnInit {
 
   onCancel(): void {
     this.activeModal.dismiss();
+  }
+  openCreateExerciseModal(): void {
+    const modalRef = this.modalService.open(CreateExerciseModalComponent, { size: 'lg' });
+    modalRef.componentInstance.planId = this.planId;
+    modalRef.componentInstance.workoutId = this.workoutId;
+
+    modalRef.result.then((newExercise: WorkoutExercise | null) => {
+      if (newExercise) {
+        this.activeModal.close(newExercise);
+      }
+    });
   }
 
 }

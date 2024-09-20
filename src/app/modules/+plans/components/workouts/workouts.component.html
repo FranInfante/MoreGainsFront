@@ -8,7 +8,7 @@
     <div class="workout-details-content text-center">
       <h4 class="mb-3">{{ selectedWorkout.name }}</h4>
       <div class="exercises">
-        <ul class="list-unstyled" *ngIf="selectedWorkout.workoutExercises.length > 0; else noExercises">
+        <ul #exerciseList class="list-unstyled" *ngIf="selectedWorkout.workoutExercises.length > 0; else noExercises">
           <li *ngFor="let exercise of selectedWorkout.workoutExercises; let i = index" class="d-flex justify-content-between align-items-center mb-2 position-relative bg-dark pt-1 px-2 rounded">
             <span class="exercise-name">{{ exercise?.exerciseName }}</span>
             <button class="btn btn-sm delete-btn" (click)="deleteExercise(exercise.id!)">
@@ -19,17 +19,12 @@
         <ng-template #noExercises>
           <p>No exercises available for this workout.</p>
         </ng-template>
-        <div class="add-exercise-container">
-        </div>
+        <div class="add-exercise-container"></div>
       </div>
       <div class="dropdown bottom-right-dropdown">
-        <button class="btn btn-primary btn-lg" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-primary btn-lg" type="button" (click)="openExercisePickerModal()">
           <img class="pluss" [src]="PlusSignIcon" alt="PlusSignIcon" />
         </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <li><a class="dropdown-item" (click)="openExercisePickerModal()">Select Existing Exercise</a></li>
-          <li><a class="dropdown-item" (click)="openCreateExerciseModal()">Create New Exercise</a></li>
-        </ul>
       </div>
     </div>
   </div>
@@ -74,7 +69,7 @@
         <form [formGroup]="workoutForm" (ngSubmit)="createWorkout()">
           <div class="mb-3">
             <label for="workout-name" class="col-form-label">Workout Name:</label>
-            <input type="text" class="form-control" id="workout-name" formControlName="workoutName" required />
+            <input type="text" class="form-control" id="workout-name" formControlName="workoutName" maxlength="20" required />
             <div *ngIf="workoutForm.get('workoutName')?.invalid && workoutForm.get('workoutName')?.touched" class="text-danger">
               <div *ngIf="workoutForm.get('workoutName')?.errors?.['required']">Workout name is required.</div>
               <div *ngIf="workoutForm.get('workoutName')?.errors?.['maxlength']">Workout name cannot exceed 20 characters.</div>

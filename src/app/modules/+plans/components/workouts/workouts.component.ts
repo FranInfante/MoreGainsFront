@@ -6,9 +6,11 @@ import {
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   Output,
+  ViewChild,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -18,7 +20,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ASSET_URLS, MSG } from '../../../../shared/components/constants';
+import { ASSET_URLS, MSG, TOAST_MSGS } from '../../../../shared/components/constants';
 import { Workout } from '../../../../shared/interfaces/workout';
 import { WorkoutExercise } from '../../../../shared/interfaces/workoutexercise';
 import { PlanService } from '../../../../shared/service/plan.service';
@@ -39,6 +41,8 @@ export class WorkoutsComponent {
   @Input() isEditing = false;
   @Output() isEditingChange: EventEmitter<boolean> = new EventEmitter();
   @Output() workoutsUpdated = new EventEmitter<Workout[]>();
+
+  @ViewChild('exerciseList') exerciseList!: ElementRef;
 
   workoutForm: FormGroup;
   newWorkout = {
@@ -88,6 +92,9 @@ export class WorkoutsComponent {
           workoutExercise
         ).subscribe((updatedWorkout: Workout) => {
           this.selectedWorkout!.workoutExercises = updatedWorkout.workoutExercises;
+          setTimeout(() => {
+            this.scrollToLastExercise();
+          }, 100);
         });
       }
     }, () => {});
@@ -113,6 +120,7 @@ export class WorkoutsComponent {
           newExercise
         ).subscribe((updatedWorkout: Workout) => {
           this.selectedWorkout!.workoutExercises = updatedWorkout.workoutExercises;
+          this.scrollToLastExercise();
         });
       }
     });
@@ -196,7 +204,7 @@ export class WorkoutsComponent {
           });
     
           // Show a toast message after successfully saving changes if any workout was deleted
-          this.toastService.showToast('Workouts deleted and changes saved successfully!', 'success');
+          this.toastService.showToast(TOAST_MSGS.workoutdeletedsaved, 'success');
     
           // Clear the deletion list after the changes are saved
           this.workoutsMarkedForDeletion = [];
@@ -225,4 +233,15 @@ export class WorkoutsComponent {
       });
     }
   }
+
+  scrollToLastExercise(): void {
+  if (this.exerciseList) {
+    const lastExerciseElement = this.exerciseList.nativeElement.lastElementChild;
+    if (lastExerciseElement) {
+      lastExerciseElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+    }
+  }
+   
+}
 }

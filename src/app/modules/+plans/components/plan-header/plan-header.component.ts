@@ -15,7 +15,7 @@ import { PlanService } from '../../../../shared/service/plan.service';
 export class PlanHeaderComponent {
   @Input() activePlan!: Plan;
   @Input() threeDotsIcon!: string;
-  @Input() workouts: Workout[] = []; 
+  @Input() workouts: Workout[] = [];
   @Output() editModeToggle = new EventEmitter<void>();
   @Output() planDelete = new EventEmitter<void>();
   @Output() planNameUpdated = new EventEmitter<Plan>();
@@ -35,19 +35,24 @@ export class PlanHeaderComponent {
   }
 
   onWorkoutsUpdated(updatedWorkouts: Workout[]): void {
-    this.workouts = updatedWorkouts; 
+    this.workouts = updatedWorkouts;
   }
 
+  // Function to handle updating the plan name
   updatePlanName(): void {
-    const newName = (document.querySelector('h3') as HTMLElement)?.innerText.trim();
+    const inputElement = document.querySelector('h3') as HTMLElement;
+    const newName = inputElement.innerText.trim();
 
-    if (newName && newName !== this.activePlan.name) {
+    if (!newName) {
+      inputElement.innerText = this.activePlan.name;
+      return;
+    }
+
+    if (newName !== this.activePlan.name) {
       this.planService.updatePlanName(this.activePlan.id, newName).subscribe({
         next: (updatedPlan) => {
           this.planNameUpdated.emit(updatedPlan);
-        },
-        error: (error) => {
-          console.error(MSG.errorupdatingplanname , error);
+          this.activePlan.name = updatedPlan.name; 
         }
       });
     }
@@ -62,13 +67,17 @@ export class PlanHeaderComponent {
 
     const isSpecial = this.specialKeys.includes(key);
     const isNavigational = this.navigationalKeys.includes(key);
-
+    
     if (selection) {
       hasSelection = !!selection.toString();
     }
 
-    if (isSpecial || isNavigational) {
-      return true;
+    // Handle Enter key press
+    if (key === 'Enter') {
+      event.preventDefault(); 
+      this.updatePlanName();
+      input.blur();
+      return false;
     }
 
     if (len >= this.maxLen && !hasSelection) {

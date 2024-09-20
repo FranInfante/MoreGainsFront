@@ -1,0 +1,12 @@
+.form-select {
+    max-height: 200px; /* Set a max height */
+    overflow-y: auto; /* Allow vertical scrolling if content exceeds max height */
+  }
+  
+  .form-select option {
+    
+    white-space: nowrap; /* Prevent text wrapping inside options */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Show ellipsis if the text is too long */
+  }
+  
