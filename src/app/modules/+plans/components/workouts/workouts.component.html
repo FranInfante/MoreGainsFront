@@ -69,7 +69,7 @@
         <form [formGroup]="workoutForm" (ngSubmit)="createWorkout()">
           <div class="mb-3">
             <label for="workout-name" class="col-form-label">Workout Name:</label>
-            <input type="text" class="form-control" id="workout-name" formControlName="workoutName" required />
+            <input type="text" class="form-control" id="workout-name" formControlName="workoutName" maxlength="20" required />
             <div *ngIf="workoutForm.get('workoutName')?.invalid && workoutForm.get('workoutName')?.touched" class="text-danger">
               <div *ngIf="workoutForm.get('workoutName')?.errors?.['required']">Workout name is required.</div>
               <div *ngIf="workoutForm.get('workoutName')?.errors?.['maxlength']">Workout name cannot exceed 20 characters.</div>
