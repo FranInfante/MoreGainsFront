@@ -22,13 +22,9 @@
         <div class="add-exercise-container"></div>
       </div>
       <div class="dropdown bottom-right-dropdown">
-        <button class="btn btn-primary btn-lg" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="btn btn-primary btn-lg" type="button" (click)="openExercisePickerModal()">
           <img class="pluss" [src]="PlusSignIcon" alt="PlusSignIcon" />
         </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <li><a class="dropdown-item" (click)="openExercisePickerModal()">Select Existing Exercise</a></li>
-          <li><a class="dropdown-item" (click)="openCreateExerciseModal()">Create New Exercise</a></li>
-        </ul>
       </div>
     </div>
   </div>

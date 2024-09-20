@@ -123,7 +123,7 @@
 .workout-details-content {
   color: #487ff7;
   position: relative;
-  height: 50vh;
+  height: 50%;
 }
 
 .bottom-right-dropdown {
@@ -148,7 +148,7 @@ margin-bottom: 2.5px;
 .exercises p {
 
 margin-top: 2rem;
-margin-bottom: 2rem;
+margin-bottom: 4rem;
 
 }
 

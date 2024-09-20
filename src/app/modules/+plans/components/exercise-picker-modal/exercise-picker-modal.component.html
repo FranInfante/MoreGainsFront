@@ -28,11 +28,12 @@
         </li>
       </ul>
     </div>
+    <div *ngIf="noExercisesFound" class="d-flex justify-content-center mt-3">
+      <button class="btn btn-secondary" (click)="openCreateExerciseModal()">Create New Exercise</button>
+    </div>
   </div>
-
-<div class="modal-footer bg-dark">
-  <button type="button" class="btn btn-secondary" (click)="onCancel()">
-    Cancel
-  </button>
-    
 </div>
+<div class="modal-footer bg-dark">
+  <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+</div>
+
