@@ -13,6 +13,7 @@
       <h4
         class="mb-3 custom-heading"
         contenteditable="true"
+        (blur)="updateWorkoutName()"
         (keydown)="onKeyDown($event, 'workout')"
       >
         {{ selectedWorkout.name }}
