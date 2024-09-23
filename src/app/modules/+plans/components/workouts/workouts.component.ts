@@ -41,6 +41,7 @@ export class WorkoutsComponent {
   @Input() isEditing = false;
   @Output() isEditingChange: EventEmitter<boolean> = new EventEmitter();
   @Output() workoutsUpdated = new EventEmitter<Workout[]>();
+   @Output() workoutNameUpdated = new EventEmitter<Workout>();
 
   @ViewChild('exerciseList') exerciseList!: ElementRef;
 
@@ -52,6 +53,10 @@ export class WorkoutsComponent {
   DeleteIcon: string = ASSET_URLS.DeleteIcon;
   PlusSignIcon: string = ASSET_URLS.PlusSignIcon;
   workoutsMarkedForDeletion: Workout[] = [];
+
+  maxLen = 20;
+  specialKeys = ['Backspace', 'Shift', 'Control', 'Alt', 'Delete'];
+  navigationalKeys = ['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
 
   constructor(
     private planService: PlanService,
@@ -243,5 +248,57 @@ export class WorkoutsComponent {
     }
   }
    
+}
+
+updateWorkoutName(): void {
+  if (!this.selectedWorkout) return; // Add null check
+
+  const inputElement = document.querySelector('h4') as HTMLElement;
+  const newName = inputElement.innerText.trim();
+
+  if (!newName) {
+    inputElement.innerText = this.selectedWorkout.name;
+    return;
+  }
+
+  if (newName !== this.selectedWorkout.name) {
+    this.planService.updateWorkoutName(this.selectedWorkout.id, newName).subscribe({
+      next: (updatedWorkout) => {
+        this.workoutNameUpdated.emit(updatedWorkout);
+        this.selectedWorkout!.name = updatedWorkout.name;
+      }
+    });
+  }
+}
+
+onKeyDown(event: KeyboardEvent, context: 'plan' | 'workout'): boolean {
+  const input = event.target as HTMLElement;
+  const len = input.innerText.trim().length;
+  let hasSelection = false;
+  const selection = window.getSelection();
+  const key = event.key;
+
+  const isSpecial = this.specialKeys.includes(key);
+  const isNavigational = this.navigationalKeys.includes(key);
+
+  if (selection) {
+    hasSelection = !!selection.toString();
+  }
+
+  if (key === 'Enter') {
+    event.preventDefault();
+    if (context === 'workout') {
+      this.updateWorkoutName();
+    }
+    input.blur();
+    return false;
+  }
+
+  if (len >= this.maxLen && !hasSelection && !isSpecial && !isNavigational) {
+    event.preventDefault();
+    return false;
+  }
+
+  return true;
 }
 }

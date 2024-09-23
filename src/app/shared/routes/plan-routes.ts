@@ -20,6 +20,8 @@ export const PLAN_ROUTES = {
     `${PLAN_API_URL}/${planId}/workouts/reorder`,
   updateplanname: (planId: number) => 
     `${PLAN_API_URL}/${planId}/name`,
+  updateworkoutname:  (workoutId: number) => 
+    `${PLAN_API_URL}/${workoutId}/name`,
   deleteworkoutid: (planId: number, workoutId: number) => 
     `${PLAN_API_URL}/${planId}/workout/${workoutId}`
 

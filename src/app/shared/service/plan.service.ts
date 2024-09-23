@@ -84,6 +84,12 @@ export class PlanService {
     });
   }
 
+  updateWorkoutName(id: number, newName: string): Observable<Workout> {
+    return this.http.patch<Workout>(PLAN_ROUTES.updateworkoutname(id), {
+      name: newName,
+    });
+  }
+
   deleteWorkout(planId: number,
     workoutId: number): Observable<void> {
     return this.http.delete<void>(
