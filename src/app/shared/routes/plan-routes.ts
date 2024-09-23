@@ -1,6 +1,7 @@
 import { environment } from "../../../environments/environment";
 
 export const PLAN_API_URL = environment.endpointUrl + 'plans';
+export const WORKOUTS_API_URL = environment.endpointUrl + 'workouts';
 export const BASE = environment.base;
 
 export const PLAN_ROUTES = {
@@ -20,6 +21,8 @@ export const PLAN_ROUTES = {
     `${PLAN_API_URL}/${planId}/workouts/reorder`,
   updateplanname: (planId: number) => 
     `${PLAN_API_URL}/${planId}/name`,
+  updateworkoutname:  (workoutId: number) => 
+    `${WORKOUTS_API_URL}/${workoutId}/name`,
   deleteworkoutid: (planId: number, workoutId: number) => 
     `${PLAN_API_URL}/${planId}/workout/${workoutId}`
 

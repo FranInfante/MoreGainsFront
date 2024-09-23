@@ -20,7 +20,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ASSET_URLS, MSG, TOAST_MSGS } from '../../../../shared/components/constants';
+import {
+  ASSET_URLS,
+  MSG,
+  TOAST_MSGS,
+} from '../../../../shared/components/constants';
 import { Workout } from '../../../../shared/interfaces/workout';
 import { WorkoutExercise } from '../../../../shared/interfaces/workoutexercise';
 import { PlanService } from '../../../../shared/service/plan.service';
@@ -41,6 +45,7 @@ export class WorkoutsComponent {
   @Input() isEditing = false;
   @Output() isEditingChange: EventEmitter<boolean> = new EventEmitter();
   @Output() workoutsUpdated = new EventEmitter<Workout[]>();
+  @Output() workoutNameUpdated = new EventEmitter<Workout>();
 
   @ViewChild('exerciseList') exerciseList!: ElementRef;
 
@@ -53,11 +58,15 @@ export class WorkoutsComponent {
   PlusSignIcon: string = ASSET_URLS.PlusSignIcon;
   workoutsMarkedForDeletion: Workout[] = [];
 
+  maxLen = 20;
+  specialKeys = ['Backspace', 'Shift', 'Control', 'Alt', 'Delete'];
+  navigationalKeys = ['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
+
   constructor(
     private planService: PlanService,
     private modalService: NgbModal,
     private fb: FormBuilder,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) {
     this.workoutForm = this.fb.group({
       workoutName: ['', [Validators.required, Validators.maxLength(20)]],
@@ -69,7 +78,7 @@ export class WorkoutsComponent {
     this.workoutsMarkedForDeletion.push(workout);
 
     // Filter out the marked workout from the displayed list without actually deleting it yet
-    this.workouts = this.workouts.filter(w => w.id !== workout.id);
+    this.workouts = this.workouts.filter((w) => w.id !== workout.id);
     this.workoutsUpdated.emit(this.workouts);
   }
 
@@ -81,47 +90,55 @@ export class WorkoutsComponent {
     const modalRef = this.modalService.open(ExercisePickerModalComponent, {
       size: 'lg',
     });
-    
+
     modalRef.componentInstance.planId = this.planId!;
     modalRef.componentInstance.workoutId = this.selectedWorkout!.id;
-    modalRef.result.then((workoutExercise: WorkoutExercise) => {
-      if (workoutExercise && this.selectedWorkout) {
-        this.planService.addExerciseToWorkout(
-          this.planId!,
-          this.selectedWorkout.id,
-          workoutExercise
-        ).subscribe((updatedWorkout: Workout) => {
-          this.selectedWorkout!.workoutExercises = updatedWorkout.workoutExercises;
-          setTimeout(() => {
-            this.scrollToLastExercise();
-          }, 100);
-        });
-      }
-    }, () => {});
+    modalRef.result.then(
+      (workoutExercise: WorkoutExercise) => {
+        if (workoutExercise && this.selectedWorkout) {
+          this.planService
+            .addExerciseToWorkout(
+              this.planId!,
+              this.selectedWorkout.id,
+              workoutExercise,
+            )
+            .subscribe((updatedWorkout: Workout) => {
+              this.selectedWorkout!.workoutExercises =
+                updatedWorkout.workoutExercises;
+              setTimeout(() => {
+                this.scrollToLastExercise();
+              }, 100);
+            });
+        }
+      },
+      () => {},
+    );
   }
 
   openCreateExerciseModal(): void {
     const modalRef = this.modalService.open(CreateExerciseModalComponent, {
       size: 'lg',
     });
-  
+
     modalRef.componentInstance.planId = this.planId!;
     modalRef.componentInstance.workoutId = this.selectedWorkout!.id;
-  
+
     modalRef.result.then((newExercise) => {
-   
       if (newExercise && this.selectedWorkout) {
         this.selectedWorkout!.workoutExercises.push(newExercise);
-   
+
         // Add to backend
-        this.planService.addExerciseToWorkout(
-          this.planId!,
-          this.selectedWorkout.id,
-          newExercise
-        ).subscribe((updatedWorkout: Workout) => {
-          this.selectedWorkout!.workoutExercises = updatedWorkout.workoutExercises;
-          this.scrollToLastExercise();
-        });
+        this.planService
+          .addExerciseToWorkout(
+            this.planId!,
+            this.selectedWorkout.id,
+            newExercise,
+          )
+          .subscribe((updatedWorkout: Workout) => {
+            this.selectedWorkout!.workoutExercises =
+              updatedWorkout.workoutExercises;
+            this.scrollToLastExercise();
+          });
       }
     });
   }
@@ -132,6 +149,11 @@ export class WorkoutsComponent {
   }
 
   closeWorkoutDetails(): void {
+    const inputElement = document.querySelector('h4') as HTMLElement;
+
+    if (inputElement) {
+      inputElement.blur();
+    }
     this.selectedWorkout = null;
     document.body.classList.remove('modal-open');
   }
@@ -143,7 +165,7 @@ export class WorkoutsComponent {
         .subscribe(() => {
           this.selectedWorkout!.workoutExercises =
             this.selectedWorkout!.workoutExercises.filter(
-              (ex) => ex.id !== exerciseId
+              (ex) => ex.id !== exerciseId,
             );
         });
     }
@@ -162,7 +184,7 @@ export class WorkoutsComponent {
               this.workoutsUpdated.emit(this.workouts);
               this.isEditingChange.emit(this.isEditing);
             }
-  
+
             this.modalService.dismissAll();
             this.resetWorkoutForm();
           },
@@ -179,7 +201,7 @@ export class WorkoutsComponent {
 
   drop(event: CdkDragDrop<Workout[]>) {
     const previousIndex = this.workouts.findIndex(
-      (workout) => workout.id === event.item.data.id
+      (workout) => workout.id === event.item.data.id,
     );
     const currentIndex = event.currentIndex;
 
@@ -191,41 +213,50 @@ export class WorkoutsComponent {
   saveReorderedWorkouts() {
     if (this.planId !== null) {
       const workoutIds = this.workouts.map((workout) => workout.id);
-    
+
       // Reorder the remaining workouts
-      this.planService.reorderWorkouts(this.planId, workoutIds).subscribe(() => {
-        // Check if any workouts are marked for deletion
-        if (this.workoutsMarkedForDeletion.length > 0) {
-          // Send delete requests for workouts marked for deletion
-          this.workoutsMarkedForDeletion.forEach(workout => {
-            this.planService.deleteWorkout(this.planId!, workout.id).subscribe(() => {
-              // Optionally handle response or errors
+      this.planService
+        .reorderWorkouts(this.planId, workoutIds)
+        .subscribe(() => {
+          // Check if any workouts are marked for deletion
+          if (this.workoutsMarkedForDeletion.length > 0) {
+            // Send delete requests for workouts marked for deletion
+            this.workoutsMarkedForDeletion.forEach((workout) => {
+              this.planService
+                .deleteWorkout(this.planId!, workout.id)
+                .subscribe(() => {
+                  // Optionally handle response or errors
+                });
             });
-          });
-    
-          // Show a toast message after successfully saving changes if any workout was deleted
-          this.toastService.showToast(TOAST_MSGS.workoutdeletedsaved, 'success');
-    
-          // Clear the deletion list after the changes are saved
-          this.workoutsMarkedForDeletion = [];
-        }
-    
-        // Update UI and reset editing mode
-        this.isEditing = false;
-        this.isEditingChange.emit(this.isEditing);
-      });
+
+            // Show a toast message after successfully saving changes if any workout was deleted
+            this.toastService.showToast(
+              TOAST_MSGS.workoutdeletedsaved,
+              'success',
+            );
+
+            // Clear the deletion list after the changes are saved
+            this.workoutsMarkedForDeletion = [];
+          }
+
+          // Update UI and reset editing mode
+          this.isEditing = false;
+          this.isEditingChange.emit(this.isEditing);
+        });
     }
   }
 
   deleteWorkout(workoutId: number, event: Event): void {
     event.stopPropagation();
-  
+
     if (this.planId !== null) {
       this.planService.deleteWorkout(this.planId, workoutId).subscribe(() => {
-        this.workouts = this.workouts.filter((workout) => workout.id !== workoutId);
-  
+        this.workouts = this.workouts.filter(
+          (workout) => workout.id !== workoutId,
+        );
+
         this.workoutsUpdated.emit(this.workouts);
-  
+
         if (this.workouts.length === 0) {
           this.isEditing = false;
           this.isEditingChange.emit(this.isEditing);
@@ -235,13 +266,80 @@ export class WorkoutsComponent {
   }
 
   scrollToLastExercise(): void {
-  if (this.exerciseList) {
-    const lastExerciseElement = this.exerciseList.nativeElement.lastElementChild;
-    if (lastExerciseElement) {
-      lastExerciseElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
-
+    if (this.exerciseList) {
+      const lastExerciseElement =
+        this.exerciseList.nativeElement.lastElementChild;
+      if (lastExerciseElement) {
+        lastExerciseElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'end',
+        });
+      }
     }
   }
-   
-}
+
+  updateWorkoutName(): void {
+    if (!this.selectedWorkout) {
+      return;
+    }
+    const inputElement = document.querySelector('h4') as HTMLElement;
+    const newName = inputElement.innerText.trim();
+
+    if (!newName) {
+      inputElement.innerText = this.selectedWorkout.name;
+      return;
+    }
+
+    if (newName !== this.selectedWorkout.name) {
+      this.planService
+        .updateWorkoutName(this.selectedWorkout.id, newName)
+        .subscribe({
+          next: (updatedWorkout) => {
+            this.workoutNameUpdated.emit(updatedWorkout);
+            const index = this.workouts.findIndex(
+              (w) => w.id === updatedWorkout.id,
+            );
+            if (index !== -1) {
+              this.workouts[index] = updatedWorkout;
+              this.workoutsUpdated.emit(this.workouts);
+            }
+
+            if (this.selectedWorkout) {
+              this.selectedWorkout.name = updatedWorkout.name;
+            }
+          },
+        });
+    }
+  }
+
+  onKeyDown(event: KeyboardEvent, context: 'plan' | 'workout'): boolean {
+    const input = event.target as HTMLElement;
+    const len = input.innerText.trim().length;
+    let hasSelection = false;
+    const selection = window.getSelection();
+    const key = event.key;
+
+    const isSpecial = this.specialKeys.includes(key);
+    const isNavigational = this.navigationalKeys.includes(key);
+
+    if (selection) {
+      hasSelection = !!selection.toString();
+    }
+
+    if (key === 'Enter') {
+      event.preventDefault();
+      if (context === 'workout') {
+        this.updateWorkoutName();
+      }
+      input.blur();
+      return false;
+    }
+
+    if (len >= this.maxLen && !hasSelection && !isSpecial && !isNavigational) {
+      event.preventDefault();
+      return false;
+    }
+
+    return true;
+  }
 }

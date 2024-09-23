@@ -12,6 +12,7 @@ import { WorkoutExercise } from '../../../../shared/interfaces/workoutexercise';
 import { Workout } from '../../../../shared/interfaces/workout';
 import { CreateExerciseModalComponent } from '../create-exercise-modal/create-exercise-modal.component';
 import { PlanService } from '../../../../shared/service/plan.service';
+import { TOAST_MSGS } from '../../../../shared/components/constants';
 
 @Component({
   selector: 'app-exercise-picker-modal',
@@ -85,6 +86,7 @@ export class ExercisePickerModalComponent implements OnInit {
   selectExercise(exercise: Exercise): void {
     this.selectedExercise = exercise;
     const workoutExercise = { exerciseName: exercise.name };
+    this.toastService.showToast(TOAST_MSGS.exercisecreated + exercise.name, 'success');
     this.activeModal.close(workoutExercise);
   }
 
