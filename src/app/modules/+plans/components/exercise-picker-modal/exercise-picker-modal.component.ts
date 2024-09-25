@@ -26,7 +26,6 @@ export class ExercisePickerModalComponent implements OnInit {
   filteredExercises: Exercise[] = [];
   searchControl: FormControl = new FormControl('');
   selectedExercise: Exercise | null = null;
-  exerciseDetails = { reps: 0, sets: 0, weight: 0 };
   creatingNewExercise: boolean = false;
   muscleGroups: MuscleGroup[] = [];
   userId: number | null = null;
