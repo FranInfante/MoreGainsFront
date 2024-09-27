@@ -5,6 +5,7 @@ import { RegisterComponent } from './modules/+login/register/register.component'
 import { MenuComponent } from './modules/+menu/menu.component';
 import { UserProfileComponent } from './modules/+userprofile/userprofile.component';
 import { PlansComponent } from './modules/+plans/plans.component';
+import { LogpageComponent } from './modules/+logpage/logpage.component';
 
 
 export const routes: Routes = [
@@ -13,5 +14,6 @@ export const routes: Routes = [
     {path: "register", component: RegisterComponent},
     {path: "menu", component: MenuComponent},
     {path: "userprofile", component: UserProfileComponent},
-    {path: "plans", component: PlansComponent}
+    {path: "plans", component: PlansComponent},
+    {path: "logpage/:workoutId", component: LogpageComponent}
 ];

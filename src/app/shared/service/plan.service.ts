@@ -96,4 +96,7 @@ export class PlanService {
       PLAN_ROUTES.deleteworkoutid(planId, workoutId)
     );
   }
+  getWorkoutById(workoutId: number): Observable<Workout> {
+    return this.http.get<Workout>(PLAN_ROUTES.getworkoutbyid(workoutId));
+  }
 }
