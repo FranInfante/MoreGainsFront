@@ -36,7 +36,8 @@ export const MSG = {
   loginerror: 'Login error: ',
   errorupdatingplanname: 'Error updating plan name: ',
   errorcreatingworkout: 'Error creating workout: ',
-  noauthtoken: 'No authentication token available.'
+  noauthtoken: 'No authentication token available.',
+  errorfindingworkout: 'Workout ID not found in service.'
 };
 
 export const TOAST_MSGS = {

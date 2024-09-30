@@ -4,13 +4,17 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class WorkoutDataService {
-  private workoutId: number | null = null;
-
+  
   setWorkoutId(id: number): void {
-    this.workoutId = id;
+    localStorage.setItem('workoutId', id.toString());
   }
 
   getWorkoutId(): number | null {
-    return this.workoutId;
+    const id = localStorage.getItem('workoutId');
+    return id ? +id : null;
+  }
+
+  clearWorkoutId(): void {
+    localStorage.removeItem('workoutId');
   }
 }

@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PlanService } from '../../shared/service/plan.service';
 import { WorkoutLogService } from '../../shared/service/workoutlog.service';
 import { WorkoutDataService } from '../../shared/service/workoutdata.service';
+import { MSG } from '../../shared/components/constants';
+import { UserService } from '../../shared/service/user.service';
 
 @Component({
   selector: 'app-logpage',
@@ -17,6 +19,7 @@ export class LogpageComponent implements OnInit {
   workoutLogForm!: FormGroup;
   workoutId!: number;
   workoutLogId!: number;
+  userId!: number; 
 
   constructor(
     private fb: FormBuilder,
@@ -24,22 +27,39 @@ export class LogpageComponent implements OnInit {
     private route: ActivatedRoute,
     private planService: PlanService,
     private workoutLogService: WorkoutLogService,
-    private workoutDataService: WorkoutDataService
+    private workoutDataService: WorkoutDataService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
-    // Initialize the form with an empty exercises array
     this.workoutLogForm = this.fb.group({
       exercises: this.fb.array([])
     });
   
+    // Get workout ID from service
     const workoutId = this.workoutDataService.getWorkoutId();
     if (workoutId) {
       this.workoutId = workoutId;
       this.loadWorkoutDetails(this.workoutId);
     } else {
-      console.error('Workout ID not found in service.');
+      console.error(MSG.errorfindingworkout);
     }
+  
+    this.userService.getCurrentUser().subscribe({
+      next: (user) => {
+        if (user.id !== undefined) {
+          this.userId = user.id; // Asignar solo si `id` está definido
+        } else {
+          console.error('User ID is undefined.');
+        }
+      },
+      error: (err) => {
+        console.error('Failed to get user ID:', err);
+      }
+    });
+  }
+  ngOnDestroy() {
+    this.workoutDataService.clearWorkoutId();
   }
 
   loadWorkoutDetails(workoutId: number) {
@@ -95,7 +115,7 @@ export class LogpageComponent implements OnInit {
 
   createWorkoutLog() {
     const initialWorkoutLog = {
-      userId: 1, // Replace with the actual userId
+      userId: this.userId,
       workoutId: this.workoutId,
       date: new Date().toISOString(),
       notes: 'Initial workout log',
@@ -132,10 +152,7 @@ export class LogpageComponent implements OnInit {
 
   submitWorkoutLog() {
     if (this.workoutLogForm.valid) {
-      this.updateWorkoutLog(); // Final update when submitting the form
-      console.log('Workout log submitted:', this.workoutLogForm.value);
-    } else {
-      console.log('Form is invalid');
-    }
+      this.updateWorkoutLog();
+    } 
   }
 }
