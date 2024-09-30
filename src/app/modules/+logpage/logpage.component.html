@@ -7,11 +7,7 @@
       [formGroupName]="i"
     >
       <div class="exercise-dropdown">
-        <button
-          class="dropdown-btn"
-          type="button"
-          (click)="toggleDropdown(i)"
-        >
+        <button class="dropdown-btn" type="button" (click)="toggleDropdown(i)">
           {{ exercise.get("name")?.value }}
         </button>
 
@@ -21,45 +17,41 @@
             show: exercise.get('open')?.value,
           }"
         >
-          <div class="exercise-form d-flex justify-content-between">
-            <div>
-              <label for="sets-{{ exercise.get('id')?.value }}">Sets:</label>
-              <input
-                type="number"
-                formControlName="sets"
-                class="form-control"
-                [id]="'sets-' + exercise.get('id')?.value"
-              />
-              <div *ngIf="exercise.get('sets')?.invalid && exercise.get('sets')?.touched" class="error">
-                Sets are required and must be at least 1.
+          <div class="exercise-form">
+            <div formArrayName="sets">
+              <div
+                *ngFor="let set of getSets(exercise).controls; let j = index"
+                [formGroupName]="j"
+                class="d-flex justify-content-between align-items-center mt-3"
+              >
+                <span>Set {{ j + 1 }}</span>
+                <div class="input-container">
+                  <label for="reps-{{ i }}-{{ j }}">Reps:</label>
+                  <input
+                    type="number"
+                    formControlName="reps"
+                    class="form-control"
+                    [id]="'reps-' + i + '-' + j"
+                  />
+                </div>
+                <div class="input-container">
+                  <label for="weight-{{ i }}-{{ j }}">Weight:</label>
+                  <input
+                    type="number"
+                    formControlName="weight"
+                    class="form-control"
+                    [id]="'weight-' + i + '-' + j"
+                  />
+                </div>
               </div>
             </div>
-
-            <div>
-              <label for="reps-{{ exercise.get('id')?.value }}">Reps:</label>
-              <input
-                type="number"
-                formControlName="reps"
-                class="form-control"
-                [id]="'reps-' + exercise.get('id')?.value"
-              />
-              <div *ngIf="exercise.get('reps')?.invalid && exercise.get('reps')?.touched" class="error">
-                Reps are required and must be at least 1.
-              </div>
-            </div>
-
-            <div>
-              <label for="weight-{{ exercise.get('id')?.value }}">Weight (kg):</label>
-              <input
-                type="number"
-                formControlName="weight"
-                class="form-control"
-                [id]="'weight-' + exercise.get('id')?.value"
-              />
-              <div *ngIf="exercise.get('weight')?.invalid && exercise.get('weight')?.touched" class="error">
-                Weight is required and must be at least 0.
-              </div>
-            </div>
+            <button
+              type="button"
+              class="btn btn-sm btn-success mt-3"
+              (click)="addSet(i)"
+            >
+              + Add Set
+            </button>
           </div>
         </div>
       </div>
@@ -67,8 +59,6 @@
   </div>
 
   <div class="text-center mt-5">
-    <button type="submit" class="btn btn-primary mt-4">
-      Submit Log
-    </button>
+    <button type="submit" class="btn btn-primary mt-4">Submit Log</button>
   </div>
 </form>
