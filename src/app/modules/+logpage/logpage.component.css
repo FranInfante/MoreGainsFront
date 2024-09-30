@@ -61,6 +61,12 @@
     border: 1px solid #ddd;
     text-align: center;
   }
+
+  .input-group-text {
+    margin-left: 5px; /* Adds some spacing between the input and 'kg' */
+    font-weight: bold;
+    font-size: 1rem;
+  }
   
   .error {
     color: #dc3545;
