@@ -4,6 +4,7 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } fr
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlanService } from '../../shared/service/plan.service';
 import { WorkoutLogService } from '../../shared/service/workoutlog.service';
+import { WorkoutDataService } from '../../shared/service/workoutdata.service';
 
 @Component({
   selector: 'app-logpage',
@@ -22,21 +23,23 @@ export class LogpageComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private planService: PlanService,
-    private workoutLogService: WorkoutLogService
+    private workoutLogService: WorkoutLogService,
+    private workoutDataService: WorkoutDataService
   ) {}
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params) => {
-      this.workoutId = +params.get('workoutId')!;
-      this.loadWorkoutDetails(this.workoutId);
-    });
-
+    // Initialize the form with an empty exercises array
     this.workoutLogForm = this.fb.group({
-      exercises: this.fb.array([]),
+      exercises: this.fb.array([])
     });
-
-    // Initialize workout log after form setup
-    this.createWorkoutLog();
+  
+    const workoutId = this.workoutDataService.getWorkoutId();
+    if (workoutId) {
+      this.workoutId = workoutId;
+      this.loadWorkoutDetails(this.workoutId);
+    } else {
+      console.error('Workout ID not found in service.');
+    }
   }
 
   loadWorkoutDetails(workoutId: number) {

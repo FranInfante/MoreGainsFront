@@ -15,5 +15,5 @@ export const routes: Routes = [
     {path: "menu", component: MenuComponent},
     {path: "userprofile", component: UserProfileComponent},
     {path: "plans", component: PlansComponent},
-    {path: "logpage/:workoutId", component: LogpageComponent}
+    { path: "logpage", component: LogpageComponent }
 ];

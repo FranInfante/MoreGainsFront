@@ -32,7 +32,8 @@ import { PlanService } from '../../../../shared/service/plan.service';
 import { ExercisePickerModalComponent } from '../exercise-picker-modal/exercise-picker-modal.component';
 import { CreateExerciseModalComponent } from '../create-exercise-modal/create-exercise-modal.component';
 import { ToastService } from '../../../../shared/service/toast.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { WorkoutDataService } from '../../../../shared/service/workoutdata.service';
 
 @Component({
   selector: 'app-workouts',
@@ -72,6 +73,8 @@ export class WorkoutsComponent {
     private modalService: NgbModal,
     private fb: FormBuilder,
     private toastService: ToastService,
+    private router: Router,
+    private workoutDataService : WorkoutDataService
   ) {
     this.workoutForm = this.fb.group({
       workoutName: ['', [Validators.required, Validators.maxLength(20)]],
@@ -347,4 +350,14 @@ export class WorkoutsComponent {
 
     return true;
   }
+
+  goToLogPage(): void {
+    if (this.selectedWorkout) {
+      this.workoutDataService.setWorkoutId(this.selectedWorkout.id);
+      this.router.navigate(['/logpage']);
+    } else {
+      console.error('No workout selected.');
+    }
+  }
+  
 }
