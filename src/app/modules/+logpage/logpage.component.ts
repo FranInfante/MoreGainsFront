@@ -10,7 +10,7 @@ import {
 import { PlanService } from '../../shared/service/plan.service';
 import { WorkoutLogService } from '../../shared/service/workoutlog.service';
 import { WorkoutDataService } from '../../shared/service/workoutdata.service';
-import { MSG } from '../../shared/components/constants';
+import { ASSET_URLS, MSG } from '../../shared/components/constants';
 import { UserService } from '../../shared/service/user.service';
 
 @Component({
@@ -25,6 +25,7 @@ export class LogpageComponent implements OnInit {
   workoutId!: number;
   workoutLogId!: number;
   userId!: number;
+  DeleteIcon: string = ASSET_URLS.DeleteIcon;
 
   constructor(
     private fb: FormBuilder,
@@ -251,5 +252,21 @@ export class LogpageComponent implements OnInit {
     if (!set.get(field)?.value) {
       set.get(field)?.setValue(0);
     }
+  }
+
+  deleteSet(exerciseIndex: number, setIndex: number) {
+    // Get the sets FormArray for the specified exercise
+    const sets = this.getSets(this.exercises.at(exerciseIndex));
+  
+    // Remove the specified set
+    sets.removeAt(setIndex);
+  
+    // Update localStorage
+    this.updateLocalStorage();
+  }
+  
+  updateLocalStorage() {
+    // Update the localStorage with the current form value
+    localStorage.setItem('workoutLogForm', JSON.stringify(this.workoutLogForm.value));
   }
 }
