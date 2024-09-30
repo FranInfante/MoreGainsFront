@@ -89,8 +89,8 @@ export class LogpageComponent implements OnInit {
 
   createSet(): FormGroup {
     return this.fb.group({
-      reps: [0, [Validators.required, Validators.min(1)]],
-      weight: [0, [Validators.required, Validators.min(0)]],
+      reps: [0, [Validators.required, Validators.min(1), Validators.max(999)]],
+      weight: [0, [Validators.required, Validators.min(0), Validators.max(999)]],
     });
   }
 
@@ -154,5 +154,29 @@ export class LogpageComponent implements OnInit {
     if (this.workoutLogForm.valid) {
       this.updateWorkoutLog();
     } 
+  }
+
+  clearInput(exerciseIndex: number, setIndex: number, field: 'reps' | 'weight') {
+    const exercise = this.exercises.at(exerciseIndex);
+    const set = this.getSets(exercise).at(setIndex);
+  
+    if (set.get(field)?.value === 0) {
+      set.get(field)?.setValue('');
+    }
+  }
+  limitInputLength(event: Event, maxLength: number) {
+    const input = event.target as HTMLInputElement;
+    
+    if (input.value.length > maxLength) {
+      input.value = input.value.slice(0, maxLength);
+    }
+  }
+  resetToZero(exerciseIndex: number, setIndex: number, field: 'reps' | 'weight') {
+    const exercise = this.exercises.at(exerciseIndex);
+    const set = this.getSets(exercise).at(setIndex);
+  
+    if (!set.get(field)?.value) {
+      set.get(field)?.setValue(0);
+    }
   }
 }
