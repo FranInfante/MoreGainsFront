@@ -22,10 +22,15 @@
         <button
           type="button"
           class="btn btn-primary"
-          (click)="viewWorkoutLog(log.id)"
+          (click)="viewWorkoutLog(log)"
         >
           View Details
         </button>
       </li>
     </ul>
+    <app-work-log-detail
+    [workoutLog]="selectedWorkoutLog"
+    [showModal]="showModal"
+    (closeModal)="closeWorkoutLogModal()"
+  ></app-work-log-detail>
   </div>

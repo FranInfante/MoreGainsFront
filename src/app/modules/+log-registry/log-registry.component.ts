@@ -3,11 +3,12 @@ import { WorkoutLogService } from '../../shared/service/workoutlog.service';
 import { UserService } from '../../shared/service/user.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { WorkoutLogDetailModalComponent } from './components/work-log-detail/work-log-detail.component';
 
 @Component({
   selector: 'app-log-registry',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, WorkoutLogDetailModalComponent],
   templateUrl: './log-registry.component.html',
   styleUrl: './log-registry.component.css'
 })
@@ -15,6 +16,8 @@ export class LogRegistryComponent implements OnInit {
   userId!: number;
   workoutLogs: any[] = [];
   isLoading: boolean = true;
+  selectedWorkoutLog: any = null;
+  showModal: boolean = false;
 
   constructor(
     private workoutLogService: WorkoutLogService,
@@ -45,6 +48,7 @@ export class LogRegistryComponent implements OnInit {
           return {
             ...log,
             date: new Date(log.date[0], log.date[1] - 1, log.date[2], log.date[3], log.date[4], log.date[5]),
+            exercises: log.exercises // Asegúrate de que `exercises` y sus detalles existan
           };
         });
         this.isLoading = false;
@@ -54,9 +58,21 @@ export class LogRegistryComponent implements OnInit {
         this.isLoading = false;
       },
     });
+  } 
+
+  viewWorkoutLog(log: any) {
+    if (log) {
+      console.log('Selected workout log:', log); // Verificar el objeto log
+      this.selectedWorkoutLog = log;
+      this.showModal = true; // Forzar la actualización de la vista
+    } else {
+      console.error('Selected workout log data is not available.');
+    }
   }
 
-  viewWorkoutLog(logId: number) {
-    this.router.navigate(['/log', logId]);
+
+  closeWorkoutLogModal() {
+    this.showModal = false;
+    this.selectedWorkoutLog = null;
   }
 }
