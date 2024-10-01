@@ -36,7 +36,7 @@ export class LogpageComponent implements OnInit {
     private workoutDataService: WorkoutDataService,
     private userService: UserService,
     private toastService: ToastService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -63,7 +63,7 @@ export class LogpageComponent implements OnInit {
     const workoutId = this.workoutDataService.getWorkoutId();
     if (workoutId) {
       this.workoutId = workoutId;
-  
+
       this.workoutLogService
         .getWorkoutLogByUserIdAndIsEditing(this.userId, true)
         .subscribe({
@@ -97,7 +97,7 @@ export class LogpageComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading workout details:', err);
-      }
+      },
     });
   }
 
@@ -121,13 +121,13 @@ export class LogpageComponent implements OnInit {
             sets: this.fb.array(
               exercise.sets
                 ? exercise.sets.map((set: any) => this.createSetWithValues(set))
-                : [this.createSet()]
+                : [this.createSet()],
             ),
             open: [false],
-          })
-        )
+          }),
+        ),
       );
-  
+
       this.workoutLogForm.setControl('exercises', exercisesArray);
     } else {
       console.error('Workout exercises are empty or invalid.');
@@ -207,14 +207,14 @@ export class LogpageComponent implements OnInit {
       notes: 'Initial workout log',
       exercises: [],
     };
-  
+
     this.workoutLogService.createWorkoutLog(initialWorkoutLog).subscribe({
       next: (response) => {
         this.workoutLogId = response.id;
       },
       error: (error) => {
         console.error('Error creating workout log:', error);
-      }
+      },
     });
   }
 
@@ -225,23 +225,87 @@ export class LogpageComponent implements OnInit {
         workoutLogId: this.workoutLogId,
       };
 
-      this.workoutLogService.updateWorkoutLog(this.workoutLogId, updatedWorkoutLog).subscribe({
-        next: (response) => {
-        },
-        error: (error) => {
-          console.error('Error updating workout log:', error);
-        }
-      });
+      this.workoutLogService
+        .updateWorkoutLog(this.workoutLogId, updatedWorkoutLog)
+        .subscribe({
+          next: (response) => {},
+          error: (error) => {
+            console.error('Error updating workout log:', error);
+          },
+        });
     }
   }
 
   submitWorkoutLog() {
     if (this.workoutLogForm.valid) {
-      this.createWorkoutLog();
-      this.toastService.showToast('Workout log submitted successfully.', 'success');
-      this.router.navigate(['/log-registry']);
+      const exercisesArray = this.exercises.controls.map(
+        (exerciseControl, exerciseIndex) => {
+          return {
+            exerciseId: exerciseControl.get('id')?.value,
+            sets: this.getSets(exerciseControl).controls.map(
+              (setControl, setIndex) => {
+                return {
+                  set: setIndex + 1,
+                  reps: setControl.get('reps')?.value,
+                  weight: setControl.get('weight')?.value,
+                };
+              }
+            ),
+          };
+        }
+      );
+  
+      const workoutLogData = {
+        userId: this.userId,
+        workoutId: this.workoutId,
+        date: new Date().toISOString(),
+        notes: this.workoutLogForm.get('notes')?.value || 'No notes',
+        exercises: exercisesArray,
+      };
+  
+      if (!this.workoutLogId) {
+        this.workoutLogService.createWorkoutLog(workoutLogData).subscribe({
+          next: (response) => {
+            this.toastService.showToast(
+              'Workout log submitted successfully.',
+              'success'
+            );
+            this.router.navigate(['/log-registry']);
+          },
+          error: (error) => {
+            this.toastService.showToast(
+              'Error creating workout log. Please try again.',
+              'danger'
+            );
+            console.error('Error creating workout log:', error);
+          },
+        });
+      } else {
+        this.workoutLogService
+          .updateWorkoutLog(this.workoutLogId, workoutLogData)
+          .subscribe({
+            next: () => {
+              this.toastService.showToast(
+                'Workout log updated successfully.',
+                'success'
+              );
+              this.router.navigate(['/log-registry']);
+            },
+            error: (error) => {
+              this.toastService.showToast(
+                'Error updating workout log. Please try again.',
+                'danger'
+              );
+              console.error('Error updating workout log:', error);
+            },
+          });
+      }
     } else {
-      console.error('Workout log form is invalid.');
+      this.toastService.showToast(
+        'Workout log form is invalid. Please fill out all required fields.',
+        'danger'
+      );
+  
       this.exercises.controls.forEach((exercise, index) => {
         if (exercise.invalid) {
           console.error(`Exercise ${index + 1} is invalid:`, exercise.errors);
@@ -249,7 +313,10 @@ export class LogpageComponent implements OnInit {
         const sets = this.getSets(exercise);
         sets.controls.forEach((set, setIndex) => {
           if (set.invalid) {
-            console.error(`Set ${setIndex + 1} of Exercise ${index + 1} is invalid:`, set.errors);
+            console.error(
+              `Set ${setIndex + 1} of Exercise ${index + 1} is invalid:`,
+              set.errors
+            );
           }
         });
       });
@@ -293,7 +360,7 @@ export class LogpageComponent implements OnInit {
   deleteSet(exerciseIndex: number, setIndex: number) {
     // Get the sets FormArray for the specified exercise
     const sets = this.getSets(this.exercises.at(exerciseIndex));
-  
+
     // Remove the specified set
     sets.removeAt(setIndex);
   }

@@ -61,13 +61,9 @@ export class LogRegistryComponent implements OnInit {
   } 
 
   viewWorkoutLog(log: any) {
-    if (log) {
-      console.log('Selected workout log:', log); // Verificar el objeto log
       this.selectedWorkoutLog = log;
-      this.showModal = true; // Forzar la actualización de la vista
-    } else {
-      console.error('Selected workout log data is not available.');
-    }
+      this.showModal = true;
+    
   }
 
 
