@@ -98,7 +98,7 @@ export class LogpageComponent implements OnInit {
                 ? exercise.sets.map((set: any) => this.createSetWithValues(set))
                 : [this.createSet()],
             ),
-            open: [true],
+            open: [false],
           }),
         ),
       );
