@@ -44,4 +44,10 @@ export class WorkoutLogService {
   deleteWorkoutLogExercise(exerciseId: number): Observable<void> {
     return this.http.delete<void>(WORKOUT_LOG_ROUTES.deleteExercise(exerciseId));
   }
+
+  getWorkoutLogByUserIdAndIsEditing(userId: number, isEditing: boolean): Observable<any> {
+    return this.http.get<any>(
+      `${WORKOUT_LOG_ROUTES.byUser(userId)}?isEditing=${isEditing}`
+    );
+  }
 }
