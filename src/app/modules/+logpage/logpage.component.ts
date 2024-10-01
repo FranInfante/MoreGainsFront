@@ -40,27 +40,11 @@ export class LogpageComponent implements OnInit {
       exercises: this.fb.array([]),
     });
 
-    const savedWorkoutLog = localStorage.getItem('workoutLogForm');
-    if (savedWorkoutLog) {
-      this.populateFormWithSavedData(JSON.parse(savedWorkoutLog));
-    } else {
-      const workoutId = this.workoutDataService.getWorkoutId();
-      if (workoutId) {
-        this.workoutId = workoutId;
-        this.loadWorkoutDetails(this.workoutId);
-      } else {
-        console.error(MSG.errorfindingworkout);
-      }
-    }
-
-    this.workoutLogForm.valueChanges.subscribe((formValue) => {
-      localStorage.setItem('workoutLogForm', JSON.stringify(formValue));
-    });
-
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
         if (user.id !== undefined) {
           this.userId = user.id;
+          this.initializeWorkoutLog();
         } else {
           console.error('User ID is undefined.');
         }
@@ -69,11 +53,34 @@ export class LogpageComponent implements OnInit {
         console.error('Failed to get user ID:', err);
       },
     });
+
+    this.workoutLogForm.valueChanges.subscribe(() => {
+      this.updateWorkoutLog();
+    });
+  }
+
+  initializeWorkoutLog() {
+    const workoutId = this.workoutDataService.getWorkoutId();
+    if (workoutId) {
+      this.workoutId = workoutId;
+      this.workoutLogService
+        .getWorkoutLogByUserId(this.userId)
+        .subscribe((logs) => {
+          const existingLog = logs.find((log) => log.workoutId === workoutId);
+          if (existingLog) {
+            this.workoutLogId = existingLog.id;
+            this.populateFormWithSavedData(existingLog);
+          } else {
+            this.loadWorkoutDetails(this.workoutId);
+          }
+        });
+    } else {
+      console.error(MSG.errorfindingworkout);
+    }
   }
 
   ngOnDestroy() {
     this.workoutDataService.clearWorkoutId();
-    localStorage.removeItem('workoutLogForm');
   }
 
   loadWorkoutDetails(workoutId: number) {
@@ -218,7 +225,6 @@ export class LogpageComponent implements OnInit {
   submitWorkoutLog() {
     if (this.workoutLogForm.valid) {
       this.updateWorkoutLog();
-      localStorage.removeItem('workoutLogForm');
     }
   }
 
@@ -261,12 +267,6 @@ export class LogpageComponent implements OnInit {
     // Remove the specified set
     sets.removeAt(setIndex);
   
-    // Update localStorage
-    this.updateLocalStorage();
   }
   
-  updateLocalStorage() {
-    // Update the localStorage with the current form value
-    localStorage.setItem('workoutLogForm', JSON.stringify(this.workoutLogForm.value));
-  }
 }
