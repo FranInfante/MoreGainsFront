@@ -12,6 +12,8 @@ import { WorkoutLogService } from '../../shared/service/workoutlog.service';
 import { WorkoutDataService } from '../../shared/service/workoutdata.service';
 import { ASSET_URLS, MSG } from '../../shared/components/constants';
 import { UserService } from '../../shared/service/user.service';
+import { Router } from '@angular/router';
+import { ToastService } from '../../shared/service/toast.service';
 
 @Component({
   selector: 'app-logpage',
@@ -33,6 +35,8 @@ export class LogpageComponent implements OnInit {
     private workoutLogService: WorkoutLogService,
     private workoutDataService: WorkoutDataService,
     private userService: UserService,
+    private toastService: ToastService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -233,19 +237,22 @@ export class LogpageComponent implements OnInit {
 
   submitWorkoutLog() {
     if (this.workoutLogForm.valid) {
-  
-      const exercisesArray = this.workoutLogForm.get('exercises') as FormArray;
-      if (exercisesArray && exercisesArray.length > 0) {
-        exercisesArray.controls.forEach((exercise, index) => {
-        });
-      }   
-      if (this.workoutLogId) {
-        this.updateWorkoutLog();
-      } else {
-        this.createWorkoutLog();
-      }
+      this.createWorkoutLog();
+      this.toastService.showToast('Workout log submitted successfully.', 'success');
+      this.router.navigate(['/log-registry']);
     } else {
       console.error('Workout log form is invalid.');
+      this.exercises.controls.forEach((exercise, index) => {
+        if (exercise.invalid) {
+          console.error(`Exercise ${index + 1} is invalid:`, exercise.errors);
+        }
+        const sets = this.getSets(exercise);
+        sets.controls.forEach((set, setIndex) => {
+          if (set.invalid) {
+            console.error(`Set ${setIndex + 1} of Exercise ${index + 1} is invalid:`, set.errors);
+          }
+        });
+      });
     }
   }
 

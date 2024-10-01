@@ -6,6 +6,7 @@ import { MenuComponent } from './modules/+menu/menu.component';
 import { UserProfileComponent } from './modules/+userprofile/userprofile.component';
 import { PlansComponent } from './modules/+plans/plans.component';
 import { LogpageComponent } from './modules/+logpage/logpage.component';
+import { LogRegistryComponent } from './modules/+log-registry/log-registry.component';
 
 
 export const routes: Routes = [
@@ -15,5 +16,6 @@ export const routes: Routes = [
     {path: "menu", component: MenuComponent},
     {path: "userprofile", component: UserProfileComponent},
     {path: "plans", component: PlansComponent},
-    { path: "logpage", component: LogpageComponent }
+    { path: "logpage", component: LogpageComponent },
+    { path: "log-registry", component: LogRegistryComponent }
 ];
