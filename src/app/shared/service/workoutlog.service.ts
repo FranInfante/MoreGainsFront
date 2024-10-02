@@ -50,4 +50,8 @@ export class WorkoutLogService {
       `${WORKOUT_LOG_ROUTES.byUser(userId)}?isEditing=${isEditing}`
     );
   }
+
+  getExerciseById(exerciseId: number): Observable<any> {
+    return this.http.get<any>(WORKOUT_LOG_ROUTES.exerciseById(exerciseId));
+  }
 }

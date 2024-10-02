@@ -33,21 +33,21 @@
                     class="form-control"
                     [id]="'reps-' + i + '-' + j"
                     (focus)="clearInput(i, j, 'reps')"
-                    (input)="limitInputLength($event, 3)"
-                    (blur)="resetToZero(i, j, 'reps')"
+                    (input)="limitInputLength($event, 3);updateWorkoutLog()"
+                    (blur)="resetToZero(i, j, 'reps');updateWorkoutLog()"
                   />
                 </div>
                 <div class="input-container">
                   <label for="weight-{{ i }}-{{ j }}">Weight:</label>
                   <div class="input-group">
                     <input
-                      type="number"
+                      type="number" 
                       formControlName="weight"
                       class="form-control"
                       [id]="'weight-' + i + '-' + j"
                       (focus)="clearInput(i, j, 'weight')"
-                      (input)="limitInputLength($event, 3)"
-                      (blur)="resetToZero(i, j, 'reps')"
+                      (input)="limitInputLength($event, 3);updateWorkoutLog()"
+                      (blur)="resetToZero(i, j, 'reps');updateWorkoutLog()"
                     />
                     <span class="input-group-text">kg</span>
                   </div>

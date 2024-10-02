@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
@@ -14,6 +14,7 @@ import { ASSET_URLS, MSG } from '../../shared/components/constants';
 import { UserService } from '../../shared/service/user.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../../shared/service/toast.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-logpage',
@@ -22,12 +23,14 @@ import { ToastService } from '../../shared/service/toast.service';
   templateUrl: './logpage.component.html',
   styleUrl: './logpage.component.css',
 })
-export class LogpageComponent implements OnInit {
+export class LogpageComponent implements OnInit, OnDestroy {
   workoutLogForm!: FormGroup;
   workoutId!: number;
   workoutLogId!: number;
   userId!: number;
   DeleteIcon: string = ASSET_URLS.DeleteIcon;
+  formChangesSubscription!: Subscription;
+  firstChangeMade: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -40,12 +43,15 @@ export class LogpageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    console.log('Initializing LogpageComponent');
+
     this.workoutLogForm = this.fb.group({
       exercises: this.fb.array([]),
     });
 
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
+        console.log('Current User:', user);
         if (user.id !== undefined) {
           this.userId = user.id;
           this.initializeWorkoutLog();
@@ -59,8 +65,17 @@ export class LogpageComponent implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    if (this.formChangesSubscription) {
+      console.log('Unsubscribing from form changes');
+      this.formChangesSubscription.unsubscribe();
+    }
+  }
+
   initializeWorkoutLog() {
     const workoutId = this.workoutDataService.getWorkoutId();
+    console.log('Workout ID:', workoutId);
+
     if (workoutId) {
       this.workoutId = workoutId;
 
@@ -68,15 +83,15 @@ export class LogpageComponent implements OnInit {
         .getWorkoutLogByUserIdAndIsEditing(this.userId, true)
         .subscribe({
           next: (editingLogs) => {
-            if (
-              editingLogs &&
-              editingLogs.length > 0 &&
-              editingLogs[0].isEditing === true
-            ) {
+            console.log('Editing Logs:', editingLogs);
+            if (editingLogs && editingLogs.length > 0) {
               const editingLog = editingLogs[0];
               this.workoutLogId = editingLog.id;
+              console.log('Editing Log ID:', this.workoutLogId);
               this.populateFormWithSavedData(editingLog);
+              this.trackFormChanges(); // Solo comenzamos a rastrear después de tener un workoutLogId
             } else {
+              console.log('No editing logs found, creating new workout log');
               this.loadWorkoutDetailsAndCreateWorkoutLog(this.workoutId);
             }
           },
@@ -90,9 +105,50 @@ export class LogpageComponent implements OnInit {
     }
   }
 
+  trackFormChanges() {
+    if (!this.workoutLogId) {
+      console.warn(
+        'Workout log ID is undefined, tracking form changes is disabled until a workout log is created.',
+      );
+      return; // Do not start tracking until the log is created
+    }
+
+    console.log('Starting to track form changes');
+
+    let updateTimeout: any;
+
+    this.formChangesSubscription = this.workoutLogForm.valueChanges.subscribe(
+      () => {
+        console.log('Form changes detected:', this.workoutLogForm.value); // Log to check the current form state
+
+        if (this.workoutLogId && this.firstChangeMade) {
+          // Debounce update call to avoid multiple rapid updates
+          clearTimeout(updateTimeout);
+          updateTimeout = setTimeout(() => {
+            console.log(
+              'Form changed, updating workout log. workoutLogId:',
+              this.workoutLogId,
+            );
+            this.updateWorkoutLog();
+          }, 500);
+        }
+      },
+    );
+  }
+
+  // Helper method to detect significant changes in form
+  hasSignificantChanges(currentData: any): boolean {
+    // Add logic here to check if the current changes are significant.
+    // For example, only update if reps or weight have been modified.
+    // Return true if an update is needed, otherwise false.
+    return true; // Placeholder to be customized
+  }
+
   loadWorkoutDetailsAndCreateWorkoutLog(workoutId: number) {
+    console.log('Loading workout details for workoutId:', workoutId);
     this.planService.getWorkoutById(workoutId).subscribe({
       next: (workout) => {
+        console.log('Workout loaded:', workout);
         this.populateFormWithWorkout(workout);
       },
       error: (err) => {
@@ -101,20 +157,18 @@ export class LogpageComponent implements OnInit {
     });
   }
 
-  loadWorkoutDetails(workoutId: number) {
-    this.planService.getWorkoutById(workoutId).subscribe((workout) => {
-      this.populateFormWithWorkout(workout);
-    });
-  }
-
   populateFormWithWorkout(workout: any) {
+    console.log('Populating form with workout details:', workout);
+    const exercisesArray = this.workoutLogForm.get('exercises') as FormArray;
+    exercisesArray.clear(); // Clear existing form controls to avoid duplication
+
     if (
       workout &&
       workout.workoutExercises &&
       Array.isArray(workout.workoutExercises)
     ) {
-      const exercisesArray = this.fb.array(
-        workout.workoutExercises.map((exercise: any) =>
+      workout.workoutExercises.forEach((exercise: any) => {
+        exercisesArray.push(
           this.fb.group({
             id: [exercise.id],
             name: [exercise.exerciseName],
@@ -125,40 +179,73 @@ export class LogpageComponent implements OnInit {
             ),
             open: [false],
           }),
-        ),
-      );
-
-      this.workoutLogForm.setControl('exercises', exercisesArray);
-    } else {
-      console.error('Workout exercises are empty or invalid.');
-      this.workoutLogForm.setControl('exercises', this.fb.array([]));
+        );
+      });
     }
   }
 
   populateFormWithSavedData(savedWorkoutLog: any) {
+    console.log('Populating form with saved workout log:', savedWorkoutLog);
+    const exercisesArray = this.workoutLogForm.get('exercises') as FormArray;
+  
+    // Clear the exercises array to avoid duplication
+    exercisesArray.clear();
+  
     if (
       savedWorkoutLog &&
       savedWorkoutLog.exercises &&
       Array.isArray(savedWorkoutLog.exercises)
     ) {
-      const exercisesArray = this.fb.array(
-        savedWorkoutLog.exercises.map((exercise: any) => {
-          return this.fb.group({
-            id: [exercise.id],
-            name: [exercise.name],
-            open: [false],
-            sets: this.fb.array(
-              exercise.sets.map((set: any) => this.createSetWithValues(set)),
-            ),
+      savedWorkoutLog.exercises.forEach((exercise: any) => {
+        const existingIndex = exercisesArray.controls.findIndex(
+          (control) => control.get('exerciseId')?.value === exercise.exerciseId
+        );
+  
+        if (existingIndex === -1) {
+          console.log('Adding exercise to form with ID:', exercise.exerciseId);
+  
+          // Fetch the exercise name using the exerciseId
+          this.workoutLogService.getExerciseById(exercise.exerciseId).subscribe({
+            next: (exerciseData) => {
+              console.log('Exercise data retrieved:', exerciseData);
+  
+              exercisesArray.push(
+                this.fb.group({
+                  id: [exercise.id],
+                  exerciseId: [exercise.exerciseId],
+                  name: [exerciseData.name || 'Unknown Name'], // Use fetched name here
+                  open: [false],
+                  sets: this.fb.array(
+                    exercise.sets.map((set: any) => this.createSetWithValues(set))
+                  ),
+                })
+              );
+            },
+            error: (error) => {
+              console.error(`Error fetching exercise with ID ${exercise.exerciseId}:`, error);
+              // Push with a fallback name in case of an error
+              exercisesArray.push(
+                this.fb.group({
+                  id: [exercise.id],
+                  exerciseId: [exercise.exerciseId],
+                  name: ['Unknown Name'],
+                  open: [false],
+                  sets: this.fb.array(
+                    exercise.sets.map((set: any) => this.createSetWithValues(set))
+                  ),
+                })
+              );
+            }
           });
-        }),
-      );
-
-      this.workoutLogForm.setControl('exercises', exercisesArray);
+        } else {
+          console.log('Exercise already exists with ID:', exercise.exerciseId);
+        }
+      });
     }
   }
 
   createSetWithValues(set: any): FormGroup {
+    console.log('Creating set with values:', set);
     return this.fb.group({
       reps: [
         set.reps,
@@ -172,6 +259,7 @@ export class LogpageComponent implements OnInit {
   }
 
   createSet(): FormGroup {
+    console.log('Creating empty set');
     return this.fb.group({
       reps: [0, [Validators.required, Validators.min(1), Validators.max(999)]],
       weight: [
@@ -182,6 +270,7 @@ export class LogpageComponent implements OnInit {
   }
 
   addSet(exerciseIndex: number) {
+    console.log('Adding set to exercise index:', exerciseIndex);
     const sets = this.getSets(this.exercises.at(exerciseIndex));
     sets.push(this.createSet());
   }
@@ -195,117 +284,142 @@ export class LogpageComponent implements OnInit {
   }
 
   toggleDropdown(index: number) {
+    console.log('Toggling dropdown for exercise index:', index);
     const exercise = this.exercises.at(index);
     exercise.patchValue({ open: !exercise.value.open });
   }
 
   createWorkoutLog() {
+    if (this.workoutLogId) {
+      console.log('Workout log already exists, skipping creation.');
+      return; // Skip creation if log already exists
+    }
+  
     const initialWorkoutLog = {
       userId: this.userId,
       workoutId: this.workoutId,
       date: new Date().toISOString(),
       notes: 'Initial workout log',
-      exercises: [],
+      exercises: this.exercises.controls.map((exerciseControl) => ({
+        exerciseId: exerciseControl.get('id')?.value,
+        sets: this.getSets(exerciseControl).controls.map((setControl, setIndex) => ({
+          set: setIndex + 1,
+          reps: setControl.get('reps')?.value,
+          weight: setControl.get('weight')?.value,
+        })),
+      })),
+      isEditing: true,
     };
-
+  
+    console.log('Creating Workout Log:', initialWorkoutLog);
+  
     this.workoutLogService.createWorkoutLog(initialWorkoutLog).subscribe({
       next: (response) => {
-        this.workoutLogId = response.id;
+        console.log('Workout Log Created:', response);
+        this.workoutLogId = response.id; // Set workoutLogId for further updates
+        this.firstChangeMade = true; // Allow updates after first creation
+        console.log('Workout log created successfully, starting to track form changes.');
+        this.trackFormChanges(); // Start tracking only after the workout log is created
       },
       error: (error) => {
+        this.toastService.showToast('Error creating workout log.', 'danger');
         console.error('Error creating workout log:', error);
       },
     });
   }
-
-  updateWorkoutLog() {
-    if (this.workoutLogId) {
-      const updatedWorkoutLog = {
-        ...this.workoutLogForm.value,
-        workoutLogId: this.workoutLogId,
-      };
-
-      this.workoutLogService
-        .updateWorkoutLog(this.workoutLogId, updatedWorkoutLog)
-        .subscribe({
-          next: (response) => {},
-          error: (error) => {
-            console.error('Error updating workout log:', error);
-          },
-        });
-    }
-  }
-
-  submitWorkoutLog() {
-    if (this.workoutLogForm.valid) {
-      const exercisesArray = this.exercises.controls.map(
-        (exerciseControl, exerciseIndex) => {
-          return {
-            exerciseId: exerciseControl.get('id')?.value,
-            sets: this.getSets(exerciseControl).controls.map(
-              (setControl, setIndex) => {
-                return {
-                  set: setIndex + 1,
-                  reps: setControl.get('reps')?.value,
-                  weight: setControl.get('weight')?.value,
-                };
-              }
-            ),
-          };
-        }
-      );
   
+  updateWorkoutLog() {
+    if (!this.workoutLogId) {
+      console.log('Workout log ID is undefined, creating a new workout log.');
+      this.createWorkoutLog(); // Si no hay ID de log, crea un nuevo log
+      return;
+    }
+  
+    const updatedWorkoutLog = {
+      userId: this.userId,
+      workoutId: this.workoutId,
+      date: new Date().toISOString(),
+      notes: this.workoutLogForm.get('notes')?.value || 'No notes',
+      exercises: this.exercises.controls.map((exerciseControl) => ({
+        id: exerciseControl.get('id')?.value, // Utiliza el ID para identificar el ejercicio
+        exerciseId: exerciseControl.get('id')?.value,
+        sets: this.getSets(exerciseControl).controls.map(
+          (setControl, setIndex) => ({
+            set: setIndex + 1,
+            reps: setControl.get('reps')?.value,
+            weight: setControl.get('weight')?.value,
+          }),
+        ),
+      })),
+      editing: true,
+    };
+  
+    console.log('Updating Workout Log:', updatedWorkoutLog);
+  
+    this.workoutLogService
+      .updateWorkoutLog(this.workoutLogId, updatedWorkoutLog)
+      .subscribe({
+        next: () => {
+          console.log('Workout log updated successfully.');
+        },
+        error: (error) => {
+          this.toastService.showToast('Error updating workout log.', 'danger');
+          console.error('Error updating workout log:', error);
+        },
+      });
+  }
+  
+  
+  submitWorkoutLog() {
+    console.log('Submitting workout log');
+    if (this.workoutLogForm.valid) {
+      const exercisesArray = this.exercises.controls.map((exerciseControl) => ({
+        exerciseId: exerciseControl.get('id')?.value,
+        sets: this.getSets(exerciseControl).controls.map(
+          (setControl, setIndex) => ({
+            set: setIndex + 1,
+            reps: setControl.get('reps')?.value,
+            weight: setControl.get('weight')?.value,
+          }),
+        ),
+      }));
+
       const workoutLogData = {
         userId: this.userId,
         workoutId: this.workoutId,
         date: new Date().toISOString(),
         notes: this.workoutLogForm.get('notes')?.value || 'No notes',
         exercises: exercisesArray,
+        isEditing: false,
       };
-  
-      if (!this.workoutLogId) {
-        this.workoutLogService.createWorkoutLog(workoutLogData).subscribe({
-          next: (response) => {
+
+      console.log('Workout Log Data for submission:', workoutLogData);
+
+      this.workoutLogService
+        .updateWorkoutLog(this.workoutLogId, workoutLogData)
+        .subscribe({
+          next: () => {
+            console.log('Workout log submitted successfully.');
             this.toastService.showToast(
               'Workout log submitted successfully.',
-              'success'
+              'success',
             );
             this.router.navigate(['/log-registry']);
           },
           error: (error) => {
             this.toastService.showToast(
-              'Error creating workout log. Please try again.',
-              'danger'
+              'Error submitting workout log.',
+              'danger',
             );
-            console.error('Error creating workout log:', error);
+            console.error('Error submitting workout log:', error);
           },
         });
-      } else {
-        this.workoutLogService
-          .updateWorkoutLog(this.workoutLogId, workoutLogData)
-          .subscribe({
-            next: () => {
-              this.toastService.showToast(
-                'Workout log updated successfully.',
-                'success'
-              );
-              this.router.navigate(['/log-registry']);
-            },
-            error: (error) => {
-              this.toastService.showToast(
-                'Error updating workout log. Please try again.',
-                'danger'
-              );
-              console.error('Error updating workout log:', error);
-            },
-          });
-      }
     } else {
       this.toastService.showToast(
         'Workout log form is invalid. Please fill out all required fields.',
-        'danger'
+        'danger',
       );
-  
+
       this.exercises.controls.forEach((exercise, index) => {
         if (exercise.invalid) {
           console.error(`Exercise ${index + 1} is invalid:`, exercise.errors);
@@ -315,7 +429,7 @@ export class LogpageComponent implements OnInit {
           if (set.invalid) {
             console.error(
               `Set ${setIndex + 1} of Exercise ${index + 1} is invalid:`,
-              set.errors
+              set.errors,
             );
           }
         });
@@ -328,6 +442,9 @@ export class LogpageComponent implements OnInit {
     setIndex: number,
     field: 'reps' | 'weight',
   ) {
+    console.log(
+      `Clearing input for exercise ${exerciseIndex}, set ${setIndex}, field ${field}`,
+    );
     const exercise = this.exercises.at(exerciseIndex);
     const set = this.getSets(exercise).at(setIndex);
 
@@ -338,6 +455,7 @@ export class LogpageComponent implements OnInit {
 
   limitInputLength(event: Event, maxLength: number) {
     const input = event.target as HTMLInputElement;
+    console.log('Limiting input length for:', input.id);
 
     if (input.value.length > maxLength) {
       input.value = input.value.slice(0, maxLength);
@@ -349,6 +467,9 @@ export class LogpageComponent implements OnInit {
     setIndex: number,
     field: 'reps' | 'weight',
   ) {
+    console.log(
+      `Resetting input to zero for exercise ${exerciseIndex}, set ${setIndex}, field ${field}`,
+    );
     const exercise = this.exercises.at(exerciseIndex);
     const set = this.getSets(exercise).at(setIndex);
 
@@ -358,10 +479,8 @@ export class LogpageComponent implements OnInit {
   }
 
   deleteSet(exerciseIndex: number, setIndex: number) {
-    // Get the sets FormArray for the specified exercise
+    console.log(`Deleting set ${setIndex} from exercise ${exerciseIndex}`);
     const sets = this.getSets(this.exercises.at(exerciseIndex));
-
-    // Remove the specified set
     sets.removeAt(setIndex);
   }
 }
