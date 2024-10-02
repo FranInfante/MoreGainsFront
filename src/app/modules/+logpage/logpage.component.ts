@@ -88,11 +88,9 @@ export class LogpageComponent implements OnInit, OnDestroy {
                 this.populateFormWithSavedData(editingLog);
                 this.trackFormChanges();
               } else {
-                // If isEditing is false, create a new one
                 this.loadWorkoutDetailsAndCreateWorkoutLog(this.workoutId);
               }
             } else {
-              // No editing log found, create a new one
               this.loadWorkoutDetailsAndCreateWorkoutLog(this.workoutId);
             }
           },
@@ -456,8 +454,30 @@ export class LogpageComponent implements OnInit, OnDestroy {
   }
 
   deleteSet(exerciseIndex: number, setIndex: number) {
-    
-    const sets = this.getSets(this.exercises.at(exerciseIndex));
-    sets.removeAt(setIndex);
+    const exerciseControl = this.exercises.at(exerciseIndex);
+    const setControl = this.getSets(exerciseControl).at(setIndex);
+  
+    if (!this.workoutLogId || !exerciseControl) {
+      console.warn('WorkoutLog ID or Exercise Control not found');
+      return;
+    }
+  
+    const workoutLogId = this.workoutLogId;
+    const exerciseId = exerciseControl.get('id')?.value;
+    const setNumber = setIndex + 1; // Assuming sets start from 1
+  
+    if (exerciseId !== undefined && workoutLogId !== undefined) {
+      this.workoutLogService.deleteWorkoutLogSet(workoutLogId, exerciseId, setNumber).subscribe({
+        next: () => {
+          const sets = this.getSets(this.exercises.at(exerciseIndex));
+          sets.removeAt(setIndex);
+        },
+        error: (error) => {
+          console.error('Error deleting set:', error);
+          this.toastService.showToast('Error deleting set.', 'danger');
+        },
+      });
+    }
   }
+  
 }
