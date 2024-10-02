@@ -73,24 +73,26 @@ export class LogpageComponent implements OnInit, OnDestroy {
 
   initializeWorkoutLog() {
     const workoutId = this.workoutDataService.getWorkoutId();
-    
-
+  
     if (workoutId) {
       this.workoutId = workoutId;
-
+  
       this.workoutLogService
         .getWorkoutLogByUserIdAndIsEditing(this.userId, true)
         .subscribe({
           next: (editingLogs) => {
-            
             if (editingLogs && editingLogs.length > 0) {
               const editingLog = editingLogs[0];
-              this.workoutLogId = editingLog.id;
-              
-              this.populateFormWithSavedData(editingLog);
-              this.trackFormChanges();
+              if (editingLog.editing) {
+                this.workoutLogId = editingLog.id;
+                this.populateFormWithSavedData(editingLog);
+                this.trackFormChanges();
+              } else {
+                // If isEditing is false, create a new one
+                this.loadWorkoutDetailsAndCreateWorkoutLog(this.workoutId);
+              }
             } else {
-              
+              // No editing log found, create a new one
               this.loadWorkoutDetailsAndCreateWorkoutLog(this.workoutId);
             }
           },
@@ -103,7 +105,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
       console.error(MSG.errorfindingworkout);
     }
   }
-
+  
   trackFormChanges() {
     if (!this.workoutLogId) {
       return;
