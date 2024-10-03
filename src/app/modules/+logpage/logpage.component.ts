@@ -15,6 +15,7 @@ import { UserService } from '../../shared/service/user.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../../shared/service/toast.service';
 import { Subscription } from 'rxjs';
+import { WorkoutLog } from '../../shared/interfaces/workoutlog';
 
 @Component({
   selector: 'app-logpage',
@@ -70,17 +71,17 @@ export class LogpageComponent implements OnInit, OnDestroy {
 
   initializeWorkoutLog() {
     const workoutId = this.workoutDataService.getWorkoutId();
-
+  
     if (workoutId) {
       this.workoutId = workoutId;
-
+  
       this.workoutLogService
         .getWorkoutLogByUserIdAndIsEditing(this.userId, true)
         .subscribe({
           next: (editingLogs) => {
             if (editingLogs && editingLogs.length > 0) {
-              const editingLog = editingLogs[0];
-              if (editingLog.editing) {
+              const editingLog = editingLogs.find((log: WorkoutLog) => log.editing === true);
+              if (editingLog) {
                 this.workoutLogId = editingLog.id;
                 this.populateFormWithSavedData(editingLog);
                 this.trackFormChanges();
@@ -160,16 +161,12 @@ export class LogpageComponent implements OnInit, OnDestroy {
     }
   }
 
-  populateFormWithSavedData(savedWorkoutLog: any) {
+  populateFormWithSavedData(savedWorkoutLog: WorkoutLog) {
     const exercisesArray = this.workoutLogForm.get('exercises') as FormArray;
     exercisesArray.clear();
-
-    if (
-      savedWorkoutLog &&
-      savedWorkoutLog.exercises &&
-      Array.isArray(savedWorkoutLog.exercises)
-    ) {
-      const groupedExercises = savedWorkoutLog.exercises.reduce((acc: any, curr: any) => {
+  
+    if (savedWorkoutLog && savedWorkoutLog.exercises && Array.isArray(savedWorkoutLog.exercises)) {
+        const groupedExercises = savedWorkoutLog.exercises.reduce((acc: any, curr: any) => {
         const exerciseId = curr.exerciseId;
         if (!acc[exerciseId]) {
           acc[exerciseId] = { ...curr, sets: [] };
@@ -177,7 +174,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
         acc[exerciseId].sets.push(...curr.sets);
         return acc;
       }, {});
-
+  
       Object.values(groupedExercises).forEach((exercise: any) => {
         this.workoutLogService.getExerciseById(exercise.exerciseId).subscribe({
           next: (exerciseData) => {
@@ -212,7 +209,6 @@ export class LogpageComponent implements OnInit, OnDestroy {
     }
   }
   
-
   createSetWithValues(set: any): FormGroup {
     
     return this.fb.group({
