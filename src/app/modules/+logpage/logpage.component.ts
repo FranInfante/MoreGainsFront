@@ -218,7 +218,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
     return this.fb.group({
       reps: [
         set.reps,
-        [Validators.required, Validators.min(1), Validators.max(999)],
+        [Validators.required, Validators.min(0), Validators.max(999)],
       ],
       weight: [
         set.weight,
