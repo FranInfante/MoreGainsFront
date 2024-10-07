@@ -4,11 +4,13 @@ import { UserService } from '../../shared/service/user.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { WorkoutLogDetailModalComponent } from './components/work-log-detail/work-log-detail.component';
+import { LOCATIONS } from '../../shared/components/constants';
+import { BackToMenuComponent } from "../../shared/components/back-to-menu/back-to-menu.component";
 
 @Component({
   selector: 'app-log-registry',
   standalone: true,
-  imports: [CommonModule, WorkoutLogDetailModalComponent],
+  imports: [CommonModule, WorkoutLogDetailModalComponent, BackToMenuComponent],
   templateUrl: './log-registry.component.html',
   styleUrl: './log-registry.component.css'
 })
@@ -18,6 +20,7 @@ export class LogRegistryComponent implements OnInit {
   isLoading: boolean = true;
   selectedWorkoutLog: any = null;
   showModal: boolean = false;
+  LOCATIONS: typeof LOCATIONS = LOCATIONS;
 
   constructor(
     private workoutLogService: WorkoutLogService,
