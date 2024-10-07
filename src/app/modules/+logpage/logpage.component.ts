@@ -100,7 +100,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
           },
         });
     } else {
-      console.error(MSG.errorfindingworkout);
+      this.router.navigate([LOCATIONS.plans]);
     }
   }
 
