@@ -29,6 +29,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   privacySettings = Object.values(PrivacySetting);
   selectedFile: File | null = null;
   isPlaceholderVisible: boolean = false;
+  LOCATIONS: typeof LOCATIONS = LOCATIONS;
 
   constructor(private userService: UserService,
               private router: Router,

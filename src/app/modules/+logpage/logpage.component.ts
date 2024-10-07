@@ -10,17 +10,18 @@ import {
 import { PlanService } from '../../shared/service/plan.service';
 import { WorkoutLogService } from '../../shared/service/workoutlog.service';
 import { WorkoutDataService } from '../../shared/service/workoutdata.service';
-import { ASSET_URLS, MSG } from '../../shared/components/constants';
+import { ASSET_URLS, LOCATIONS, MSG } from '../../shared/components/constants';
 import { UserService } from '../../shared/service/user.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../../shared/service/toast.service';
 import { Subscription } from 'rxjs';
 import { WorkoutLog } from '../../shared/interfaces/workoutlog';
+import { BackToMenuComponent } from "../../shared/components/back-to-menu/back-to-menu.component";
 
 @Component({
   selector: 'app-logpage',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, BackToMenuComponent],
   templateUrl: './logpage.component.html',
   styleUrl: './logpage.component.css',
 })
@@ -32,6 +33,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
   DeleteIcon: string = ASSET_URLS.DeleteIcon;
   formChangesSubscription!: Subscription;
   firstChangeMade: boolean = false;
+  LOCATIONS: typeof LOCATIONS = LOCATIONS;
 
   constructor(
     private fb: FormBuilder,
