@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BackToMenuComponent } from '../../shared/components/back-to-menu/back-to-menu.component';
-import { ASSET_URLS, TOAST_MSGS } from '../../shared/components/constants';
+import { ASSET_URLS, LOCATIONS, TOAST_MSGS } from '../../shared/components/constants';
 import { Plan } from '../../shared/interfaces/plan';
 import { User } from '../../shared/interfaces/users';
 import { Workout } from '../../shared/interfaces/workout';
@@ -28,6 +28,7 @@ export class PlansComponent implements OnInit {
   currentUser: User | null = null;
   user: User | null = null;
   ThreeDotsIcon: string = ASSET_URLS.ThreeDotsIcon;
+  LOCATIONS: typeof LOCATIONS = LOCATIONS;
 
   PlusSignIcon: string = ASSET_URLS.PlusSignIcon;
   editMode = false;

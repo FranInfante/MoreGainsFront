@@ -22,6 +22,7 @@ import {
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   ASSET_URLS,
+  LOCATIONS,
   MSG,
   TOAST_MSGS,
 } from '../../../../shared/components/constants';
@@ -31,11 +32,13 @@ import { PlanService } from '../../../../shared/service/plan.service';
 import { ExercisePickerModalComponent } from '../exercise-picker-modal/exercise-picker-modal.component';
 import { CreateExerciseModalComponent } from '../create-exercise-modal/create-exercise-modal.component';
 import { ToastService } from '../../../../shared/service/toast.service';
+import { Router, RouterLink } from '@angular/router';
+import { WorkoutDataService } from '../../../../shared/service/workoutdata.service';
 
 @Component({
   selector: 'app-workouts',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, DragDropModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, DragDropModule, RouterLink],
   templateUrl: './workouts.component.html',
   styleUrl: './workouts.component.css',
 })
@@ -56,17 +59,22 @@ export class WorkoutsComponent {
   selectedWorkout: Workout | null = null;
   DeleteIcon: string = ASSET_URLS.DeleteIcon;
   PlusSignIcon: string = ASSET_URLS.PlusSignIcon;
+  PlayButton: string = ASSET_URLS.PlayIcon;
   workoutsMarkedForDeletion: Workout[] = [];
 
   maxLen = 20;
   specialKeys = ['Backspace', 'Shift', 'Control', 'Alt', 'Delete'];
   navigationalKeys = ['ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
 
+  LOCATIONS: typeof LOCATIONS = LOCATIONS;
+
   constructor(
     private planService: PlanService,
     private modalService: NgbModal,
     private fb: FormBuilder,
     private toastService: ToastService,
+    private router: Router,
+    private workoutDataService : WorkoutDataService
   ) {
     this.workoutForm = this.fb.group({
       workoutName: ['', [Validators.required, Validators.maxLength(20)]],
@@ -342,4 +350,14 @@ export class WorkoutsComponent {
 
     return true;
   }
+
+  goToLogPage(): void {
+    if (this.selectedWorkout) {
+      this.workoutDataService.setWorkoutId(this.selectedWorkout.id);
+      this.router.navigate(['/logpage']);
+    } else {
+      console.error('No workout selected.');
+    }
+  }
+  
 }

@@ -1,0 +1,37 @@
+<app-back-to-menu [navigationPath]="LOCATIONS.logpage"></app-back-to-menu>
+<div class="container mt-5">
+    <h3 class="text-center">Your Workout Logs</h3>
+  
+    <div *ngIf="isLoading" class="text-center mt-4">
+      <p>Loading workout logs...</p>
+    </div>
+  
+    <div *ngIf="!isLoading && workoutLogs.length === 0" class="text-center mt-4">
+      <p>No workout logs found.</p>
+    </div>
+  
+    <ul *ngIf="!isLoading && workoutLogs.length > 0" class="list-group mt-4">
+      <li
+        *ngFor="let log of workoutLogs"
+        class="list-group-item d-flex justify-content-between align-items-center"
+      >
+        <div>
+          <h5>{{ log.workoutName }}</h5>
+          <p>Date: {{ log.date | date: 'medium' }}</p>
+          <p>Notes: {{ log.notes }}</p>
+        </div>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="viewWorkoutLog(log)"
+        >
+          View Details
+        </button>
+      </li>
+    </ul>
+    <app-work-log-detail
+    [workoutLog]="selectedWorkoutLog"
+    [showModal]="showModal"
+    (closeModal)="closeWorkoutLogModal()"
+  ></app-work-log-detail>
+  </div>

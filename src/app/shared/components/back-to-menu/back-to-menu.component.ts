@@ -12,11 +12,12 @@ import { LOCATIONS } from '../constants';
 export class BackToMenuComponent {
   
   @Input() displayText: string = '';
+  @Input() navigationPath: string = LOCATIONS.menu; 
 
   constructor(private router: Router) {}
 
-  goToMenu() {
-    this.router.navigate([LOCATIONS.menu]);
+  goToPath() {
+    this.router.navigate([this.navigationPath]);
   }
 
 }

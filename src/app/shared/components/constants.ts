@@ -7,6 +7,7 @@ export const ASSET_URLS = {
   DeleteIcon: 'icons/DeleteIcon.svg',
   PlusSignIcon: 'icons/PlusSignIcon.svg',
   ThreeDotsIcon: 'icons/ThreeDotsIcon.svg',
+  PlayIcon: 'icons/PlayIcon.svg',
   genericlogo: 'user/genericlogo.png',
   workout: 'menu/workouts.png',
   mesos: 'menu/mesos.png',
@@ -20,7 +21,8 @@ export const LOCATIONS = {
   register: '/register',
   menu: '/menu',
   userprofile: '/userprofile',
-  plans: '/plans'
+  plans: '/plans',
+  logpage: '/logpage'
 };
 
 export const MSG = {
@@ -34,7 +36,8 @@ export const MSG = {
   loginerror: 'Login error: ',
   errorupdatingplanname: 'Error updating plan name: ',
   errorcreatingworkout: 'Error creating workout: ',
-  noauthtoken: 'No authentication token available.'
+  noauthtoken: 'No authentication token available.',
+  errorfindingworkout: 'Workout ID not found in service.'
 };
 
 export const TOAST_MSGS = {
