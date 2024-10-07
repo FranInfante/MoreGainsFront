@@ -352,12 +352,11 @@ export class WorkoutsComponent {
   }
 
   goToLogPage(): void {
-    if (this.selectedWorkout) {
+    if (this.selectedWorkout && this.selectedWorkout.workoutExercises.length > 0) {
       this.workoutDataService.setWorkoutId(this.selectedWorkout.id);
       this.router.navigate(['/logpage']);
     } else {
-      console.error('No workout selected.');
+      this.toastService.showToast(TOAST_MSGS.noexercisesinworkout, 'danger');
     }
   }
-  
 }

@@ -54,6 +54,7 @@ export const TOAST_MSGS = {
   editmodedisabled: 'Edit mode disabled',
   workoutdeletedsaved:'Workouts deleted and changes saved successfully!',
   exerciseexists: 'Exercise already exists: ',
-  exercisecreated: 'New exercise created successfully: '
+  exercisecreated: 'New exercise created successfully: ',
+  noexercisesinworkout: 'You need at least one exercise to log this workout.'
 };
 
