@@ -274,7 +274,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
           weight: setControl.get('weight')?.value,
         })),
       })),
-      isEditing: true,
+      editing: true,
     };
   
     
@@ -357,7 +357,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
         date: new Date().toISOString(),
         notes: this.workoutLogForm.get('notes')?.value || 'No notes',
         exercises: exercisesArray,
-        isEditing: false,
+        editing: false,
       };
 
       
