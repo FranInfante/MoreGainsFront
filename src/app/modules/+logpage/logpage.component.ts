@@ -139,17 +139,15 @@ export class LogpageComponent implements OnInit, OnDestroy {
   populateFormWithWorkout(workout: any) {
     const exercisesArray = this.workoutLogForm.get('exercises') as FormArray;
     exercisesArray.clear();
-
-    if (
-      workout &&
-      workout.workoutExercises &&
-      Array.isArray(workout.workoutExercises)
-    ) {
+  
+    if (workout && workout.workoutExercises && Array.isArray(workout.workoutExercises)) {
       workout.workoutExercises.forEach((exercise: any) => {
+        console.log('Populating form - Exercise ID:', exercise.exerciseId, 'Name:', exercise.exerciseName);
+
         exercisesArray.push(
           this.fb.group({
-            id: [exercise.id],
-            exerciseId: [exercise.id],
+            id: [exercise.id],  // This is the unique ID for the workout-exercise relation (WorkoutExercise ID)
+            exerciseId: [exercise.exerciseId],  // Use exerciseId for the actual reference to the Exercise entity
             name: [exercise.exerciseName],
             sets: this.fb.array(
               exercise.sets
@@ -160,8 +158,11 @@ export class LogpageComponent implements OnInit, OnDestroy {
           }),
         );
       });
+  
+      console.log('Form after populating workout:', this.workoutLogForm.value);
     }
-  }
+}
+
 
   populateFormWithSavedData(savedWorkoutLog: WorkoutLog) {
     const exercisesArray = this.workoutLogForm.get('exercises') as FormArray;
@@ -267,7 +268,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
       date: new Date().toISOString(),
       notes: 'Initial workout log',
       exercises: this.exercises.controls.map((exerciseControl) => ({
-        exerciseId: exerciseControl.get('id')?.value,
+        exerciseId: exerciseControl.get('exerciseId')?.value,
         sets: this.getSets(exerciseControl).controls.map((setControl, setIndex) => ({
           set: setIndex + 1,
           reps: setControl.get('reps')?.value,
