@@ -37,7 +37,11 @@ export const MSG = {
   errorupdatingplanname: 'Error updating plan name: ',
   errorcreatingworkout: 'Error creating workout: ',
   noauthtoken: 'No authentication token available.',
-  errorfindingworkout: 'Workout ID not found in service.'
+  errorfindingworkout: 'Workout ID not found in service.',
+  noworkoutlogidfound: 'WorkoutLog ID or Exercise Control not found',
+  useridundefined: 'User ID is undefined.',
+  failedtogetuserid: 'Failed to get user ID:',
+  errorfetchingworkoutlogs:'Error fetching workout logs:'
 };
 
 export const TOAST_MSGS = {
@@ -54,6 +58,8 @@ export const TOAST_MSGS = {
   editmodedisabled: 'Edit mode disabled',
   workoutdeletedsaved:'Workouts deleted and changes saved successfully!',
   exerciseexists: 'Exercise already exists: ',
-  exercisecreated: 'New exercise created successfully: '
+  exercisecreated: 'New exercise created successfully: ',
+  noexercisesinworkout: 'You need at least one exercise to log this workout.',
+  errorcreatingworkout: 'Error creating or updating the workout log.'
 };
 

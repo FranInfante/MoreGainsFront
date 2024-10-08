@@ -4,7 +4,7 @@ import { UserService } from '../../shared/service/user.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { WorkoutLogDetailModalComponent } from './components/work-log-detail/work-log-detail.component';
-import { LOCATIONS } from '../../shared/components/constants';
+import { LOCATIONS, MSG } from '../../shared/components/constants';
 import { BackToMenuComponent } from "../../shared/components/back-to-menu/back-to-menu.component";
 
 @Component({
@@ -35,11 +35,11 @@ export class LogRegistryComponent implements OnInit {
           this.userId = user.id;
           this.getWorkoutLogsForUser();
         } else {
-          console.error('User ID is undefined.');
+          console.error(MSG.useridundefined);
         }
       },
       error: (err) => {
-        console.error('Failed to get user ID:', err);
+        console.error(MSG.failedtogetuserid, err);
       },
     });
   }
@@ -57,7 +57,7 @@ export class LogRegistryComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error('Error fetching workout logs:', err);
+        console.error(MSG.errorfetchingworkoutlogs, err);
         this.isLoading = false;
       },
     });
