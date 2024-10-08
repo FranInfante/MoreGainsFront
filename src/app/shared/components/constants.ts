@@ -38,7 +38,10 @@ export const MSG = {
   errorcreatingworkout: 'Error creating workout: ',
   noauthtoken: 'No authentication token available.',
   errorfindingworkout: 'Workout ID not found in service.',
-  noworkoutlogidfound: 'WorkoutLog ID or Exercise Control not found'
+  noworkoutlogidfound: 'WorkoutLog ID or Exercise Control not found',
+  useridundefined: 'User ID is undefined.',
+  failedtogetuserid: 'Failed to get user ID:',
+  errorfetchingworkoutlogs:'Error fetching workout logs:'
 };
 
 export const TOAST_MSGS = {
