@@ -38,7 +38,13 @@ import { WorkoutDataService } from '../../../../shared/service/workoutdata.servi
 @Component({
   selector: 'app-workouts',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, DragDropModule, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DragDropModule,
+    RouterLink,
+  ],
   templateUrl: './workouts.component.html',
   styleUrl: './workouts.component.css',
 })
@@ -74,7 +80,7 @@ export class WorkoutsComponent {
     private fb: FormBuilder,
     private toastService: ToastService,
     private router: Router,
-    private workoutDataService : WorkoutDataService
+    private workoutDataService: WorkoutDataService,
   ) {
     this.workoutForm = this.fb.group({
       workoutName: ['', [Validators.required, Validators.maxLength(20)]],
@@ -84,9 +90,11 @@ export class WorkoutsComponent {
 
   ngOnInit() {
     const storedWorkoutId = this.workoutDataService.getWorkoutId();
-    
+
     if (storedWorkoutId) {
-      const selectedWorkout = this.workouts.find(workout => workout.id === storedWorkoutId);
+      const selectedWorkout = this.workouts.find(
+        (workout) => workout.id === storedWorkoutId,
+      );
       if (selectedWorkout) {
         this.showWorkoutDetails(selectedWorkout);
       }
@@ -112,6 +120,9 @@ export class WorkoutsComponent {
 
     modalRef.componentInstance.planId = this.planId!;
     modalRef.componentInstance.workoutId = this.selectedWorkout!.id;
+    modalRef.componentInstance.existingExercises =
+      this.selectedWorkout!.workoutExercises.map((ex) => ex.exerciseName);
+
     modalRef.result.then(
       (workoutExercise: WorkoutExercise) => {
         if (workoutExercise && this.selectedWorkout) {
@@ -364,7 +375,10 @@ export class WorkoutsComponent {
   }
 
   goToLogPage(): void {
-    if (this.selectedWorkout && this.selectedWorkout.workoutExercises.length > 0) {
+    if (
+      this.selectedWorkout &&
+      this.selectedWorkout.workoutExercises.length > 0
+    ) {
       this.workoutDataService.setWorkoutId(this.selectedWorkout.id);
       this.router.navigate(['/logpage']);
     } else {

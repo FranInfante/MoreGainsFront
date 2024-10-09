@@ -158,18 +158,10 @@ export class LogpageComponent implements OnInit, OnDestroy {
   populateFormWithSavedData(savedWorkoutLog: WorkoutLog) {
     const exercisesArray = this.workoutLogForm.get('exercises') as FormArray;
     exercisesArray.clear();
-
+  
     if (savedWorkoutLog && savedWorkoutLog.exercises && Array.isArray(savedWorkoutLog.exercises)) {
-      const groupedExercises = savedWorkoutLog.exercises.reduce((acc: any, curr: any) => {
-        const exerciseId = curr.exerciseId;
-        if (!acc[exerciseId]) {
-          acc[exerciseId] = { ...curr, sets: [] };
-        }
-        acc[exerciseId].sets.push(...curr.sets);
-        return acc;
-      }, {});
-
-      Object.values(groupedExercises).forEach((exercise: any) => {
+      // Do not group by exerciseId. Instead, treat each exercise as a unique instance.
+      savedWorkoutLog.exercises.forEach((exercise: any, index: number) => {
         this.workoutLogService.getExerciseById(exercise.exerciseId).subscribe({
           next: (exerciseData) => {
             exercisesArray.push(
@@ -260,13 +252,13 @@ export class LogpageComponent implements OnInit, OnDestroy {
       this.createWorkoutLog();
       return;
     }
-
+  
     const updatedWorkoutLog = {
       userId: this.userId,
       workoutId: this.workoutId,
       date: new Date().toISOString(),
       notes: this.workoutLogForm.get('notes')?.value || 'No notes',
-      exercises: this.exercises.controls.map((exerciseControl) => ({
+      exercises: this.exercises.controls.map((exerciseControl, index) => ({
         id: exerciseControl.get('id')?.value,
         exerciseId: exerciseControl.get('exerciseId')?.value,
         sets: this.getSets(exerciseControl).controls.map(
@@ -279,7 +271,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
       })),
       editing: true,
     };
-
+  
     if (updatedWorkoutLog.exercises.some(exercise => exercise.sets.length > 0)) {
       this.workoutLogService
         .updateWorkoutLog(this.workoutLogId, updatedWorkoutLog)
@@ -291,6 +283,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
         });
     }
   }
+  
 
   submitWorkoutLog() {
     if (this.workoutLogForm.valid) {
