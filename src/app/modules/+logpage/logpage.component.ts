@@ -358,25 +358,21 @@ export class LogpageComponent implements OnInit, OnDestroy {
 
   deleteSet(exerciseIndex: number, setIndex: number) {
     const exerciseControl = this.exercises.at(exerciseIndex);
-    const exerciseId = exerciseControl.get('exerciseId')?.value;
-  
-    if (!this.workoutLogId || !exerciseControl) {
+    const sets = this.getSets(exerciseControl);
+    
+    if (sets.length === 1) {
+      this.toastService.showToast("You cannot delete all sets. There must be at least one set.", 'danger');
       return;
     }
   
+    const exerciseId = exerciseControl.get('exerciseId')?.value;
     const workoutLogId = this.workoutLogId;
     const setNumber = setIndex + 1;
   
     if (exerciseId !== undefined && workoutLogId !== undefined) {
       this.workoutLogService.deleteWorkoutLogSet(workoutLogId, exerciseId, setNumber).subscribe({
         next: () => {
-          const sets = this.getSets(this.exercises.at(exerciseIndex));
           sets.removeAt(setIndex);
-  
-          // Check if there are no sets left, if so, add a default set
-          if (sets.length === 0) {
-            sets.push(this.createSet()); // Add a new set with default values
-          }
         },
         error: (error) => {
           this.toastService.showToast(TOAST_MSGS.errorcreatingworkout, 'danger');
@@ -384,6 +380,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
       });
     }
   }
+  
   onInputFocus() {
     this.isInputFocused = true;
 }
