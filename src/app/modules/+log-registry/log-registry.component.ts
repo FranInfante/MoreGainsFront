@@ -51,7 +51,7 @@ export class LogRegistryComponent implements OnInit {
           return {
             ...log,
             date: new Date(log.date[0], log.date[1] - 1, log.date[2], log.date[3], log.date[4], log.date[5]),
-            exercises: log.exercises // Asegúrate de que `exercises` y sus detalles existan
+            exercises: log.exercises
           };
         });
         this.isLoading = false;
