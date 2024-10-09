@@ -286,6 +286,10 @@ export class LogpageComponent implements OnInit, OnDestroy {
   
 
   submitWorkoutLog() {
+    if (this.formChangesSubscription) {
+      this.formChangesSubscription.unsubscribe();
+    }
+  
     if (this.workoutLogForm.valid) {
       const exercisesArray = this.exercises.controls.map((exerciseControl) => ({
         id: exerciseControl.get('id')?.value,
@@ -299,16 +303,16 @@ export class LogpageComponent implements OnInit, OnDestroy {
           }),
         ),
       }));
-
+  
       const workoutLogData = {
         userId: this.userId,
         workoutId: this.workoutId,
         date: new Date().toISOString(),
         notes: this.workoutLogForm.get('notes')?.value || 'No notes',
         exercises: exercisesArray,
-        editing: false,
+        editing: false, // Set editing to false since the log is being submitted
       };
-
+  
       this.workoutLogService
         .updateWorkoutLog(this.workoutLogId, workoutLogData)
         .subscribe({
