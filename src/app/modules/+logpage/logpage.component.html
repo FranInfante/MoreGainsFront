@@ -33,33 +33,37 @@
                     formControlName="reps"
                     class="form-control"
                     [id]="'reps-' + i + '-' + j"
+                    (focus)="onInputFocus()"
+                    (blur)="onInputBlur()"
                     (focus)="clearInput(i, j, 'reps')"
-                    (input)="limitInputLength($event, 3);updateWorkoutLog()"
-                    (blur)="resetToZero(i, j, 'reps');updateWorkoutLog()"
+                    (input)="limitInputLength($event, 3); updateWorkoutLog()"
+                    (blur)="resetToZero(i, j, 'reps'); updateWorkoutLog()"
                   />
                 </div>
                 <div class="input-container">
                   <label for="weight-{{ i }}-{{ j }}">Weight:</label>
                   <div class="input-group">
                     <input
-                      type="number" 
+                      type="number"
                       formControlName="weight"
                       class="form-control"
                       [id]="'weight-' + i + '-' + j"
+                      (focus)="onInputFocus()"
+                      (blur)="onInputBlur()"
                       (focus)="clearInput(i, j, 'weight')"
-                      (input)="limitInputLength($event, 3);updateWorkoutLog()"
-                      (blur)="resetToZero(i, j, 'reps');updateWorkoutLog()"
+                      (input)="limitInputLength($event, 3); updateWorkoutLog()"
+                      (blur)="resetToZero(i, j, 'reps'); updateWorkoutLog()"
                     />
                     <span class="input-group-text">kg</span>
                   </div>
                 </div>
                 <button
-                type="button"
-                class="btn btn-sm ml-2"
-                (click)="deleteSet(i, j)"
-              >
-              <img [src]="DeleteIcon" alt="DeleteIcon" />
-              </button>
+                  type="button"
+                  class="btn btn-sm ml-2"
+                  (click)="deleteSet(i, j)"
+                >
+                  <img [src]="DeleteIcon" alt="DeleteIcon" />
+                </button>
               </div>
             </div>
             <button
@@ -76,6 +80,12 @@
   </div>
 
   <div class="text-center mt-5">
-    <button type="submit" class="btn btn-primary mt-4">Submit Log</button>
+    <button
+      type="submit"
+      class="btn btn-primary mt-4"
+      [disabled]="isInputFocused || !workoutLogForm.valid || !hasSets()"
+    >
+      Submit Log
+    </button>
   </div>
 </form>

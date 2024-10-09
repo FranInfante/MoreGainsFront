@@ -34,6 +34,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
   formChangesSubscription!: Subscription;
   firstChangeMade: boolean = false;
   LOCATIONS: typeof LOCATIONS = LOCATIONS;
+  isInputFocused: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -379,4 +380,15 @@ export class LogpageComponent implements OnInit, OnDestroy {
       });
     }
   }
+  onInputFocus() {
+    this.isInputFocused = true;
+}
+
+onInputBlur() {
+    this.isInputFocused = false;
+}
+
+hasSets(): boolean {
+  return this.exercises.controls.some(exercise => this.getSets(exercise).length > 0);
+}
 }
