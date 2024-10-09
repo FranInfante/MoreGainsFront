@@ -14,7 +14,7 @@
               <h6>Exercises:</h6>
               <ul class="list-group">
                 <li *ngFor="let exercise of workoutLog.exercises" class="list-group-item">
-                  <p><strong>{{ exercise.name }}</strong></p>
+                  <p><strong>{{ exercise.exerciseName }}</strong></p>
                   <ul>
                     <li *ngFor="let set of exercise.sets">
                       <p>
