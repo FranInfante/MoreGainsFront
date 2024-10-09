@@ -62,11 +62,33 @@ export class LogRegistryComponent implements OnInit {
       },
     });
   } 
+  getGroupedExercises(exercises: any[]): any[] {
+    const groupedExercises: any[] = [];
+    exercises.forEach((exercise: any) => {
+      const existingExercise = groupedExercises.find(e => e.exerciseId === exercise.exerciseId);
+    
+      if (existingExercise) {
+        existingExercise.sets.push(...exercise.sets);
+      } else {
+        groupedExercises.push({
+          exerciseId: exercise.exerciseId,
+          exerciseName: exercise.exerciseName,
+          sets: [...exercise.sets]
+        });
+      }
+    });
+  
+    return groupedExercises;
+  }
 
   viewWorkoutLog(log: any) {
-      this.selectedWorkoutLog = log;
-      this.showModal = true;
-    
+    const groupedExercises = this.getGroupedExercises(log.exercises);
+    this.selectedWorkoutLog = {
+      ...log,
+      exercises: groupedExercises
+    };
+  
+    this.showModal = true;
   }
 
 

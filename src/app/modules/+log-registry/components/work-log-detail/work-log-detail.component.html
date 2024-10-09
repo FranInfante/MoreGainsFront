@@ -1,36 +1,35 @@
 <div class="modal" [ngClass]="{ 'show': showModal }" tabindex="-1" [ngStyle]="{ 'display': showModal ? 'block' : 'none' }" (click)="onBackdropClick($event)">
-    <div class="modal-dialog" (click)="$event.stopPropagation()">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Workout Log Details</h5>
-          <button type="button" class="btn-close" (click)="onClose()"></button>
-        </div>
-        <div class="modal-body">
-          <div *ngIf="workoutLog">
-            <p><strong>Workout Name:</strong> {{ workoutLog.workoutName }}</p>
-            <p><strong>Date:</strong> {{ workoutLog.date | date: 'medium' }}</p>
-            <p><strong>Notes:</strong> {{ workoutLog.notes }}</p>
-            <div *ngIf="workoutLog.exercises && workoutLog.exercises.length > 0">
-              <h6>Exercises:</h6>
-              <ul class="list-group">
-                <li *ngFor="let exercise of workoutLog.exercises" class="list-group-item">
-                  <p><strong>{{ exercise.exerciseName }}</strong></p>
-                  <ul>
-                    <li *ngFor="let set of exercise.sets">
-                      <p>
-                        Set {{ set.setNumber }}: {{ set.reps }} reps at {{ set.weight }} kg
-                      </p>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
+  <div class="modal-dialog" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Workout Log Details</h5>
+        <button type="button" class="btn-close" (click)="onClose()"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="workoutLog">
+          <p><strong>Workout Name:</strong> {{ workoutLog.workoutName }}</p>
+          <p><strong>Date:</strong> {{ workoutLog.date | date: 'medium' }}</p>
+          <p><strong>Notes:</strong> {{ workoutLog.notes }}</p>
+          <div *ngIf="workoutLog.exercises && workoutLog.exercises.length > 0">
+            <h6>Exercises:</h6>
+            <ul class="list-group">
+              <li *ngFor="let exercise of workoutLog.exercises" class="list-group-item">
+                <p><strong>{{ exercise.exerciseName }}</strong></p>
+                <ul>
+                  <li *ngFor="let set of exercise.sets">
+                    <p>Set {{ set.set }}: {{ set.reps }} reps at {{ set.weight }} kg</p>
+                  </li>
+                </ul>
+              </li>
+            </ul>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="onClose()">Close</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="onClose()">Close</button>
       </div>
     </div>
-    <div class="modal-backdrop" *ngIf="showModal"></div>
   </div>
+  <div class="modal-backdrop" *ngIf="showModal"></div>
+</div>
+<pre>{{ workoutLog | json }}</pre>
