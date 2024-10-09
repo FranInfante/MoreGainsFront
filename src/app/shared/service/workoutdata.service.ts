@@ -5,17 +5,17 @@ import { Injectable } from '@angular/core';
 })
 export class WorkoutDataService {
 
-  private workoutId : number |null = null;
   
   setWorkoutId(id: number): void {
-    this.workoutId = id;
+    localStorage.setItem('currentWorkoutId', id.toString());
   }
 
   getWorkoutId(): number | null {
-    return this.workoutId;
+    const workoutId = localStorage.getItem('currentWorkoutId');
+    return workoutId ? parseInt(workoutId, 10) : null;
   }
 
   clearWorkoutId(): void {
-    this.workoutId = null;
+    localStorage.removeItem('currentWorkoutId');
   }
 }

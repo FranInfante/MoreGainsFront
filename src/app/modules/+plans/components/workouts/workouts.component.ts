@@ -82,6 +82,17 @@ export class WorkoutsComponent {
   }
   showExerciseOptions = false;
 
+  ngOnInit() {
+    const storedWorkoutId = this.workoutDataService.getWorkoutId();
+    
+    if (storedWorkoutId) {
+      const selectedWorkout = this.workouts.find(workout => workout.id === storedWorkoutId);
+      if (selectedWorkout) {
+        this.showWorkoutDetails(selectedWorkout);
+      }
+    }
+  }
+
   markWorkoutForDeletion(workout: Workout): void {
     this.workoutsMarkedForDeletion.push(workout);
 
@@ -158,6 +169,7 @@ export class WorkoutsComponent {
 
   closeWorkoutDetails(): void {
     const inputElement = document.querySelector('h4') as HTMLElement;
+    this.workoutDataService.clearWorkoutId();
 
     if (inputElement) {
       inputElement.blur();
