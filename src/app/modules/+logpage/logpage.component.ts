@@ -31,10 +31,12 @@ export class LogpageComponent implements OnInit, OnDestroy {
   workoutLogId!: number;
   userId!: number;
   DeleteIcon: string = ASSET_URLS.DeleteIcon;
+  NotesIcon: string = ASSET_URLS.NotesIcon;
   formChangesSubscription!: Subscription;
   firstChangeMade: boolean = false;
   LOCATIONS: typeof LOCATIONS = LOCATIONS;
   isInputFocused: boolean = false;
+  selectedExercise: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -415,5 +417,9 @@ onInputBlur() {
 
 hasSets(): boolean {
   return this.exercises.controls.some(exercise => this.getSets(exercise).length > 0);
+}
+
+setSelectedExercise(exerciseName: string) {
+  this.selectedExercise = exerciseName;
 }
 }

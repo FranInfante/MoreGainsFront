@@ -7,6 +7,7 @@ export const ASSET_URLS = {
   DeleteIcon: 'icons/DeleteIcon.svg',
   PlusSignIcon: 'icons/PlusSignIcon.svg',
   ThreeDotsIcon: 'icons/ThreeDotsIcon.svg',
+  NotesIcon:'icons/NotesIcon.svg',
   PlayIcon: 'icons/PlayIcon.svg',
   genericlogo: 'user/genericlogo.png',
   workout: 'menu/workouts.png',
