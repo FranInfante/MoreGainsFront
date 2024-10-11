@@ -161,27 +161,51 @@ export class LogpageComponent implements OnInit, OnDestroy {
     exercisesArray.clear();
   
     if (savedWorkoutLog && savedWorkoutLog.exercises && Array.isArray(savedWorkoutLog.exercises)) {
-      // Do not group by exerciseId. Instead, treat each exercise as a unique instance.
-      savedWorkoutLog.exercises.forEach((exercise: any, index: number) => {
+      // Group exercises by exerciseId
+      const groupedExercises = new Map<number, any>();
+  
+      savedWorkoutLog.exercises.forEach((exercise: any) => {
+        if (!groupedExercises.has(exercise.exerciseId)) {
+          // If the exerciseId is not in the map, initialize it with the exercise data and empty sets
+          groupedExercises.set(exercise.exerciseId, {
+            ...exercise,
+            sets: [...exercise.sets], // Start with the first exercise's sets
+          });
+        } else {
+          // If the exerciseId already exists, combine the sets
+          const existingExercise = groupedExercises.get(exercise.exerciseId);
+          existingExercise.sets = existingExercise.sets.concat(exercise.sets); // Combine sets
+        }
+      });
+  
+      // Now we have exercises grouped with combined sets, so we can process them
+      groupedExercises.forEach((exercise: any) => {
         this.workoutLogService.getExerciseById(exercise.exerciseId).subscribe({
           next: (exerciseData) => {
-            exercisesArray.push(
-              this.fb.group({
-                id: [exercise.id],
-                exerciseId: [exercise.exerciseId],
-                workoutLogId: [exercise.workoutLogId],
-                name: [exerciseData.name || 'Unknown Name'],
-                open: [false],
-                sets: this.fb.array(
-                  exercise.sets.map((set: any) => this.createSetWithValues(set))
-                ),
-              }),
-            );
+            const formGroup = this.fb.group({
+              id: [exercise.id],
+              exerciseId: [exercise.exerciseId],
+              workoutLogId: [exercise.workoutLogId],
+              name: [exerciseData.name || 'Unknown Name'],
+              open: [false],
+              sets: this.fb.array([]), // Start with an empty set array.
+            });
+  
+            // Add form group to the exercises array.
+            exercisesArray.push(formGroup);
+  
+            // Add the sets after the formGroup is created.
+            const setsArray = formGroup.get('sets') as FormArray; // Cast to FormArray
+            exercise.sets.forEach((set: any) => {
+              setsArray.push(this.createSetWithValues(set)); // Now push works
+            });
           },
         });
       });
     }
   }
+  
+  
 
   createSetWithValues(set: any): FormGroup {
     return this.fb.group({
