@@ -4,6 +4,8 @@ import {
   FormArray,
   FormBuilder,
   FormGroup,
+  FormsModule,
+  NgModel,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -21,7 +23,7 @@ import { BackToMenuComponent } from "../../shared/components/back-to-menu/back-t
 @Component({
   selector: 'app-logpage',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, BackToMenuComponent],
+  imports: [CommonModule, ReactiveFormsModule, BackToMenuComponent, FormsModule],
   templateUrl: './logpage.component.html',
   styleUrl: './logpage.component.css',
 })
@@ -37,6 +39,11 @@ export class LogpageComponent implements OnInit, OnDestroy {
   LOCATIONS: typeof LOCATIONS = LOCATIONS;
   isInputFocused: boolean = false;
   selectedExercise: string = '';
+  currentNotes: string = '';
+
+  selectedExerciseIndex: number | null = null;
+  tempNotes: string = '';
+
 
   constructor(
     private fb: FormBuilder,
@@ -151,6 +158,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
                 ? exercise.sets.map((set: any) => this.createSetWithValues(set))
                 : [this.createSet()],
             ),
+            notes: [exercise.notes || ''],
             open: [false],
           }),
         );
@@ -189,8 +197,9 @@ export class LogpageComponent implements OnInit, OnDestroy {
               exerciseId: [exercise.exerciseId],
               workoutLogId: [exercise.workoutLogId],
               name: [exerciseData.name || 'Unknown Name'],
+              notes: [exercise.notes || ''],
               open: [false],
-              sets: this.fb.array([]), // Start with an empty set array.
+              sets: this.fb.array([]), 
             });
   
             // Add form group to the exercises array.
@@ -250,7 +259,6 @@ export class LogpageComponent implements OnInit, OnDestroy {
       userId: this.userId,
       workoutId: this.workoutId,
       date: new Date().toISOString(),
-      notes: 'Initial workout log',
       exercises: this.exercises.controls.map((exerciseControl) => ({
         exerciseId: exerciseControl.get('exerciseId')?.value,
         sets: this.getSets(exerciseControl).controls.map((setControl, setIndex) => ({
@@ -284,10 +292,10 @@ export class LogpageComponent implements OnInit, OnDestroy {
       userId: this.userId,
       workoutId: this.workoutId,
       date: new Date().toISOString(),
-      notes: this.workoutLogForm.get('notes')?.value || 'No notes',
       exercises: this.exercises.controls.map((exerciseControl, index) => ({
         id: exerciseControl.get('id')?.value,
         exerciseId: exerciseControl.get('exerciseId')?.value,
+        notes: exerciseControl.get('notes')?.value,
         sets: this.getSets(exerciseControl).controls.map(
           (setControl, setIndex) => ({
             set: setIndex + 1,
@@ -299,12 +307,16 @@ export class LogpageComponent implements OnInit, OnDestroy {
       editing: true,
     };
   
+  
+    // Proceed with the update request
     if (updatedWorkoutLog.exercises.some(exercise => exercise.sets.length > 0)) {
       this.workoutLogService
         .updateWorkoutLog(this.workoutLogId, updatedWorkoutLog)
         .subscribe({
-          next: () => {},
+          next: () => {
+          },
           error: (error) => {
+            console.error('Error updating workout log', error);
             this.toastService.showToast(TOAST_MSGS.errorcreatingworkout, 'danger');
           },
         });
@@ -335,7 +347,6 @@ export class LogpageComponent implements OnInit, OnDestroy {
         userId: this.userId,
         workoutId: this.workoutId,
         date: new Date().toISOString(),
-        notes: this.workoutLogForm.get('notes')?.value || 'No notes',
         exercises: exercisesArray,
         editing: false, // Set editing to false since the log is being submitted
       };
@@ -419,7 +430,53 @@ hasSets(): boolean {
   return this.exercises.controls.some(exercise => this.getSets(exercise).length > 0);
 }
 
-setSelectedExercise(exerciseName: string) {
-  this.selectedExercise = exerciseName;
+setSelectedExercise(exerciseIndex: number) {
+  const exerciseControl = this.exercises.at(exerciseIndex);
+  if (exerciseControl) {
+  } else {
+    console.error('No exercise control found at index', exerciseIndex);
+  }
+
+  this.selectedExerciseIndex = exerciseIndex;
+  this.selectedExercise = exerciseControl.get('name')?.value || 'Unknown';
+}
+
+saveExerciseNotes() {
+  if (this.selectedExerciseIndex !== null) {
+    const exerciseControl = this.exercises.at(this.selectedExerciseIndex) as FormGroup; // Cast to FormGroup
+    const workoutLogExerciseId = exerciseControl.get('id')?.value;
+    const exerciseId = exerciseControl.get('exerciseId')?.value;
+    const workoutLogId = this.workoutLogId;
+
+    if (workoutLogExerciseId) {
+      const sets = this.getSets(exerciseControl).controls.map((setControl, setIndex) => ({
+        set: setIndex + 1,
+        reps: setControl.get('reps')?.value,
+        weight: setControl.get('weight')?.value,
+      }));
+
+      const updatedExercise = {
+        exerciseId: exerciseId,
+        workoutLogId: workoutLogId,
+        sets: sets,
+        notes: exerciseControl.get('notes')?.value || '',  // Use the notes from the form group
+      };
+
+      this.workoutLogService.updateWorkoutLogExercise(workoutLogExerciseId, updatedExercise)
+        .subscribe({
+          next: () => {
+            this.toastService.showToast('Notes saved successfully', 'success');
+          },
+          error: (error) => {
+            console.error('Error updating notes', error);
+            this.toastService.showToast(TOAST_MSGS.errorcreatingworkout, 'danger');
+          }
+        });
+    }
+  }
+}
+
+getExerciseFormGroup(exerciseIndex: number): FormGroup {
+  return this.exercises.at(exerciseIndex) as FormGroup;
 }
 }

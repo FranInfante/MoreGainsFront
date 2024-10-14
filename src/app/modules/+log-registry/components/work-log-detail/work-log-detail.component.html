@@ -9,7 +9,6 @@
         <div *ngIf="workoutLog">
           <p><strong>Workout Name:</strong> {{ workoutLog.workoutName }}</p>
           <p><strong>Date:</strong> {{ workoutLog.date | date: 'medium' }}</p>
-          <p><strong>Notes:</strong> {{ workoutLog.notes }}</p>
           <div *ngIf="workoutLog.exercises && workoutLog.exercises.length > 0">
             <h6>Exercises:</h6>
             <ul class="list-group">
