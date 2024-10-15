@@ -36,8 +36,8 @@
                     (focus)="onInputFocus()"
                     (blur)="onInputBlur()"
                     (focus)="clearInput(i, j, 'reps')"
-                    (input)="limitInputLength($event, 3); updateWorkoutLog()"
-                    (blur)="resetToZero(i, j, 'reps'); updateWorkoutLog()"
+                    (input)="limitInputLength($event, 3); triggerWorkoutLogUpdate(i, j)"
+                    (blur)="onInputBlur(); resetToZero(i, j, 'reps'); triggerWorkoutLogUpdate(i, j)"
                   />
                 </div>
                 <div class="input-container">
@@ -51,8 +51,8 @@
                       (focus)="onInputFocus()"
                       (blur)="onInputBlur()"
                       (focus)="clearInput(i, j, 'weight')"
-                      (input)="limitInputLength($event, 3); updateWorkoutLog()"
-                      (blur)="resetToZero(i, j, 'reps'); updateWorkoutLog()"
+                      (input)="limitInputLength($event, 3);  triggerWorkoutLogUpdate(i, j)"
+                      (blur)="onInputBlur(); resetToZero(i, j, 'weight'); triggerWorkoutLogUpdate(i, j)"
                     />
                     <span class="input-group-text">kg</span>
                   </div>

@@ -41,7 +41,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
   currentNotes: string = '';
 
   selectedExerciseIndex: number | null = null;
-  tempNotes: string = '';
+  updateTimeout: any;
 
 
   constructor(
@@ -119,18 +119,32 @@ export class LogpageComponent implements OnInit, OnDestroy {
     if (!this.workoutLogId) {
       return;
     }
-
+  
     let updateTimeout: any;
-
+  
     this.formChangesSubscription = this.workoutLogForm.valueChanges.subscribe(() => {
       if (this.workoutLogId && this.firstChangeMade) {
-        clearTimeout(updateTimeout);
-        updateTimeout = setTimeout(() => {
-          this.updateWorkoutLog();
-        }, 500);
+        // Validate the form before triggering an update
+        if (this.workoutLogForm.valid && this.hasValidSets()) {
+          clearTimeout(updateTimeout);
+          updateTimeout = setTimeout(() => {
+            this.updateWorkoutLog();
+          }, 500);
+        } else {
+          console.log('Invalid form values, skipping update');
+        }
       }
     });
   }
+
+  hasValidSets(): boolean {
+    return this.exercises.controls.every(exercise => 
+      this.getSets(exercise).controls.every(set => 
+        set.get('reps')?.value > 0 && set.get('weight')?.value >= 0
+      )
+    );
+  }
+  
 
   loadWorkoutDetailsAndCreateWorkoutLog(workoutId: number) {
     this.planService.getWorkoutById(workoutId).subscribe({
@@ -422,13 +436,15 @@ export class LogpageComponent implements OnInit, OnDestroy {
   }
 
   resetToZero(exerciseIndex: number, setIndex: number, field: 'reps' | 'weight') {
-    const exercise = this.exercises.at(exerciseIndex);
-    const set = this.getSets(exercise).at(setIndex);
-
-    if (!set.get(field)?.value) {
-      set.get(field)?.setValue(0);
-    }
+  const exercise = this.exercises.at(exerciseIndex);
+  const set = this.getSets(exercise).at(setIndex);
+  
+  // Check for null, undefined, or empty values and reset to 0
+  const fieldValue = set.get(field)?.value;
+  if (fieldValue === '' || fieldValue === null || fieldValue === undefined) {
+    set.get(field)?.setValue(0);
   }
+}
 
   deleteSet(exerciseIndex: number, setIndex: number) {
     const exerciseControl = this.exercises.at(exerciseIndex);
@@ -520,6 +536,26 @@ saveExerciseNotes() {
 
 getExerciseFormGroup(exerciseIndex: number): FormGroup {
   return this.exercises.at(exerciseIndex) as FormGroup;
+}
+
+triggerWorkoutLogUpdate(exerciseIndex: number, setIndex: number) {
+  const exerciseControl = this.exercises.at(exerciseIndex);
+  const setControl = this.getSets(exerciseControl).at(setIndex);
+
+  const repsValue = setControl.get('reps')?.value;
+  const weightValue = setControl.get('weight')?.value;
+
+  // Only update if the values are non-null, defined, and 0 or greater
+  if (repsValue !== null && repsValue !== undefined && repsValue >= 0 && 
+      weightValue !== null && weightValue !== undefined && weightValue >= 0) {
+      
+    clearTimeout(this.updateTimeout);
+
+    this.updateTimeout = setTimeout(() => {
+      console.log('Update timeout triggered');
+      this.updateWorkoutLog();
+    }, 500); // Delay to avoid frequent updates while typing
+  }
 }
 
 }
