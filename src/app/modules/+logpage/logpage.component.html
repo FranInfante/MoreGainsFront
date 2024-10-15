@@ -143,7 +143,7 @@
     <button
       type="submit"
       class="btn btn-primary mt-5 mb-5"
-      [disabled]="isInputFocused || !workoutLogForm.valid || !hasSets()"
+      [disabled]="!workoutLogForm.valid || !hasSets()"
     >
       Submit Log
     </button>

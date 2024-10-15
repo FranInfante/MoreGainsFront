@@ -130,7 +130,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
           clearTimeout(updateTimeout);
           updateTimeout = setTimeout(() => {
             this.updateWorkoutLog();
-          }, 500);
+          }, 100);
         }
       }
     });
@@ -369,49 +369,51 @@ export class LogpageComponent implements OnInit, OnDestroy {
     }
   }
   
-
   submitWorkoutLog() {
     if (this.formChangesSubscription) {
       this.formChangesSubscription.unsubscribe();
     }
   
-    if (this.workoutLogForm.valid) {
-      const exercisesArray = this.exercises.controls.map((exerciseControl) => ({
-        id: exerciseControl.get('id')?.value,
-        exerciseId: exerciseControl.get('exerciseId')?.value,
-        workoutLogId: this.workoutLogId,
-        sets: this.getSets(exerciseControl).controls.map(
-          (setControl, setIndex) => ({
-            set: setIndex + 1,
-            reps: setControl.get('reps')?.value,
-            weight: setControl.get('weight')?.value,
-          }),
-        ),
-      }));
+    setTimeout(() => {
+      if (this.workoutLogForm.valid) {
+        const exercisesArray = this.exercises.controls.map((exerciseControl) => ({
+          id: exerciseControl.get('id')?.value,
+          exerciseId: exerciseControl.get('exerciseId')?.value,
+          workoutLogId: this.workoutLogId,
+          sets: this.getSets(exerciseControl).controls.map(
+            (setControl, setIndex) => ({
+              set: setIndex + 1,
+              reps: setControl.get('reps')?.value,
+              weight: setControl.get('weight')?.value,
+            })
+          ),
+        }));
   
-      const workoutLogData = {
-        userId: this.userId,
-        workoutId: this.workoutId,
-        date: new Date().toISOString(),
-        exercises: exercisesArray,
-        editing: false, // Set editing to false since the log is being submitted
-      };
+        const workoutLogData = {
+          userId: this.userId,
+          workoutId: this.workoutId,
+          date: new Date().toISOString(),
+          exercises: exercisesArray,
+          editing: false, // Set editing to false since the log is being submitted
+        };
   
-      this.workoutLogService
-        .updateWorkoutLog(this.workoutLogId, workoutLogData)
-        .subscribe({
-          next: () => {
-            this.toastService.showToast(TOAST_MSGS.workoutdeletedsaved, 'success');
-            this.router.navigate(['/log-registry']);
-          },
-          error: (error) => {
-            this.toastService.showToast(TOAST_MSGS.errorcreatingworkout, 'danger');
-          },
-        });
-    } else {
-      this.toastService.showToast(TOAST_MSGS.fillallfields, 'danger');
-    }
+        this.workoutLogService
+          .updateWorkoutLog(this.workoutLogId, workoutLogData)
+          .subscribe({
+            next: () => {
+              this.toastService.showToast(TOAST_MSGS.workoutdeletedsaved, 'success');
+              this.router.navigate(['/log-registry']);
+            },
+            error: (error) => {
+              this.toastService.showToast(TOAST_MSGS.errorcreatingworkout, 'danger');
+            },
+          });
+      } else {
+        this.toastService.showToast(TOAST_MSGS.fillallfields, 'danger');
+      }
+    }, 200);
   }
+  
 
   clearInput(exerciseIndex: number, setIndex: number, field: 'reps' | 'weight') {
     const exercise = this.exercises.at(exerciseIndex);
@@ -541,7 +543,7 @@ triggerWorkoutLogUpdate(exerciseIndex: number, setIndex: number) {
 
     this.updateTimeout = setTimeout(() => {
       this.updateWorkoutLog();
-    }, 500);
+    }, 100);
   }
 }
 fetchWorkoutName(workoutId: number) {
