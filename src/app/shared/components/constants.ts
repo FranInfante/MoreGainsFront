@@ -42,7 +42,8 @@ export const MSG = {
   noworkoutlogidfound: 'WorkoutLog ID or Exercise Control not found',
   useridundefined: 'User ID is undefined.',
   failedtogetuserid: 'Failed to get user ID:',
-  errorfetchingworkoutlogs:'Error fetching workout logs:'
+  errorfetchingworkoutlogs:'Error fetching workout logs:',
+  noexercisecontrolfound: 'No exercise control found at index'
 };
 
 export const TOAST_MSGS = {
@@ -61,6 +62,8 @@ export const TOAST_MSGS = {
   exerciseexists: 'Exercise already exists: ',
   exercisecreated: 'New exercise created successfully: ',
   noexercisesinworkout: 'You need at least one exercise to log this workout.',
-  errorcreatingworkout: 'Error creating or updating the workout log.'
+  errorcreatingworkout: 'Error creating or updating the workout log.',
+  notessavedsuccessfully: 'Notes saved successfully',
+  cantdeleteallsets: 'You cannot delete all sets. There must be at least one set.'
 };
 

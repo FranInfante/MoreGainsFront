@@ -148,7 +148,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
   loadWorkoutDetailsAndCreateWorkoutLog(workoutId: number) {
     this.planService.getWorkoutById(workoutId).subscribe({
       next: (workout) => {
-        this.workoutName = workout.name || 'Unknown Workout'; 
+        this.workoutName = workout.name || ''; 
         this.populateFormWithWorkout(workout);
         this.createWorkoutLog(); 
       },
@@ -213,7 +213,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
               id: [exercise.id],
               exerciseId: [exercise.exerciseId],
               workoutLogId: [exercise.workoutLogId],
-              name: [exerciseData.name || 'Unknown Name'],
+              name: [exerciseData.name || ''],
               notes: [exercise.notes || ''],
               open: [false],
               sets: this.fb.array([]), 
@@ -434,7 +434,6 @@ export class LogpageComponent implements OnInit, OnDestroy {
   const exercise = this.exercises.at(exerciseIndex);
   const set = this.getSets(exercise).at(setIndex);
   
-  // Check for null, undefined, or empty values and reset to 0
   const fieldValue = set.get(field)?.value;
   if (fieldValue === '' || fieldValue === null || fieldValue === undefined) {
     set.get(field)?.setValue(0);
@@ -446,7 +445,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
     const sets = this.getSets(exerciseControl);
     
     if (sets.length === 1) {
-      this.toastService.showToast("You cannot delete all sets. There must be at least one set.", 'danger');
+      this.toastService.showToast(TOAST_MSGS.cantdeleteallsets, 'danger');
       return;
     }
   
@@ -482,7 +481,7 @@ setSelectedExercise(exerciseIndex: number) {
   const exerciseControl = this.exercises.at(exerciseIndex);
   if (exerciseControl) {
   } else {
-    console.error('No exercise control found at index', exerciseIndex);
+    console.error(MSG.noexercisecontrolfound, exerciseIndex);
   }
 
   this.selectedExerciseIndex = exerciseIndex;
@@ -513,10 +512,9 @@ saveExerciseNotes() {
       this.workoutLogService.updateWorkoutLogExercise(workoutLogExerciseId, updatedExercise)
         .subscribe({
           next: () => {
-            this.toastService.showToast('Notes saved successfully', 'success');
+            this.toastService.showToast(TOAST_MSGS.notessavedsuccessfully, 'success');
           },
           error: (error) => {
-            console.error('Error updating notes', error);
             this.toastService.showToast(TOAST_MSGS.errorcreatingworkout, 'danger');
           }
         });
@@ -549,7 +547,7 @@ triggerWorkoutLogUpdate(exerciseIndex: number, setIndex: number) {
 fetchWorkoutName(workoutId: number) {
   this.planService.getWorkoutById(workoutId).subscribe({
     next: (workout) => {
-      this.workoutName = workout.name || 'Unknown Workout'; // Set the workout name only
+      this.workoutName = workout.name || '';
     },
     error: (err) => {
       console.error(MSG.errorfindingworkout, err);
