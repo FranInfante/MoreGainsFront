@@ -5,7 +5,6 @@ import {
   FormBuilder,
   FormGroup,
   FormsModule,
-  NgModel,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -83,10 +82,10 @@ export class LogpageComponent implements OnInit, OnDestroy {
 
   initializeWorkoutLog() {
     const workoutId = this.workoutDataService.getWorkoutId();
-
+  
     if (workoutId) {
       this.workoutId = workoutId;
-
+  
       this.workoutLogService
         .getWorkoutLogByUserIdAndIsEditing(this.userId, true)
         .subscribe({
@@ -95,24 +94,26 @@ export class LogpageComponent implements OnInit, OnDestroy {
               const editingLog = editingLogs.find((log: WorkoutLog) => log.editing === true);
               if (editingLog) {
                 this.workoutLogId = editingLog.id;
-                this.populateFormWithSavedData(editingLog);
+                this.populateFormWithSavedData(editingLog);  // Populate the form with existing log data
                 this.trackFormChanges();
+                console.log('Loaded saved workout log:', editingLog);
               } else {
-                this.loadWorkoutDetailsAndCreateWorkoutLog(this.workoutId);
+                this.createAndLoadWorkoutLog();  // No existing log, create a new one and load it
               }
             } else {
-              this.loadWorkoutDetailsAndCreateWorkoutLog(this.workoutId);
+              this.createAndLoadWorkoutLog();  // No logs found, create a new one and load it
             }
           },
           error: (err) => {
             console.error(MSG.errorfindingworkout, err);
-            this.loadWorkoutDetailsAndCreateWorkoutLog(this.workoutId);
+            this.createAndLoadWorkoutLog();  // Handle errors by creating a new log
           },
         });
     } else {
-      this.router.navigate([LOCATIONS.plans]);
+      this.router.navigate([LOCATIONS.plans]);  // Redirect if no workout ID is found
     }
   }
+  
 
   trackFormChanges() {
     if (!this.workoutLogId) {
@@ -134,18 +135,22 @@ export class LogpageComponent implements OnInit, OnDestroy {
   loadWorkoutDetailsAndCreateWorkoutLog(workoutId: number) {
     this.planService.getWorkoutById(workoutId).subscribe({
       next: (workout) => {
-        this.populateFormWithWorkout(workout);
+        this.populateFormWithWorkout(workout);  // Populate the form with workout details
+        this.createWorkoutLog();  // Automatically create the workout log after loading the workout details
       },
       error: (err) => {
         console.error(MSG.errorfindingworkout, err);
       },
     });
   }
+  
 
   populateFormWithWorkout(workout: any) {
     const exercisesArray = this.workoutLogForm.get('exercises') as FormArray;
     exercisesArray.clear();
-
+  
+    console.log('Workout retrieved:', workout);
+  
     if (workout && workout.workoutExercises && Array.isArray(workout.workoutExercises)) {
       workout.workoutExercises.forEach((exercise: any) => {
         exercisesArray.push(
@@ -164,11 +169,16 @@ export class LogpageComponent implements OnInit, OnDestroy {
         );
       });
     }
+  
+    console.log('Form after workout is populated:', this.workoutLogForm.value);
   }
+  
 
   populateFormWithSavedData(savedWorkoutLog: WorkoutLog) {
     const exercisesArray = this.workoutLogForm.get('exercises') as FormArray;
     exercisesArray.clear();
+
+    console.log('Saved workout log:', savedWorkoutLog);
   
     if (savedWorkoutLog && savedWorkoutLog.exercises && Array.isArray(savedWorkoutLog.exercises)) {
       // Group exercises by exerciseId
@@ -176,13 +186,11 @@ export class LogpageComponent implements OnInit, OnDestroy {
   
       savedWorkoutLog.exercises.forEach((exercise: any) => {
         if (!groupedExercises.has(exercise.exerciseId)) {
-          // If the exerciseId is not in the map, initialize it with the exercise data and empty sets
           groupedExercises.set(exercise.exerciseId, {
             ...exercise,
-            sets: [...exercise.sets], // Start with the first exercise's sets
+            sets: [...exercise.sets],
           });
         } else {
-          // If the exerciseId already exists, combine the sets
           const existingExercise = groupedExercises.get(exercise.exerciseId);
           existingExercise.sets = existingExercise.sets.concat(exercise.sets); // Combine sets
         }
@@ -214,6 +222,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
         });
       });
     }
+    console.log('Form after adding saved exercise data:', this.workoutLogForm.value);
   }
   
   
@@ -250,11 +259,36 @@ export class LogpageComponent implements OnInit, OnDestroy {
     exercise.patchValue({ open: !exercise.value.open });
   }
 
+  createAndLoadWorkoutLog() {
+    this.planService.getWorkoutById(this.workoutId).subscribe({
+      next: (workout) => {
+        this.populateFormWithWorkout(workout);  // Populate the form with workout details
+        this.createWorkoutLog();  // Create the workout log
+      },
+      error: (err) => {
+        console.error(MSG.errorfindingworkout, err);
+      },
+    });
+  }
+
+  loadSavedWorkoutLog() {
+    this.workoutLogService.getWorkoutLogById(this.workoutLogId).subscribe({
+      next: (savedWorkoutLog) => {
+        this.populateFormWithSavedData(savedWorkoutLog);  // Now populate form with saved workout log
+        console.log('Form after loading saved workout log:', this.workoutLogForm.value);
+      },
+      error: (err) => {
+        console.error(MSG.errorfindingworkout, err);
+      },
+    });
+  }
+  
+  
   createWorkoutLog() {
     if (this.workoutLogId) {
-      return;
+      return;  // Skip if a workout log already exists
     }
-
+  
     const initialWorkoutLog = {
       userId: this.userId,
       workoutId: this.workoutId,
@@ -269,10 +303,11 @@ export class LogpageComponent implements OnInit, OnDestroy {
       })),
       editing: true,
     };
-
+  
     this.workoutLogService.createWorkoutLog(initialWorkoutLog).subscribe({
       next: (response) => {
-        this.workoutLogId = response.id;
+        this.workoutLogId = response.id;  // Store the ID of the newly created log
+        this.loadSavedWorkoutLog();  // Load the created log into the form
         this.firstChangeMade = true;
         this.trackFormChanges();
       },
@@ -281,6 +316,8 @@ export class LogpageComponent implements OnInit, OnDestroy {
       },
     });
   }
+  
+  
 
   updateWorkoutLog() {
     if (!this.workoutLogId) {
@@ -443,10 +480,15 @@ setSelectedExercise(exerciseIndex: number) {
 
 saveExerciseNotes() {
   if (this.selectedExerciseIndex !== null) {
-    const exerciseControl = this.exercises.at(this.selectedExerciseIndex) as FormGroup; // Cast to FormGroup
+    const exerciseControl = this.exercises.at(this.selectedExerciseIndex) as FormGroup;
     const workoutLogExerciseId = exerciseControl.get('id')?.value;
     const exerciseId = exerciseControl.get('exerciseId')?.value;
     const workoutLogId = this.workoutLogId;
+
+    console.log('Exercise Control:', exerciseControl);
+    console.log('WorkoutLogExercise ID:', workoutLogExerciseId);
+    console.log('Exercise ID:', exerciseId);
+    console.log('WorkoutLog ID:', workoutLogId);
 
     if (workoutLogExerciseId) {
       const sets = this.getSets(exerciseControl).controls.map((setControl, setIndex) => ({
@@ -459,7 +501,7 @@ saveExerciseNotes() {
         exerciseId: exerciseId,
         workoutLogId: workoutLogId,
         sets: sets,
-        notes: exerciseControl.get('notes')?.value || '',  // Use the notes from the form group
+        notes: exerciseControl.get('notes')?.value || '', 
       };
 
       this.workoutLogService.updateWorkoutLogExercise(workoutLogExerciseId, updatedExercise)
@@ -479,4 +521,5 @@ saveExerciseNotes() {
 getExerciseFormGroup(exerciseIndex: number): FormGroup {
   return this.exercises.at(exerciseIndex) as FormGroup;
 }
+
 }
