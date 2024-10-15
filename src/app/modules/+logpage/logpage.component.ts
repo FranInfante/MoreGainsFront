@@ -94,23 +94,22 @@ export class LogpageComponent implements OnInit, OnDestroy {
               const editingLog = editingLogs.find((log: WorkoutLog) => log.editing === true);
               if (editingLog) {
                 this.workoutLogId = editingLog.id;
-                this.populateFormWithSavedData(editingLog);  // Populate the form with existing log data
+                this.populateFormWithSavedData(editingLog);
                 this.trackFormChanges();
-                console.log('Loaded saved workout log:', editingLog);
               } else {
-                this.createAndLoadWorkoutLog();  // No existing log, create a new one and load it
+                this.createAndLoadWorkoutLog();
               }
             } else {
-              this.createAndLoadWorkoutLog();  // No logs found, create a new one and load it
+              this.createAndLoadWorkoutLog();
             }
           },
           error: (err) => {
             console.error(MSG.errorfindingworkout, err);
-            this.createAndLoadWorkoutLog();  // Handle errors by creating a new log
+            this.createAndLoadWorkoutLog();
           },
         });
     } else {
-      this.router.navigate([LOCATIONS.plans]);  // Redirect if no workout ID is found
+      this.router.navigate([LOCATIONS.plans]);
     }
   }
   
@@ -130,8 +129,6 @@ export class LogpageComponent implements OnInit, OnDestroy {
           updateTimeout = setTimeout(() => {
             this.updateWorkoutLog();
           }, 500);
-        } else {
-          console.log('Invalid form values, skipping update');
         }
       }
     });
@@ -163,7 +160,6 @@ export class LogpageComponent implements OnInit, OnDestroy {
     const exercisesArray = this.workoutLogForm.get('exercises') as FormArray;
     exercisesArray.clear();
   
-    console.log('Workout retrieved:', workout);
   
     if (workout && workout.workoutExercises && Array.isArray(workout.workoutExercises)) {
       workout.workoutExercises.forEach((exercise: any) => {
@@ -184,15 +180,12 @@ export class LogpageComponent implements OnInit, OnDestroy {
       });
     }
   
-    console.log('Form after workout is populated:', this.workoutLogForm.value);
   }
   
 
   populateFormWithSavedData(savedWorkoutLog: WorkoutLog) {
     const exercisesArray = this.workoutLogForm.get('exercises') as FormArray;
     exercisesArray.clear();
-
-    console.log('Saved workout log:', savedWorkoutLog);
   
     if (savedWorkoutLog && savedWorkoutLog.exercises && Array.isArray(savedWorkoutLog.exercises)) {
       // Group exercises by exerciseId
@@ -236,7 +229,6 @@ export class LogpageComponent implements OnInit, OnDestroy {
         });
       });
     }
-    console.log('Form after adding saved exercise data:', this.workoutLogForm.value);
   }
   
   
@@ -290,8 +282,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
   loadSavedWorkoutLog() {
     this.workoutLogService.getWorkoutLogById(this.workoutLogId).subscribe({
       next: (savedWorkoutLog) => {
-        this.populateFormWithSavedData(savedWorkoutLog);  // Now populate form with saved workout log
-        console.log('Form after loading saved workout log:', this.workoutLogForm.value);
+        this.populateFormWithSavedData(savedWorkoutLog);
       },
       error: (err) => {
         console.error(MSG.errorfindingworkout, err);
@@ -503,11 +494,6 @@ saveExerciseNotes() {
     const exerciseId = exerciseControl.get('exerciseId')?.value;
     const workoutLogId = this.workoutLogId;
 
-    console.log('Exercise Control:', exerciseControl);
-    console.log('WorkoutLogExercise ID:', workoutLogExerciseId);
-    console.log('Exercise ID:', exerciseId);
-    console.log('WorkoutLog ID:', workoutLogId);
-
     if (workoutLogExerciseId) {
       const sets = this.getSets(exerciseControl).controls.map((setControl, setIndex) => ({
         set: setIndex + 1,
@@ -554,9 +540,8 @@ triggerWorkoutLogUpdate(exerciseIndex: number, setIndex: number) {
     clearTimeout(this.updateTimeout);
 
     this.updateTimeout = setTimeout(() => {
-      console.log('Update timeout triggered');
       this.updateWorkoutLog();
-    }, 500); // Delay to avoid frequent updates while typing
+    }, 500);
   }
 }
 
