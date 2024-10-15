@@ -258,6 +258,8 @@ export class LogpageComponent implements OnInit, OnDestroy {
   addSet(exerciseIndex: number) {
     const sets = this.getSets(this.exercises.at(exerciseIndex));
     sets.push(this.createSet());
+
+    this.updateWorkoutLog();
   }
 
   getSets(exercise: any): FormArray {
