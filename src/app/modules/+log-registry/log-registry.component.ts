@@ -51,7 +51,7 @@ export class LogRegistryComponent implements OnInit {
           return {
             ...log,
             date: new Date(log.date[0], log.date[1] - 1, log.date[2], log.date[3], log.date[4], log.date[5]),
-            exercises: log.exercises // Asegúrate de que `exercises` y sus detalles existan
+            exercises: log.exercises
           };
         });
         this.isLoading = false;
@@ -62,11 +62,33 @@ export class LogRegistryComponent implements OnInit {
       },
     });
   } 
+  getGroupedExercises(exercises: any[]): any[] {
+    const groupedExercises: any[] = [];
+    exercises.forEach((exercise: any) => {
+      const existingExercise = groupedExercises.find(e => e.exerciseId === exercise.exerciseId);
+    
+      if (existingExercise) {
+        existingExercise.sets.push(...exercise.sets);
+      } else {
+        groupedExercises.push({
+          exerciseId: exercise.exerciseId,
+          exerciseName: exercise.exerciseName,
+          sets: [...exercise.sets]
+        });
+      }
+    });
+  
+    return groupedExercises;
+  }
 
   viewWorkoutLog(log: any) {
-      this.selectedWorkoutLog = log;
-      this.showModal = true;
-    
+    const groupedExercises = this.getGroupedExercises(log.exercises);
+    this.selectedWorkoutLog = {
+      ...log,
+      exercises: groupedExercises
+    };
+  
+    this.showModal = true;
   }
 
 

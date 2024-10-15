@@ -1,32 +1,47 @@
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1050; /* Asegúrate de que el modal tenga un z-index más alto */
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .modal-content {
-    color: black; /* Establece el color del texto a negro */
-  }
-  
-  .modal-dialog {
-    position: relative;
-    z-index: 1051; /* Modal dialog debe tener el z-index más alto */
-    max-width: 500px;
-    margin: 1.75rem auto;
-  }
-  
-  .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1040; /* Backdrop debe tener un z-index menor */
-  }
-  
+.modal-dialog {
+  position: relative;
+  z-index: 1051;
+  max-width: 500px;
+  width: 100%;
+  margin: 1.75rem auto;
+}
+
+.modal-content {
+  color: black;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-body {
+  overflow-y: auto;
+  max-height: 70vh; 
+  padding: 20px;
+}
+
+.modal-header, .modal-footer {
+  flex-shrink: 0;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+}

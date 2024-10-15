@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Exercise } from '../../../../shared/interfaces/exercise';
 import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -33,6 +33,8 @@ export class ExercisePickerModalComponent implements OnInit {
 
   planId: number | null = null;
   workoutId: number | null = null;
+
+  @Input() existingExercises: string[] = [];
 
   newExerciseForm: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -70,15 +72,18 @@ export class ExercisePickerModalComponent implements OnInit {
     if (this.userId !== null) {
       this.exerciseService.getallExercises(this.userId).subscribe(exercises => {
         this.exercises = exercises;
-        this.filteredExercises = exercises;
+        this.filterExercises('');
       });
     }
   }
 
   filterExercises(searchText: string): void {
-    this.filteredExercises = this.exercises.filter(exercise =>
-      exercise.name.toLowerCase().includes(searchText.toLowerCase())
-    );
+    this.filteredExercises = this.exercises
+      .filter(exercise =>
+        exercise.name.toLowerCase().includes(searchText.toLowerCase())
+      )
+      .filter(exercise => !this.existingExercises.includes(exercise.name));
+
     this.noExercisesFound = this.filteredExercises.length === 0;
   }
 

@@ -2,17 +2,19 @@ export interface WorkoutLog {
     id: number;
     userId: number;
     workoutId: number;
-    notes: string;
     date: string;
     exercises: WorkoutLogExercise[];
     editing: boolean;
   }
   
   export interface WorkoutLogExercise {
-    exerciseId: number;
     id: number;
-    sets: SetDetails[];
-  }
+  exerciseId: number;
+  exerciseName: string;
+  sets: SetDetails[];
+  workoutLogId: number;
+  notes?: string; 
+}
   
   export interface SetDetails {
     set: number;
