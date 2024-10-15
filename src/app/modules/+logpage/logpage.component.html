@@ -1,5 +1,5 @@
 <app-back-to-menu [navigationPath]="LOCATIONS.plans"></app-back-to-menu>
-<h3 class="text-center mt-5">Log Your Workout</h3>
+<h3 class="text-center mt-5">Logging {{ workoutName }}</h3>
 
 <form [formGroup]="workoutLogForm" (ngSubmit)="submitWorkoutLog()">
   <div formArrayName="exercises" class="text-center mt-5">
@@ -73,6 +73,7 @@
                   type="button"
                   class="btn btn-sm btn-success"
                   (click)="addSet(i)"
+                  [disabled]="!isLastSetValid(i)"
                 >
                   + Add Set
                 </button>

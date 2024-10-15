@@ -42,7 +42,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
 
   selectedExerciseIndex: number | null = null;
   updateTimeout: any;
-
+  workoutName: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -82,9 +82,11 @@ export class LogpageComponent implements OnInit, OnDestroy {
 
   initializeWorkoutLog() {
     const workoutId = this.workoutDataService.getWorkoutId();
-  
+
     if (workoutId) {
       this.workoutId = workoutId;
+
+      this.fetchWorkoutName(workoutId);
   
       this.workoutLogService
         .getWorkoutLogByUserIdAndIsEditing(this.userId, true)
@@ -146,8 +148,9 @@ export class LogpageComponent implements OnInit, OnDestroy {
   loadWorkoutDetailsAndCreateWorkoutLog(workoutId: number) {
     this.planService.getWorkoutById(workoutId).subscribe({
       next: (workout) => {
-        this.populateFormWithWorkout(workout);  // Populate the form with workout details
-        this.createWorkoutLog();  // Automatically create the workout log after loading the workout details
+        this.workoutName = workout.name || 'Unknown Workout'; 
+        this.populateFormWithWorkout(workout);
+        this.createWorkoutLog(); 
       },
       error: (err) => {
         console.error(MSG.errorfindingworkout, err);
@@ -159,7 +162,6 @@ export class LogpageComponent implements OnInit, OnDestroy {
   populateFormWithWorkout(workout: any) {
     const exercisesArray = this.workoutLogForm.get('exercises') as FormArray;
     exercisesArray.clear();
-  
   
     if (workout && workout.workoutExercises && Array.isArray(workout.workoutExercises)) {
       workout.workoutExercises.forEach((exercise: any) => {
@@ -543,6 +545,27 @@ triggerWorkoutLogUpdate(exerciseIndex: number, setIndex: number) {
       this.updateWorkoutLog();
     }, 500);
   }
+}
+fetchWorkoutName(workoutId: number) {
+  this.planService.getWorkoutById(workoutId).subscribe({
+    next: (workout) => {
+      this.workoutName = workout.name || 'Unknown Workout'; // Set the workout name only
+    },
+    error: (err) => {
+      console.error(MSG.errorfindingworkout, err);
+    }
+  });
+}
+
+isLastSetValid(exerciseIndex: number): boolean {
+  const exerciseControl = this.exercises.at(exerciseIndex) as FormGroup;
+  const setsArray = this.getSets(exerciseControl);
+  const lastSet = setsArray.at(setsArray.length - 1) as FormGroup;
+
+  return !!(lastSet.get('reps')?.valid && 
+            lastSet.get('weight')?.valid && 
+            lastSet.get('reps')?.value > 0 && 
+            lastSet.get('weight')?.value >= 0);
 }
 
 }
