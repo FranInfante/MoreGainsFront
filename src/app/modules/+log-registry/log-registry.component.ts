@@ -6,11 +6,13 @@ import { CommonModule } from '@angular/common';
 import { WorkoutLogDetailModalComponent } from './components/work-log-detail/work-log-detail.component';
 import { LOCATIONS, MSG } from '../../shared/components/constants';
 import { BackToMenuComponent } from "../../shared/components/back-to-menu/back-to-menu.component";
+import { PlanService } from '../../shared/service/plan.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-log-registry',
   standalone: true,
-  imports: [CommonModule, WorkoutLogDetailModalComponent, BackToMenuComponent],
+  imports: [CommonModule, WorkoutLogDetailModalComponent, BackToMenuComponent, FormsModule],
   templateUrl: './log-registry.component.html',
   styleUrl: './log-registry.component.css'
 })
@@ -22,10 +24,14 @@ export class LogRegistryComponent implements OnInit {
   showModal: boolean = false;
   LOCATIONS: typeof LOCATIONS = LOCATIONS;
 
+  plans: any[] = [];
+  selectedWorkoutId: string = '';
+  filteredWorkoutLogs: any[] = [];
+
   constructor(
     private workoutLogService: WorkoutLogService,
     private userService: UserService,
-    private router: Router
+    private planService: PlanService,
   ) {}
 
   ngOnInit() {
@@ -34,6 +40,7 @@ export class LogRegistryComponent implements OnInit {
         if (user.id !== undefined) {
           this.userId = user.id;
           this.getWorkoutLogsForUser();
+          this.getPlansForUser();
         } else {
           console.error(MSG.useridundefined);
         }
@@ -57,7 +64,6 @@ export class LogRegistryComponent implements OnInit {
         this.isLoading = false;
       },
       error: (err) => {
-        console.error(MSG.errorfetchingworkoutlogs, err);
         this.isLoading = false;
       },
     });
@@ -95,5 +101,23 @@ export class LogRegistryComponent implements OnInit {
   closeWorkoutLogModal() {
     this.showModal = false;
     this.selectedWorkoutLog = null;
+  }
+
+  getPlansForUser() {
+    this.planService.getPlansByUserId(this.userId).subscribe({
+      next: (plans) => {
+        this.plans = plans;
+      }
+    });
+  }
+
+  filterWorkoutLogs() {
+    if (this.selectedWorkoutId) {
+      this.filteredWorkoutLogs = this.workoutLogs.filter(
+        (log) => log.workoutId === parseInt(this.selectedWorkoutId, 10),
+      );
+    } else {
+      this.filteredWorkoutLogs = [...this.workoutLogs];
+    }
   }
 }

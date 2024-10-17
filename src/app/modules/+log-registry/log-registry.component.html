@@ -2,17 +2,31 @@
 <div class="container mt-5">
     <h3 class="text-center">Your Workout Logs</h3>
   
+    <div class="text-center">
+      <label for="workoutFilter">Filter by Workout:</label>
+      <select id="workoutFilter" class="form-select" [(ngModel)]="selectedWorkoutId" (change)="filterWorkoutLogs()">
+        <option value="">All Workouts</option>
+
+        <!-- Group workouts by plan using optgroup -->
+        <optgroup *ngFor="let plan of plans" [label]="plan.name">
+          <option *ngFor="let workout of plan.workouts" [value]="workout.id">
+            {{ workout.name }}
+          </option>
+        </optgroup>
+      </select>
+    </div>
+
     <div *ngIf="isLoading" class="text-center mt-4">
       <p>Loading workout logs...</p>
     </div>
   
-    <div *ngIf="!isLoading && workoutLogs.length === 0" class="text-center mt-4">
+    <div *ngIf="!isLoading && filteredWorkoutLogs.length === 0" class="text-center mt-4">
       <p>No workout logs found.</p>
     </div>
   
-    <ul *ngIf="!isLoading && workoutLogs.length > 0" class="list-group mt-4">
+    <ul *ngIf="!isLoading && filteredWorkoutLogs.length > 0" class="list-group mt-4">
       <li
-        *ngFor="let log of workoutLogs"
+        *ngFor="let log of filteredWorkoutLogs"
         class="list-group-item d-flex justify-content-between align-items-center"
       >
         <div>
@@ -33,4 +47,4 @@
     [showModal]="showModal"
     (closeModal)="closeWorkoutLogModal()"
   ></app-work-log-detail>
-  </div>
+</div>
