@@ -1,48 +1,59 @@
 <app-back-to-menu [navigationPath]="LOCATIONS.plans"></app-back-to-menu>
 <div class="container mt-5">
-    <h3 class="text-center">Your Workout Logs</h3>
-  
-    <div class="text-center">
-      <label for="workoutFilter">Filter by Workout:</label>
-      <select id="workoutFilter" class="form-select" [(ngModel)]="selectedWorkoutId" (change)="filterWorkoutLogs()">
-        <option value="">All Workouts</option>
+  <h3 class="text-center">Your Workout Logs</h3>
 
-        <!-- Group workouts by plan using optgroup -->
-        <optgroup *ngFor="let plan of plans" [label]="plan.name">
-          <option *ngFor="let workout of plan.workouts" [value]="workout.id">
-            {{ workout.name }}
-          </option>
-        </optgroup>
-      </select>
-    </div>
+  <div class="text-center">
+    <label class="pb-2" for="workoutFilter">Filter by Workout:</label>
+    <select
+      id="workoutFilter"
+      class="form-select"
+      [(ngModel)]="selectedWorkoutId"
+      (change)="filterWorkoutLogs()"
+    >
+      <option value="">All Workouts</option>
 
-    <div *ngIf="isLoading" class="text-center mt-4">
-      <p>Loading workout logs...</p>
-    </div>
-  
-    <div *ngIf="!isLoading && filteredWorkoutLogs.length === 0" class="text-center mt-4">
-      <p>No workout logs found.</p>
-    </div>
-  
-    <ul *ngIf="!isLoading && filteredWorkoutLogs.length > 0" class="list-group mt-4">
-      <li
-        *ngFor="let log of filteredWorkoutLogs"
-        class="list-group-item d-flex justify-content-between align-items-center"
+      <!-- Group workouts by plan using optgroup -->
+      <optgroup *ngFor="let plan of plans" [label]="plan.name">
+        <option *ngFor="let workout of plan.workouts" [value]="workout.id">
+          {{ workout.name }}
+        </option>
+      </optgroup>
+    </select>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center mt-4">
+    <p>Loading workout logs...</p>
+  </div>
+
+  <div
+    *ngIf="!isLoading && filteredWorkoutLogs.length === 0"
+    class="text-center mt-4"
+  >
+    <p>No workout logs found.</p>
+  </div>
+
+  <ul
+    *ngIf="!isLoading && filteredWorkoutLogs.length > 0"
+    class="list-group mt-4"
+  >
+    <li
+      *ngFor="let log of filteredWorkoutLogs"
+      class="list-group-item d-flex justify-content-between align-items-center"
+    >
+      <div>
+        <h5>{{ log.workoutName }}</h5>
+        <p>Date: {{ log.date | date: "shortDate" }}</p>
+      </div>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="viewWorkoutLog(log)"
       >
-        <div>
-          <h5>{{ log.workoutName }}</h5>
-          <p>Date: {{ log.date | date: 'medium' }}</p>
-        </div>
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="viewWorkoutLog(log)"
-        >
-          View Details
-        </button>
-      </li>
-    </ul>
-    <app-work-log-detail
+        View Details
+      </button>
+    </li>
+  </ul>
+  <app-work-log-detail
     [workoutLog]="selectedWorkoutLog"
     [showModal]="showModal"
     (closeModal)="closeWorkoutLogModal()"
