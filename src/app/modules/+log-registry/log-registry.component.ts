@@ -8,6 +8,7 @@ import { LOCATIONS, MSG } from '../../shared/components/constants';
 import { BackToMenuComponent } from "../../shared/components/back-to-menu/back-to-menu.component";
 import { PlanService } from '../../shared/service/plan.service';
 import { FormsModule } from '@angular/forms';
+import { WorkoutDataService } from '../../shared/service/workoutdata.service';
 
 @Component({
   selector: 'app-log-registry',
@@ -32,6 +33,7 @@ export class LogRegistryComponent implements OnInit {
     private workoutLogService: WorkoutLogService,
     private userService: UserService,
     private planService: PlanService,
+    private workoutDataService: WorkoutDataService
   ) {}
 
   ngOnInit() {
@@ -41,6 +43,11 @@ export class LogRegistryComponent implements OnInit {
           this.userId = user.id;
           this.getWorkoutLogsForUser();
           this.getPlansForUser();
+          const workoutId = this.workoutDataService.getWorkoutId();
+          if (workoutId !== null) {
+            this.selectedWorkoutId = workoutId.toString();
+            this.filterWorkoutLogs();
+          }
         } else {
           console.error(MSG.useridundefined);
         }
@@ -62,6 +69,7 @@ export class LogRegistryComponent implements OnInit {
           };
         });
         this.isLoading = false;
+        this.filterWorkoutLogs();
       },
       error: (err) => {
         this.isLoading = false;
