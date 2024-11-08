@@ -18,18 +18,19 @@
       >
         {{ selectedWorkout.name }}
       </h4>
+
+      <!-- Drag and drop list for exercises -->
       <div class="exercises">
         <ul
           #exerciseList
           class="list-unstyled"
-          *ngIf="selectedWorkout.workoutExercises.length > 0; else noExercises"
+          cdkDropList
+          (cdkDropListDropped)="dropExercise($event)"
         >
           <li
-            *ngFor="
-              let exercise of selectedWorkout.workoutExercises;
-              let i = index
-            "
+            *ngFor="let exercise of selectedWorkout.workoutExercises; let i = index"
             class="d-flex justify-content-between align-items-center mb-2 position-relative bg-dark pt-1 px-2 rounded"
+            cdkDrag
           >
             <span class="exercise-name">{{ exercise?.exerciseName }}</span>
             <button
@@ -45,6 +46,7 @@
         </ng-template>
         <div class="add-exercise-container"></div>
       </div>
+
       <div class="d-flex justify-content-between align-items-center">
         <button
           class="btn btn-primary btn-lg"

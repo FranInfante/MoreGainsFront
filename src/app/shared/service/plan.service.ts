@@ -99,4 +99,8 @@ export class PlanService {
   getWorkoutById(workoutId: number): Observable<Workout> {
     return this.http.get<Workout>(PLAN_ROUTES.getworkoutbyid(workoutId));
   }
+
+ updateWorkoutExercise(workoutexerciseId: number, workoutExercise: WorkoutExercise): Observable<any> {
+  return this.http.put(PLAN_ROUTES.updateworkoutexercise(workoutexerciseId), workoutExercise);
+}
 }

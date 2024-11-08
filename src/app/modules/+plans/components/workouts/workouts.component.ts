@@ -32,7 +32,7 @@ import { PlanService } from '../../../../shared/service/plan.service';
 import { ExercisePickerModalComponent } from '../exercise-picker-modal/exercise-picker-modal.component';
 import { CreateExerciseModalComponent } from '../create-exercise-modal/create-exercise-modal.component';
 import { ToastService } from '../../../../shared/service/toast.service';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { WorkoutDataService } from '../../../../shared/service/workoutdata.service';
 
 @Component({
@@ -43,7 +43,6 @@ import { WorkoutDataService } from '../../../../shared/service/workoutdata.servi
     FormsModule,
     ReactiveFormsModule,
     DragDropModule,
-    RouterLink,
   ],
   templateUrl: './workouts.component.html',
   styleUrl: './workouts.component.css',
@@ -385,4 +384,27 @@ export class WorkoutsComponent {
       this.toastService.showToast(TOAST_MSGS.noexercisesinworkout, 'danger');
     }
   }
+
+  dropExercise(event: CdkDragDrop<WorkoutExercise[]>): void {
+    if (this.selectedWorkout) {
+      moveItemInArray(
+        this.selectedWorkout.workoutExercises,
+        event.previousIndex,
+        event.currentIndex
+      );
+  
+      this.selectedWorkout.workoutExercises.forEach((exercise, index) => {
+        exercise.exerciseOrder = index + 1;
+        exercise.exerciseOrder = exercise.exerciseOrder;
+        exercise.workoutId = this.selectedWorkout!.id;
+      });
+  
+      this.selectedWorkout.workoutExercises.forEach((exercise) => {
+        this.planService.updateWorkoutExercise(exercise.id!, exercise)
+          .subscribe({
+          });
+      });
+    }
+  }
+  
 }
