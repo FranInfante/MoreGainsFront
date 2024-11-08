@@ -35,6 +35,8 @@ export class ExercisePickerModalComponent implements OnInit {
   workoutId: number | null = null;
 
   @Input() existingExercises: string[] = [];
+  @Input() currentExercises: WorkoutExercise[] = [];
+
 
   newExerciseForm: FormGroup = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -89,8 +91,23 @@ export class ExercisePickerModalComponent implements OnInit {
 
   selectExercise(exercise: Exercise): void {
     this.selectedExercise = exercise;
-    const workoutExercise = { exerciseName: exercise.name };
-    this.toastService.showToast(TOAST_MSGS.exercisecreated + exercise.name, 'success');
+  
+    const nextOrder = this.currentExercises.length > 0
+    ? Math.max(...this.currentExercises.map((ex) => ex.exerciseOrder || 0)) + 1
+    : 1;
+  
+    const workoutExercise: WorkoutExercise = {
+      exerciseName: exercise.name,
+      exerciseOrder: nextOrder, 
+      workoutId: this.workoutId!,
+      exerciseId: exercise.id, 
+    };
+  
+    this.toastService.showToast(
+      `${TOAST_MSGS.exercisecreated} ${exercise.name}`,
+      'success'
+    );
+    
     this.activeModal.close(workoutExercise);
   }
 

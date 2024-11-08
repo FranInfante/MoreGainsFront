@@ -121,6 +121,7 @@ export class WorkoutsComponent {
     modalRef.componentInstance.workoutId = this.selectedWorkout!.id;
     modalRef.componentInstance.existingExercises =
       this.selectedWorkout!.workoutExercises.map((ex) => ex.exerciseName);
+      modalRef.componentInstance.currentExercises = this.selectedWorkout!.workoutExercises; 
 
     modalRef.result.then(
       (workoutExercise: WorkoutExercise) => {
@@ -173,8 +174,16 @@ export class WorkoutsComponent {
   }
 
   showWorkoutDetails(workout: Workout): void {
-    this.selectedWorkout = workout;
-    document.body.classList.add('modal-open');
+    // Fetch the latest data from the backend
+    this.planService.getWorkoutById(workout.id).subscribe((updatedWorkout: Workout) => {
+      this.selectedWorkout = {
+        ...updatedWorkout,
+        workoutExercises: updatedWorkout.workoutExercises.sort(
+          (a, b) => a.exerciseOrder - b.exerciseOrder
+        )
+      };
+      document.body.classList.add('modal-open');
+    });
   }
 
   closeWorkoutDetails(): void {
