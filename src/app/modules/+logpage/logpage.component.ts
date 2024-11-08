@@ -164,7 +164,9 @@ export class LogpageComponent implements OnInit, OnDestroy {
     exercisesArray.clear();
   
     if (workout && workout.workoutExercises && Array.isArray(workout.workoutExercises)) {
-      workout.workoutExercises.forEach((exercise: any) => {
+      workout.workoutExercises
+      .sort((a: { exerciseOrder: number }, b: { exerciseOrder: number }) => a.exerciseOrder - b.exerciseOrder)
+      .forEach((exercise: any) => {
         exercisesArray.push(
           this.fb.group({
             id: [exercise.id],
@@ -190,7 +192,6 @@ export class LogpageComponent implements OnInit, OnDestroy {
     exercisesArray.clear();
   
     if (savedWorkoutLog && savedWorkoutLog.exercises && Array.isArray(savedWorkoutLog.exercises)) {
-      // Group exercises by exerciseId
       const groupedExercises = new Map<number, any>();
   
       savedWorkoutLog.exercises.forEach((exercise: any) => {
@@ -201,35 +202,35 @@ export class LogpageComponent implements OnInit, OnDestroy {
           });
         } else {
           const existingExercise = groupedExercises.get(exercise.exerciseId);
-          existingExercise.sets = existingExercise.sets.concat(exercise.sets); // Combine sets
+          existingExercise.sets = existingExercise.sets.concat(exercise.sets);
         }
       });
   
-      // Now we have exercises grouped with combined sets, so we can process them
-      groupedExercises.forEach((exercise: any) => {
-        this.workoutLogService.getExerciseById(exercise.exerciseId).subscribe({
-          next: (exerciseData) => {
-            const formGroup = this.fb.group({
-              id: [exercise.id],
-              exerciseId: [exercise.exerciseId],
-              workoutLogId: [exercise.workoutLogId],
-              name: [exerciseData.name || ''],
-              notes: [exercise.notes || ''],
-              open: [false],
-              sets: this.fb.array([]), 
-            });
+      // Sort grouped exercises by `exerciseOrder`
+      Array.from(groupedExercises.values())
+        .sort((a: { exerciseOrder: number }, b: { exerciseOrder: number }) => a.exerciseOrder - b.exerciseOrder)
+        .forEach((exercise: any) => {
+          this.workoutLogService.getExerciseById(exercise.exerciseId).subscribe({
+            next: (exerciseData) => {
+              const formGroup = this.fb.group({
+                id: [exercise.id],
+                exerciseId: [exercise.exerciseId],
+                workoutLogId: [exercise.workoutLogId],
+                name: [exerciseData.name || ''],
+                notes: [exercise.notes || ''],
+                open: [false],
+                sets: this.fb.array([]),
+              });
   
-            // Add form group to the exercises array.
-            exercisesArray.push(formGroup);
+              exercisesArray.push(formGroup);
   
-            // Add the sets after the formGroup is created.
-            const setsArray = formGroup.get('sets') as FormArray; // Cast to FormArray
-            exercise.sets.forEach((set: any) => {
-              setsArray.push(this.createSetWithValues(set)); // Now push works
-            });
-          },
+              const setsArray = formGroup.get('sets') as FormArray;
+              exercise.sets.forEach((set: any) => {
+                setsArray.push(this.createSetWithValues(set));
+              });
+            },
+          });
         });
-      });
     }
   }
   
