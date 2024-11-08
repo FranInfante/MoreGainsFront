@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h5 class="modal-title">Confirm Navigation</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="onCancel()"
+    ></button>
+  </div>
+  
+  <div class="modal-body">
+    <p>Do you want to save your workout log before leaving?</p>
+  </div>
+  
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">
+      Cancel
+    </button>
+    <button type="button" class="btn btn-danger" (click)="onDiscard()">
+      Discard
+    </button>
+    <button type="button" class="btn btn-primary" (click)="onSave()">
+      Save
+    </button>
+  </div>
+  

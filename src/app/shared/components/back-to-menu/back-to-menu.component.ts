@@ -12,7 +12,7 @@ import { LOCATIONS } from '../constants';
 export class BackToMenuComponent {
   
   @Input() displayText: string = '';
-  @Input() navigationPath: string = LOCATIONS.menu; 
+  @Input() navigationPath?: string = undefined; 
 
   constructor(private router: Router) {}
 

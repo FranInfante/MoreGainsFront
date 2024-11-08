@@ -1,4 +1,4 @@
-<app-back-to-menu [navigationPath]="LOCATIONS.plans"></app-back-to-menu>
+<app-back-to-menu (click)="backToPlans()" ></app-back-to-menu>
 <h3 class="text-center mt-5">Logging {{ workoutName }}</h3>
 
 <form [formGroup]="workoutLogForm" (ngSubmit)="submitWorkoutLog()">

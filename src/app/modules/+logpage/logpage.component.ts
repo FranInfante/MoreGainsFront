@@ -18,6 +18,8 @@ import { ToastService } from '../../shared/service/toast.service';
 import { Subscription } from 'rxjs';
 import { WorkoutLog } from '../../shared/interfaces/workoutlog';
 import { BackToMenuComponent } from "../../shared/components/back-to-menu/back-to-menu.component";
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationModalComponent } from '../../shared/components/comfirmation-modal/cofirmation-modal.component';
 
 @Component({
   selector: 'app-logpage',
@@ -52,6 +54,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private toastService: ToastService,
     private router: Router,
+    private modalService: NgbModal
   ) {}
 
   ngOnInit() {
@@ -77,6 +80,41 @@ export class LogpageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.formChangesSubscription) {
       this.formChangesSubscription.unsubscribe();
+    }
+  }
+  backToPlans() {
+    const modalRef = this.modalService.open(ConfirmationModalComponent);
+    modalRef.result.then(
+      (result) => {
+        if (result === 'save') {
+          this.saveAndNavigate();
+        } else if (result === 'discard') {
+          this.discardAndNavigate();
+        }
+      },
+      () => {
+      }
+    );
+  }
+
+  saveAndNavigate() {
+    this.router.navigate([LOCATIONS.plans]);
+  }
+
+  discardAndNavigate() {
+    if (this.workoutLogId) {
+      this.workoutLogService.deleteWorkoutLog(this.workoutLogId).subscribe({
+        next: () => {
+          console.log('Workout log deleted successfully');
+          this.router.navigate([LOCATIONS.plans]);
+        },
+        error: (error) => {
+          console.error('Error deleting workout log', error);
+        },
+      });
+    } else {
+      // If no workout log exists, simply navigate
+      this.router.navigate([LOCATIONS.plans]);
     }
   }
 
