@@ -229,48 +229,33 @@ export class LogpageComponent implements OnInit, OnDestroy {
     const exercisesArray = this.workoutLogForm.get('exercises') as FormArray;
     exercisesArray.clear();
   
-    if (savedWorkoutLog && savedWorkoutLog.exercises && Array.isArray(savedWorkoutLog.exercises)) {
-      const groupedExercises = new Map<number, any>();
+    if (savedWorkoutLog && savedWorkoutLog.exercises) {
+      // Sort exercises by exerciseOrder
+      const sortedExercises = savedWorkoutLog.exercises.sort(
+        (a, b) => a.exerciseOrder - b.exerciseOrder
+      );
   
-      savedWorkoutLog.exercises.forEach((exercise: any) => {
-        if (!groupedExercises.has(exercise.exerciseId)) {
-          groupedExercises.set(exercise.exerciseId, {
-            ...exercise,
-            sets: [...exercise.sets],
-          });
-        } else {
-          const existingExercise = groupedExercises.get(exercise.exerciseId);
-          existingExercise.sets = existingExercise.sets.concat(exercise.sets);
-        }
-      });
-  
-      // Sort grouped exercises by `exerciseOrder`
-      Array.from(groupedExercises.values())
-        .sort((a: { exerciseOrder: number }, b: { exerciseOrder: number }) => a.exerciseOrder - b.exerciseOrder)
-        .forEach((exercise: any) => {
-          this.workoutLogService.getExerciseById(exercise.exerciseId).subscribe({
-            next: (exerciseData) => {
-              const formGroup = this.fb.group({
-                id: [exercise.id],
-                exerciseId: [exercise.exerciseId],
-                workoutLogId: [exercise.workoutLogId],
-                name: [exerciseData.name || ''],
-                notes: [exercise.notes || ''],
-                open: [false],
-                sets: this.fb.array([]),
-              });
-  
-              exercisesArray.push(formGroup);
-  
-              const setsArray = formGroup.get('sets') as FormArray;
-              exercise.sets.forEach((set: any) => {
-                setsArray.push(this.createSetWithValues(set));
-              });
-            },
-          });
+      sortedExercises.forEach((exercise) => {
+        const formGroup = this.fb.group({
+          id: [exercise.id],
+          exerciseId: [exercise.exerciseId],
+          workoutLogId: [exercise.workoutLogId],
+          name: [exercise.exerciseName],
+          notes: [exercise.notes || ''],
+          open: [false],
+          sets: this.fb.array([]),
         });
+  
+        exercisesArray.push(formGroup);
+  
+        const setsArray = formGroup.get('sets') as FormArray;
+        exercise.sets.forEach((set) => {
+          setsArray.push(this.createSetWithValues(set));
+        });
+      });
     }
   }
+  
   
   
 
@@ -311,8 +296,8 @@ export class LogpageComponent implements OnInit, OnDestroy {
   createAndLoadWorkoutLog() {
     this.planService.getWorkoutById(this.workoutId).subscribe({
       next: (workout) => {
-        this.populateFormWithWorkout(workout);  // Populate the form with workout details
-        this.createWorkoutLog();  // Create the workout log
+        this.populateFormWithWorkout(workout);
+        this.createWorkoutLog();
       },
       error: (err) => {
         console.error(MSG.errorfindingworkout, err);
@@ -341,8 +326,9 @@ export class LogpageComponent implements OnInit, OnDestroy {
       userId: this.userId,
       workoutId: this.workoutId,
       date: new Date().toISOString(),
-      exercises: this.exercises.controls.map((exerciseControl) => ({
+      exercises: this.exercises.controls.map((exerciseControl, index) => ({
         exerciseId: exerciseControl.get('exerciseId')?.value,
+        exerciseOrder: index + 1,
         sets: this.getSets(exerciseControl).controls.map((setControl, setIndex) => ({
           set: setIndex + 1,
           reps: setControl.get('reps')?.value,
@@ -354,8 +340,8 @@ export class LogpageComponent implements OnInit, OnDestroy {
   
     this.workoutLogService.createWorkoutLog(initialWorkoutLog).subscribe({
       next: (response) => {
-        this.workoutLogId = response.id;  // Store the ID of the newly created log
-        this.loadSavedWorkoutLog();  // Load the created log into the form
+        this.workoutLogId = response.id; 
+        this.loadSavedWorkoutLog();
         this.firstChangeMade = true;
         this.trackFormChanges();
       },

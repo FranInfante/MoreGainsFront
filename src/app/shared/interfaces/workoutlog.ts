@@ -14,6 +14,7 @@ export interface WorkoutLog {
   sets: SetDetails[];
   workoutLogId: number;
   notes?: string; 
+  exerciseOrder: number;
 }
   
   export interface SetDetails {
