@@ -1,0 +1,24 @@
+<div class="modal-header">
+    <h5 class="modal-title">Resume or Create New Log</h5>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="onCancel()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <p>
+      You already have a workout log in progress. Would you like to continue
+      editing it or delete it and create a new one?
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="onReset()">
+      Create New Log
+    </button>
+    <button type="button" class="btn btn-primary" (click)="onContinue()">
+      Continue Editing
+    </button>
+  </div>
+  

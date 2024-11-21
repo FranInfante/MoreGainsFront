@@ -20,6 +20,7 @@ import { WorkoutLog } from '../../shared/interfaces/workoutlog';
 import { BackToMenuComponent } from "../../shared/components/back-to-menu/back-to-menu.component";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfirmationModalComponent } from '../../shared/components/comfirmation-modal/cofirmation-modal.component';
+import { ContinueOrResetModalComponent } from '../../shared/components/continue-or-reset-modal/continue-or-reset-modal.component';
 
 @Component({
   selector: 'app-logpage',
@@ -120,10 +121,10 @@ export class LogpageComponent implements OnInit, OnDestroy {
 
   initializeWorkoutLog() {
     const workoutId = this.workoutDataService.getWorkoutId();
-
+  
     if (workoutId) {
       this.workoutId = workoutId;
-
+  
       this.fetchWorkoutName(workoutId);
   
       this.workoutLogService
@@ -133,9 +134,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
             if (editingLogs && editingLogs.length > 0) {
               const editingLog = editingLogs.find((log: WorkoutLog) => log.editing === true);
               if (editingLog) {
-                this.workoutLogId = editingLog.id;
-                this.populateFormWithSavedData(editingLog);
-                this.trackFormChanges();
+                this.askUserToContinueOrReset(editingLog);
               } else {
                 this.createAndLoadWorkoutLog();
               }
@@ -151,6 +150,33 @@ export class LogpageComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate([LOCATIONS.plans]);
     }
+  }
+  
+  askUserToContinueOrReset(editingLog: WorkoutLog) {
+    const modalRef = this.modalService.open(ContinueOrResetModalComponent);
+  
+    modalRef.result.then(
+      (result) => {
+        if (result === 'continue') {
+          this.workoutLogId = editingLog.id;
+          this.populateFormWithSavedData(editingLog);
+          this.trackFormChanges();
+        } else if (result === 'reset') {
+          this.workoutLogService.deleteWorkoutLog(editingLog.id).subscribe({
+            next: () => {
+              console.log('Existing workout log deleted successfully.');
+              this.createAndLoadWorkoutLog();
+            },
+            error: (err) => {
+              console.error('Error deleting existing workout log', err);
+            },
+          });
+        }
+      },
+      (dismissReason) => {
+        console.log('Modal dismissed:', dismissReason);
+      }
+    );
   }
   
 

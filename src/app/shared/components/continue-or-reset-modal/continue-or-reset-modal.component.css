@@ -1,0 +1,14 @@
+.modal-header {
+    border-bottom: 1px solid #dee2e6;
+    color: black;
+  }
+  
+  .modal-footer {
+    border-top: 1px solid #dee2e6;
+  }
+  
+  .modal-body p {
+    font-size: 1rem;
+    color: #333;
+  }
+  
