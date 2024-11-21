@@ -173,8 +173,10 @@ export class LogpageComponent implements OnInit, OnDestroy {
           });
         }
       },
-      (dismissReason) => {
-        console.log('Modal dismissed:', dismissReason);
+      () => {
+        this.workoutLogId = editingLog.id;
+          this.populateFormWithSavedData(editingLog);
+          this.trackFormChanges();
       }
     );
   }
@@ -345,7 +347,7 @@ export class LogpageComponent implements OnInit, OnDestroy {
   
   createWorkoutLog() {
     if (this.workoutLogId) {
-      return;  // Skip if a workout log already exists
+      return;
     }
   
     const initialWorkoutLog = {
